@@ -1,0 +1,1664 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TimeMaker — 모빌리티전력전자융합전공 시간표 추천</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #4338CA;
+  --primary-light: #6366F1;
+  --primary-pale: #EEF2FF;
+  --primary-border: #C7D2FE;
+  --cyan: #0891B2;
+  --cyan-pale: #CFFAFE;
+  --success: #059669;
+  --success-pale: #DCFCE7;
+  --warning: #D97706;
+  --warning-pale: #FEF3C7;
+  --danger: #DC2626;
+  --danger-pale: #FEE2E2;
+  --purple: #7C3AED;
+  --purple-pale: #EDE9FE;
+  --gray: #6B7280;
+  --gray-light: #F3F4F6;
+  --gray-border: #E5E7EB;
+  --text: #111827;
+  --text-sub: #6B7280;
+  --bg: #F0F1FF;
+  --white: #ffffff;
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.app-shell {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ── 화면 공통 ── */
+.screen {
+  display: none;
+  flex-direction: column;
+  min-height: 100vh;
+}
+.screen.active { display: flex; }
+
+/* ── 헤더 ── */
+.header {
+  background: var(--primary);
+  border-radius: var(--radius) var(--radius) 0 0;
+  padding: 20px 20px 0;
+  flex-shrink: 0;
+}
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+.header-logo {
+  font-size: 18px;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -0.5px;
+}
+.header-logo span { color: #A5B4FC; }
+.header-dept {
+  font-size: 10px;
+  color: rgba(255,255,255,0.6);
+  font-weight: 600;
+  text-align: right;
+  line-height: 1.4;
+}
+
+/* 상단 탭 버튼 */
+.header-tabs {
+  display: flex;
+  gap: 6px;
+}
+.htab {
+  flex: 1;
+  padding: 10px 0;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  color: rgba(255,255,255,0.55);
+  background: rgba(255,255,255,0.08);
+  border: none;
+  transition: all .2s;
+  letter-spacing: -0.2px;
+}
+.htab.active {
+  background: var(--white);
+  color: var(--primary);
+}
+.htab:hover:not(.active) { background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.8); }
+
+/* ── 바디 ── */
+.body {
+  background: var(--white);
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ── 바텀 네비 ── */
+.bottom-nav {
+  background: var(--white);
+  border-radius: 0 0 var(--radius) var(--radius);
+  border-top: 1px solid var(--gray-border);
+  display: flex;
+  padding: 8px 0 12px;
+  flex-shrink: 0;
+}
+.bnav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  cursor: pointer;
+  padding: 4px 0;
+}
+.bnav-icon { font-size: 20px; }
+.bnav-label { font-size: 10px; font-weight: 700; color: var(--gray); }
+.bnav-item.active .bnav-label { color: var(--primary); }
+
+/* ──────────────────────────────────────
+   홈 화면 — 시간표 그리드
+   ────────────────────────────────────── */
+.home-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.home-info-left .hi-title { font-size: 16px; font-weight: 800; }
+.home-info-left .hi-sub { font-size: 11px; color: var(--text-sub); margin-top: 2px; }
+.credit-badge {
+  background: var(--primary-pale);
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 800;
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+
+/* 시간표 그리드 */
+.tt-wrap { border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--gray-border); }
+.tt-grid {
+  display: grid;
+  grid-template-columns: 36px repeat(5, 1fr);
+  font-size: 10px;
+}
+.tt-head {
+  background: var(--primary);
+  color: rgba(255,255,255,0.9);
+  font-weight: 800;
+  text-align: center;
+  padding: 7px 2px;
+  font-size: 11px;
+}
+.tt-head.off { background: #818CF8; }
+.tt-time {
+  background: var(--primary-pale);
+  color: var(--primary);
+  font-weight: 700;
+  text-align: center;
+  padding: 3px 2px;
+  font-size: 9px;
+  border-bottom: 1px solid var(--primary-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tt-cell {
+  border-bottom: 1px solid var(--gray-border);
+  border-right: 1px solid var(--gray-border);
+  min-height: 36px;
+  position: relative;
+  cursor: pointer;
+}
+.tt-cell:last-child { border-right: none; }
+.tt-class {
+  position: absolute; inset: 1px;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  font-weight: 800;
+  text-align: center;
+  line-height: 1.3;
+  cursor: pointer;
+  transition: opacity .15s;
+  padding: 2px;
+}
+.tt-class:hover { opacity: 0.85; }
+.tt-off { background: #EEF2FF; }
+
+.c-blue   { background: var(--primary); color: #fff; }
+.c-cyan   { background: var(--cyan); color: #fff; }
+.c-purple { background: var(--purple); color: #fff; }
+.c-green  { background: var(--success); color: #fff; }
+.c-amber  { background: var(--warning); color: #fff; }
+.c-pink   { background: #DB2777; color: #fff; }
+
+/* 빈 시간표 상태 */
+.empty-tt {
+  border: 2px dashed var(--primary-border);
+  border-radius: var(--radius-sm);
+  padding: 40px 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.empty-tt .et-icon { font-size: 40px; }
+.empty-tt .et-title { font-size: 15px; font-weight: 800; color: var(--primary); }
+.empty-tt .et-sub { font-size: 12px; color: var(--text-sub); line-height: 1.6; }
+
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  width: 100%;
+  font-family: 'Nunito', sans-serif;
+  transition: background .15s, transform .1s;
+  letter-spacing: -0.2px;
+}
+.btn-primary:hover { background: #3730A3; }
+.btn-primary:active { transform: scale(0.98); }
+
+.btn-outline {
+  background: var(--white);
+  color: var(--primary);
+  border: 1.5px solid var(--primary-border);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  font-family: 'Nunito', sans-serif;
+  transition: all .15s;
+}
+.btn-outline:hover { background: var(--primary-pale); }
+
+/* 과목 범례 */
+.legend { display: flex; flex-wrap: wrap; gap: 6px; }
+.legend-item {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 10px; font-weight: 700;
+  background: var(--gray-light);
+  border-radius: 6px;
+  padding: 4px 8px;
+  cursor: pointer;
+  transition: all .15s;
+}
+.legend-item:hover { background: var(--primary-pale); }
+.legend-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+
+/* ──────────────────────────────────────
+   시간표 확인 화면
+   ────────────────────────────────────── */
+.section-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--primary);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.section-badge {
+  font-size: 10px;
+  font-weight: 700;
+  background: var(--primary-pale);
+  color: var(--primary);
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+
+.subject-card {
+  border: 1px solid var(--gray-border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  cursor: pointer;
+  transition: box-shadow .15s;
+}
+.subject-card:hover { box-shadow: 0 4px 16px rgba(67,56,202,0.12); }
+
+.subject-card-header {
+  padding: 12px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.subject-name { font-size: 14px; font-weight: 800; }
+.subject-credit { font-size: 11px; color: var(--text-sub); font-weight: 700; }
+.subject-tag {
+  font-size: 10px; font-weight: 700;
+  padding: 3px 8px; border-radius: 6px;
+}
+.tag-req { background: var(--danger-pale); color: var(--danger); }
+.tag-elec { background: var(--primary-pale); color: var(--primary); }
+.tag-core { background: var(--success-pale); color: var(--success); }
+.tag-free { background: var(--warning-pale); color: var(--warning); }
+
+.subject-card-body {
+  display: none;
+  border-top: 1px solid var(--gray-border);
+  padding: 12px 14px;
+  background: var(--gray-light);
+}
+.subject-card-body.open { display: block; }
+.prof-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 10px;
+  background: var(--white);
+  border-radius: 8px;
+  margin-bottom: 6px;
+  border: 1px solid var(--gray-border);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all .15s;
+}
+.prof-option:last-child { margin-bottom: 0; }
+.prof-option:hover { border-color: var(--primary-border); background: var(--primary-pale); }
+.prof-option.selected { border-color: var(--primary); background: var(--primary-pale); }
+.prof-name { font-weight: 700; }
+.prof-time { color: var(--text-sub); font-size: 11px; }
+.prof-room { color: var(--text-sub); font-size: 10px; }
+.prof-check { color: var(--primary); font-weight: 800; font-size: 14px; }
+
+/* ──────────────────────────────────────
+   시간표 만들기 — 마법사
+   ────────────────────────────────────── */
+.wizard-progress {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+.wp-step {
+  flex: 1;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--primary-border);
+  transition: background .3s;
+}
+.wp-step.done { background: var(--primary); }
+.wp-label {
+  font-size: 11px;
+  color: var(--text-sub);
+  font-weight: 700;
+  text-align: center;
+  margin-top: 6px;
+}
+
+.wizard-page { display: none; flex-direction: column; gap: 14px; }
+.wizard-page.active { display: flex; }
+
+.wiz-title { font-size: 17px; font-weight: 900; line-height: 1.35; }
+.wiz-sub { font-size: 12px; color: var(--text-sub); margin-top: 3px; line-height: 1.5; }
+
+/* 요일 선택 */
+.day-chips { display: flex; gap: 8px; justify-content: space-between; }
+.day-chip {
+  flex: 1;
+  padding: 12px 4px;
+  border-radius: 10px;
+  border: 1.5px solid var(--gray-border);
+  text-align: center;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all .15s;
+  background: var(--white);
+}
+.day-chip:hover { border-color: var(--primary-border); background: var(--primary-pale); }
+.day-chip.selected { border-color: var(--primary); background: var(--primary); color: var(--white); }
+.day-chip.off-day { border-color: #C7D2FE; background: var(--primary-pale); color: var(--primary); }
+
+/* 시간 블록 선택 */
+.time-block-wrap { display: flex; flex-direction: column; gap: 8px; }
+.time-block-row { display: flex; align-items: center; gap: 8px; }
+.tbl-day { font-size: 12px; font-weight: 800; width: 28px; color: var(--primary); }
+.tbl-slots { display: flex; gap: 4px; flex: 1; }
+.tbl-slot {
+  flex: 1;
+  padding: 7px 2px;
+  border-radius: 6px;
+  border: 1.5px solid var(--gray-border);
+  text-align: center;
+  font-size: 9px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .15s;
+  background: var(--white);
+  color: var(--text-sub);
+}
+.tbl-slot:hover { border-color: var(--danger-pale); background: var(--danger-pale); }
+.tbl-slot.blocked { border-color: var(--danger); background: var(--danger-pale); color: var(--danger); }
+.tbl-slot.off-block { background: var(--primary-pale); border-color: var(--primary-border); color: var(--primary); pointer-events: none; }
+
+/* 교양 영역 카드 */
+.gyoyang-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.gy-card {
+  border: 1.5px solid var(--gray-border);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  cursor: pointer;
+  transition: all .15s;
+  background: var(--white);
+}
+.gy-card:hover { border-color: var(--primary-border); background: var(--primary-pale); }
+.gy-card.selected { border-color: var(--primary); background: var(--primary); color: var(--white); }
+.gy-card.done-before { border-color: var(--success); background: var(--success-pale); pointer-events: none; }
+.gy-name { font-size: 13px; font-weight: 800; }
+.gy-sub { font-size: 10px; opacity: 0.7; margin-top: 2px; }
+.gy-status { font-size: 10px; font-weight: 700; margin-top: 6px; }
+
+/* 토글 */
+.toggle-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  background: var(--gray-light);
+  border-radius: var(--radius-sm);
+}
+.toggle-label { font-size: 13px; font-weight: 700; }
+.toggle-sub { font-size: 11px; color: var(--text-sub); margin-top: 2px; }
+.toggle {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+.toggle input { display: none; }
+.toggle-track {
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  background: var(--gray-border);
+  cursor: pointer;
+  transition: background .2s;
+}
+.toggle input:checked + .toggle-track { background: var(--primary); }
+.toggle-thumb {
+  position: absolute;
+  width: 18px; height: 18px;
+  background: #fff;
+  border-radius: 50%;
+  top: 3px; left: 3px;
+  transition: transform .2s;
+  pointer-events: none;
+}
+.toggle input:checked ~ .toggle-thumb { transform: translateX(20px); }
+
+/* 결과 화면 */
+.result-header {
+  background: linear-gradient(135deg, var(--primary) 0%, #6366F1 100%);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  color: #fff;
+}
+.rh-title { font-size: 16px; font-weight: 900; }
+.rh-sub { font-size: 11px; color: rgba(255,255,255,0.75); margin-top: 3px; }
+.rh-badges { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+.rh-badge {
+  background: rgba(255,255,255,0.2);
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 8px;
+}
+
+.plan-tab-row { display: flex; gap: 6px; }
+.plan-tab {
+  flex: 1;
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--gray-border);
+  text-align: center;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all .15s;
+  background: var(--white);
+}
+.plan-tab.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+/* 과목 상세 모달 */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 100;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0 20px;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--white);
+  border-radius: var(--radius) var(--radius) 0 0;
+  width: 100%;
+  max-width: 420px;
+  max-height: 75vh;
+  overflow-y: auto;
+  padding: 20px;
+  animation: slideUp .25s ease;
+}
+@keyframes slideUp {
+  from { transform: translateY(40px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+.modal-handle {
+  width: 40px; height: 4px;
+  background: var(--gray-border);
+  border-radius: 2px;
+  margin: 0 auto 16px;
+}
+.modal-subject-name { font-size: 20px; font-weight: 900; margin-bottom: 4px; }
+.modal-prof { font-size: 13px; color: var(--text-sub); margin-bottom: 16px; }
+.modal-section { margin-bottom: 14px; }
+.modal-sec-title { font-size: 11px; font-weight: 800; color: var(--primary); margin-bottom: 8px; letter-spacing: 0.05em; }
+.modal-row {
+  display: flex; justify-content: space-between;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--gray-light);
+  font-size: 13px;
+}
+.modal-row:last-child { border-bottom: none; }
+.modal-key { color: var(--text-sub); font-weight: 600; }
+.modal-val { font-weight: 800; }
+.reason-list { display: flex; flex-direction: column; gap: 8px; }
+.reason-item {
+  display: flex; gap: 8px;
+  background: var(--primary-pale);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+.ri-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--primary); flex-shrink: 0; margin-top: 5px; }
+.ri-text { font-size: 12px; color: var(--primary); font-weight: 600; line-height: 1.5; }
+
+/* 알림 토스트 */
+.toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%) translateY(60px);
+  background: #1F2937;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 12px 20px;
+  border-radius: 20px;
+  white-space: nowrap;
+  transition: transform .3s;
+  z-index: 200;
+  font-family: 'Nunito', sans-serif;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+.input-field {
+  width: 100%;
+  border: 1.5px solid var(--gray-border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-size: 13px;
+  font-family: 'Nunito', sans-serif;
+  outline: none;
+  transition: border-color .15s;
+}
+.input-field:focus { border-color: var(--primary); }
+
+.divider { border: none; border-top: 1px solid var(--gray-border); margin: 4px 0; }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════
+     홈 화면
+════════════════════════════════════ -->
+<div class="app-shell">
+<div id="screen-home" class="screen active">
+
+  <div class="header">
+    <div class="header-top">
+      <div class="header-logo">Time<span>Maker</span></div>
+      <div class="header-dept">모빌리티전력전자<br>융합전공 2학년</div>
+    </div>
+    <div class="header-tabs">
+      <button class="htab" onclick="goScreen('check')">📋 시간표 확인하기</button>
+      <button class="htab" onclick="goScreen('make')">✨ 시간표 만들기</button>
+    </div>
+  </div>
+
+  <div class="body">
+
+    <div class="home-info">
+      <div class="home-info-left">
+        <div class="hi-title">2027년 1학기 시간표</div>
+        <div class="hi-sub" id="home-credit-sub">시간표를 만들어보세요!</div>
+      </div>
+      <div class="credit-badge" id="home-credit-badge">0 / 21학점</div>
+    </div>
+
+    <!-- 빈 시간표 (초기) -->
+    <div id="empty-state" class="empty-tt">
+      <div class="et-icon">📅</div>
+      <div class="et-title">아직 시간표가 없어요</div>
+      <div class="et-sub">위의 <b>시간표 만들기</b>를 눌러<br>나만의 최적 시간표를 추천받아보세요!</div>
+    </div>
+
+    <!-- 생성된 시간표 (숨김 → 생성 후 표시) -->
+    <div id="timetable-state" style="display:none; flex-direction:column; gap:12px;">
+
+      <div class="plan-tab-row">
+        <div class="plan-tab active" onclick="switchPlan('A',this)">🏆 플랜 A (최적)</div>
+        <div class="plan-tab" onclick="switchPlan('B',this)">🔄 플랜 B (차선)</div>
+      </div>
+
+      <div class="tt-wrap">
+        <div class="tt-grid" id="tt-grid">
+          <!-- JS로 생성 -->
+        </div>
+      </div>
+
+      <div class="legend" id="tt-legend"></div>
+
+      <button class="btn-outline" onclick="goScreen('make')">🔧 조건 수정하고 다시 만들기</button>
+    </div>
+
+  </div>
+
+  <div class="bottom-nav">
+    <div class="bnav-item active">
+      <div class="bnav-icon">🏠</div>
+      <div class="bnav-label">홈</div>
+    </div>
+    <div class="bnav-item" onclick="goScreen('check')">
+      <div class="bnav-icon">📋</div>
+      <div class="bnav-label">과목확인</div>
+    </div>
+    <div class="bnav-item" onclick="goScreen('make')">
+      <div class="bnav-icon">✨</div>
+      <div class="bnav-label">만들기</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     시간표 확인하기
+════════════════════════════════════ -->
+<div id="screen-check" class="screen">
+  <div class="header">
+    <div class="header-top">
+      <button onclick="goScreen('home')" style="background:rgba(255,255,255,0.15);border:none;color:#fff;font-size:13px;font-weight:700;padding:6px 12px;border-radius:8px;cursor:pointer;font-family:'Nunito',sans-serif;">← 홈</button>
+      <div class="header-logo">Time<span>Maker</span></div>
+    </div>
+    <div class="header-tabs">
+      <button class="htab active">📋 시간표 확인하기</button>
+      <button class="htab" onclick="goScreen('make')">✨ 시간표 만들기</button>
+    </div>
+  </div>
+
+  <div class="body">
+
+    <div>
+      <div class="section-title">🔴 전공 필수 과목 <span class="section-badge">4과목 · 12학점</span></div>
+      <div style="display:flex;flex-direction:column;gap:8px;" id="req-subjects"></div>
+    </div>
+
+    <hr class="divider">
+
+    <div>
+      <div class="section-title">🔵 전공 선택 과목 <span class="section-badge">택 1 · 3학점</span></div>
+      <div style="display:flex;flex-direction:column;gap:8px;" id="elec-subjects"></div>
+    </div>
+
+    <hr class="divider">
+
+    <div>
+      <div class="section-title">🟢 핵심교양 5영역 <span class="section-badge">1~2과목 권장</span></div>
+      <div style="display:flex;flex-direction:column;gap:8px;" id="core-subjects"></div>
+    </div>
+
+    <hr class="divider">
+
+    <div>
+      <div class="section-title">🟡 자유교양 <span class="section-badge">학점 채우기</span></div>
+      <div style="display:flex;flex-direction:column;gap:8px;" id="free-subjects"></div>
+    </div>
+
+    <button class="btn-primary" onclick="goScreen('make')">✨ 시간표 만들기로 이동</button>
+
+  </div>
+
+  <div class="bottom-nav">
+    <div class="bnav-item" onclick="goScreen('home')">
+      <div class="bnav-icon">🏠</div><div class="bnav-label">홈</div>
+    </div>
+    <div class="bnav-item active">
+      <div class="bnav-icon">📋</div><div class="bnav-label">과목확인</div>
+    </div>
+    <div class="bnav-item" onclick="goScreen('make')">
+      <div class="bnav-icon">✨</div><div class="bnav-label">만들기</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     시간표 만들기 (마법사)
+════════════════════════════════════ -->
+<div id="screen-make" class="screen">
+  <div class="header">
+    <div class="header-top">
+      <button onclick="goScreen('home')" style="background:rgba(255,255,255,0.15);border:none;color:#fff;font-size:13px;font-weight:700;padding:6px 12px;border-radius:8px;cursor:pointer;font-family:'Nunito',sans-serif;">← 홈</button>
+      <div class="header-logo">Time<span>Maker</span></div>
+    </div>
+    <div class="header-tabs">
+      <button class="htab" onclick="goScreen('check')">📋 시간표 확인하기</button>
+      <button class="htab active">✨ 시간표 만들기</button>
+    </div>
+  </div>
+
+  <div class="body">
+    <!-- 진행 바 -->
+    <div>
+      <div class="wizard-progress" id="wiz-progress"></div>
+      <div class="wp-label" id="wiz-step-label">단계 1 / 4</div>
+    </div>
+
+    <!-- STEP 1: 교수 선택 -->
+    <div class="wizard-page active" id="wpage-1">
+      <div>
+        <div class="wiz-title">원하는 교수님을<br>선택해주세요</div>
+        <div class="wiz-sub">과목별로 꼭 듣고 싶은 교수님을 선택하세요.<br>선택 안 하면 AI가 자동으로 골라드려요.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;" id="prof-select-list"></div>
+      <button class="btn-primary" onclick="nextStep(2)">다음 → 공강 요일 선택</button>
+    </div>
+
+    <!-- STEP 2: 공강 요일 + 제외 시간 -->
+    <div class="wizard-page" id="wpage-2">
+      <div>
+        <div class="wiz-title">공강 요일과<br>제외할 시간을 골라주세요</div>
+        <div class="wiz-sub">공강 요일은 수업이 없는 날, 제외 시간은 수업 넣기 싫은 시간대예요.</div>
+      </div>
+
+      <div>
+        <div class="section-title" style="margin-bottom:10px;">📅 공강 희망 요일</div>
+        <div class="day-chips" id="day-chips">
+          <div class="day-chip" data-day="월" onclick="toggleDay(this)">월</div>
+          <div class="day-chip" data-day="화" onclick="toggleDay(this)">화</div>
+          <div class="day-chip" data-day="수" onclick="toggleDay(this)">수</div>
+          <div class="day-chip" data-day="목" onclick="toggleDay(this)">목</div>
+          <div class="day-chip" data-day="금" onclick="toggleDay(this)">금</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-title" style="margin-bottom:4px;">⏰ 요일별 제외 시간</div>
+        <div style="font-size:11px;color:var(--text-sub);margin-bottom:10px;">탭하면 해당 시간대를 제외해요. 보라색은 공강 처리된 요일.</div>
+        <div class="time-block-wrap" id="time-blocks"></div>
+      </div>
+
+      <div>
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-label">1교시(9시) 전체 제외</div>
+            <div class="toggle-sub">모든 요일 9시 수업 없애기</div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="toggle-1st" onchange="toggle1st(this.checked)">
+            <div class="toggle-track"></div>
+            <div class="toggle-thumb"></div>
+          </label>
+        </div>
+        <div class="toggle-row" style="margin-top:8px;">
+          <div>
+            <div class="toggle-label">점심시간(12~13시) 확보</div>
+            <div class="toggle-sub">12~13시 수업 배정 안 함</div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="toggle-lunch">
+            <div class="toggle-track"></div>
+            <div class="toggle-thumb"></div>
+          </label>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:8px;">
+        <button class="btn-outline" style="flex:1;" onclick="nextStep(1)">← 이전</button>
+        <button class="btn-primary" style="flex:2;" onclick="nextStep(3)">다음 → 제외 설정</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: 제외 과목/교수 + 교양 -->
+    <div class="wizard-page" id="wpage-3">
+      <div>
+        <div class="wiz-title">제외할 과목과<br>교양 영역을 선택해요</div>
+        <div class="wiz-sub">싫은 과목은 제외하고, 이미 이수한 핵심교양 영역을 체크해주세요.</div>
+      </div>
+
+      <div>
+        <div class="section-title">🚫 제외할 전공선택 과목</div>
+        <div style="display:flex;flex-direction:column;gap:6px;" id="exclude-list"></div>
+      </div>
+
+      <div>
+        <div class="section-title">✅ 핵심교양 — 이미 이수한 영역</div>
+        <div style="font-size:11px;color:var(--text-sub);margin-bottom:10px;">이수 완료한 영역 선택 → AI가 나머지 영역 중 빈 시간에 자동 배치</div>
+        <div class="gyoyang-grid" id="gyoyang-grid"></div>
+      </div>
+
+      <div style="display:flex;gap:8px;">
+        <button class="btn-outline" style="flex:1;" onclick="nextStep(2)">← 이전</button>
+        <button class="btn-primary" style="flex:2;" onclick="nextStep(4)">다음 → AI 생성!</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: 생성 중 / 결과 -->
+    <div class="wizard-page" id="wpage-4">
+      <div id="generating-state" style="text-align:center;padding:30px 0;">
+        <div style="font-size:50px;margin-bottom:16px;animation:spin 1s linear infinite;">⚙️</div>
+        <div style="font-size:17px;font-weight:900;color:var(--primary);">AI가 시간표를 생성 중이에요</div>
+        <div style="font-size:12px;color:var(--text-sub);margin-top:8px;line-height:1.6;">조건에 맞는 최적의 조합을 탐색하고 있어요<br>잠시만 기다려주세요...</div>
+      </div>
+      <div id="result-state" style="display:none;flex-direction:column;gap:14px;">
+        <div class="result-header">
+          <div class="rh-title">🎉 시간표 완성!</div>
+          <div class="rh-sub">조건을 분석해 최적의 시간표를 만들었어요</div>
+          <div class="rh-badges" id="result-badges"></div>
+        </div>
+        <div class="plan-tab-row">
+          <div class="plan-tab active" onclick="switchResultPlan('A',this)">🏆 플랜 A</div>
+          <div class="plan-tab" onclick="switchResultPlan('B',this)">🔄 플랜 B</div>
+        </div>
+        <div class="tt-wrap">
+          <div class="tt-grid" id="result-tt-grid"></div>
+        </div>
+        <div class="legend" id="result-legend"></div>
+        <div id="result-subjects-list" style="display:flex;flex-direction:column;gap:8px;"></div>
+        <button class="btn-primary" onclick="applyToHome()">✅ 이 시간표 적용하기</button>
+        <button class="btn-outline" onclick="nextStep(1)">🔧 처음부터 다시 설정</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="bottom-nav">
+    <div class="bnav-item" onclick="goScreen('home')">
+      <div class="bnav-icon">🏠</div><div class="bnav-label">홈</div>
+    </div>
+    <div class="bnav-item" onclick="goScreen('check')">
+      <div class="bnav-icon">📋</div><div class="bnav-label">과목확인</div>
+    </div>
+    <div class="bnav-item active">
+      <div class="bnav-icon">✨</div><div class="bnav-label">만들기</div>
+    </div>
+  </div>
+</div>
+</div><!-- app-shell -->
+
+<!-- 과목 상세 모달 -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-subject-name" id="modal-name"></div>
+    <div class="modal-prof" id="modal-prof"></div>
+    <div class="modal-section">
+      <div class="modal-sec-title">📋 기본 정보</div>
+      <div id="modal-info"></div>
+    </div>
+    <div class="modal-section">
+      <div class="modal-sec-title">🤖 AI 추천 이유</div>
+      <div class="reason-list" id="modal-reasons"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 토스트 -->
+<div class="toast" id="toast"></div>
+
+<style>
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+
+<script>
+// ══════════════════════════════════════
+// 샘플 데이터
+// ══════════════════════════════════════
+const SUBJECTS = [
+  // 전공 필수
+  {
+    id:'s1', name:'회로이론', credit:3, type:'req', tag:'전공필수',
+    color:'c-blue',
+    professors:[
+      {name:'김전기 교수', days:['월','수'], times:['10','11'], room:'공학관 101호', label:'월·수 10:00~12:00'},
+      {name:'이회로 교수', days:['화','목'], times:['10','11'], room:'공학관 203호', label:'화·목 10:00~12:00'},
+    ],
+    reasons:['2학년 1학기 전공 필수 과목이에요','절대평가로 학점 취득에 유리해요','선수과목 없이 바로 수강 가능해요']
+  },
+  {
+    id:'s2', name:'전자기학', credit:3, type:'req', tag:'전공필수',
+    color:'c-cyan',
+    professors:[
+      {name:'박자기 교수', days:['월','수'], times:['13','14'], room:'공학관 201호', label:'월·수 13:00~15:00'},
+      {name:'최전자 교수', days:['화','목'], times:['13','14'], room:'공학관 305호', label:'화·목 13:00~15:00'},
+    ],
+    reasons:['전력전자 이수를 위한 선수과목이에요','회로이론과 같은 교수 선택 시 연속 학습 가능','강의평가 4.3점 (과제량 적음)']
+  },
+  {
+    id:'s3', name:'공학수학2', credit:3, type:'req', tag:'전공필수',
+    color:'c-purple',
+    professors:[
+      {name:'정수학 교수', days:['화','목'], times:['9','10'], room:'공학관 102호', label:'화·목 9:00~11:00'},
+      {name:'한미적 교수', days:['월','수'], times:['14','15'], room:'공학관 104호', label:'월·수 14:00~16:00'},
+    ],
+    reasons:['모든 전공 과목의 기반이 되는 필수 과목','1교시 제외 설정 시 한미적 교수반 자동 추천','상대평가지만 수강생 수 적어 유리']
+  },
+  {
+    id:'s4', name:'모빌리티공학개론', credit:3, type:'req', tag:'전공필수',
+    color:'c-green',
+    professors:[
+      {name:'강모빌 교수', days:['목'], times:['13','14','15'], room:'공학관 410호', label:'목 13:00~16:00'},
+    ],
+    reasons:['전공 정체성을 이해하는 핵심 개론 과목','목요일 오후 단독 배치로 다른 과목과 충돌 없음','실무 중심 강의로 취업 준비에 도움']
+  },
+  // 전공 선택
+  {
+    id:'s5', name:'전력전자기초', credit:3, type:'elec', tag:'전공선택',
+    color:'c-amber',
+    professors:[
+      {name:'오전력 교수', days:['월'], times:['13','14','15'], room:'공학관 305호', label:'월 13:00~16:00'},
+      {name:'서파워 교수', days:['수'], times:['13','14','15'], room:'공학관 307호', label:'수 13:00~16:00'},
+    ],
+    reasons:['전력전자 심화 과목 수강을 위한 선수과목','절대평가 · 강의평가 4.1점','취업 시 전력전자 직무에 필수 역량']
+  },
+  // 핵심교양
+  {
+    id:'g1', name:'글로벌리더십과소통', credit:3, type:'core', tag:'핵심교양(글로벌)',
+    color:'c-pink',
+    professors:[
+      {name:'분반A', days:['화'], times:['10','11','12'], room:'인문관 301호', label:'화 10:00~13:00'},
+      {name:'분반B', days:['수'], times:['10','11','12'], room:'인문관 302호', label:'수 10:00~13:00'},
+      {name:'분반C', days:['금'], times:['10','11','12'], room:'인문관 303호', label:'금 10:00~13:00'},
+    ],
+    reasons:['글로벌 영역 이수 가능','취업 역량 강화에 직결','발표·토론 중심으로 소통 능력 향상']
+  },
+  {
+    id:'g2', name:'창의적사고와표현', credit:3, type:'core', tag:'핵심교양(창의)',
+    color:'c-pink',
+    professors:[
+      {name:'분반A', days:['월'], times:['10','11','12'], room:'인문관 201호', label:'월 10:00~13:00'},
+      {name:'분반B', days:['목'], times:['10','11','12'], room:'인문관 202호', label:'목 10:00~13:00'},
+    ],
+    reasons:['창의 영역 이수 가능','설계·발표 역량 강화','전공 프로젝트에 바로 적용 가능']
+  },
+  {
+    id:'g3', name:'인간과문명의이해', credit:3, type:'core', tag:'핵심교양(인문I)',
+    color:'c-pink',
+    professors:[
+      {name:'분반A', days:['화'], times:['13','14','15'], room:'인문관 401호', label:'화 13:00~16:00'},
+      {name:'분반B', days:['금'], times:['13','14','15'], room:'인문관 402호', label:'금 13:00~16:00'},
+    ],
+    reasons:['인문I 영역 이수','인문 소양 함양','절대평가 운영 분반 多']
+  },
+  // 자유교양
+  {
+    id:'f1', name:'기업가정신과창업', credit:3, type:'free', tag:'자유교양',
+    color:'c-amber',
+    professors:[
+      {name:'임창업 교수', days:['금'], times:['10','11','12'], room:'경영관 201호', label:'금 10:00~13:00'},
+    ],
+    reasons:['금요일 오전 배치로 공강 요일 선택지 확보','취업·창업 모두 도움되는 실용 과목','과제 적고 강의평가 높음(4.4점)']
+  },
+  {
+    id:'f2', name:'데이터과학입문', credit:3, type:'free', tag:'자유교양',
+    color:'c-amber',
+    professors:[
+      {name:'권데이터 교수', days:['화'], times:['16','17'], room:'IT관 301호', label:'화 16:00~18:00'},
+    ],
+    reasons:['빅데이터·AI 기초 역량 함양','엔지니어 취업 시 가산점','절대평가 운영']
+  },
+];
+
+// ══════════════════════════════════════
+// 상태
+// ══════════════════════════════════════
+const state = {
+  currentScreen: 'home',
+  wizStep: 1,
+  profSelected: {},     // {subjectId: profIndex or null}
+  offDays: [],
+  blockedSlots: {},     // {day: [time,...]}
+  block1st: false,
+  blockLunch: false,
+  excludedSubjects: [],
+  doneGyoyang: [],
+  generatedPlan: null,
+  activePlan: 'A',
+};
+
+const DAYS = ['월','화','수','목','금'];
+const TIMES = ['9','10','11','12','13','14','15','16','17'];
+const TIME_LABELS = {'9':'9시','10':'10시','11':'11시','12':'12시','13':'13시','14':'14시','15':'15시','16':'16시','17':'17시'};
+
+// ══════════════════════════════════════
+// 화면 전환
+// ══════════════════════════════════════
+function goScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+  state.currentScreen = name;
+  window.scrollTo(0, 0);
+  if (name === 'check') renderCheckScreen();
+  if (name === 'make') renderMakeScreen();
+}
+
+// ══════════════════════════════════════
+// 시간표 확인 화면
+// ══════════════════════════════════════
+function renderCheckScreen() {
+  ['req','elec','core','free'].forEach(type => {
+    const el = document.getElementById(type + '-subjects');
+    if (!el) return;
+    const subs = SUBJECTS.filter(s => s.type === type);
+    el.innerHTML = subs.map(s => renderSubjectCard(s)).join('');
+  });
+}
+
+function renderSubjectCard(s) {
+  const tagClass = {req:'tag-req',elec:'tag-elec',core:'tag-core',free:'tag-free'}[s.type];
+  const profOpts = s.professors.map((p, i) => `
+    <div class="prof-option" onclick="toggleProfInCheck('${s.id}',${i},this)">
+      <div>
+        <div class="prof-name">${p.name}</div>
+        <div class="prof-time">${p.label}</div>
+        <div class="prof-room">${p.room}</div>
+      </div>
+      <div class="prof-check" id="check-prof-${s.id}-${i}" style="display:none;">✓</div>
+    </div>
+  `).join('');
+
+  return `
+    <div class="subject-card" onclick="toggleCard('${s.id}')">
+      <div class="subject-card-header">
+        <div>
+          <div class="subject-name">${s.name}</div>
+          <div class="subject-credit">${s.credit}학점 · ${s.tag}</div>
+        </div>
+        <span class="subject-tag ${tagClass}">${s.tag}</span>
+      </div>
+      <div class="subject-card-body" id="card-body-${s.id}">
+        <div style="font-size:11px;font-weight:700;color:var(--text-sub);margin-bottom:8px;">개설 교수 / 시간 선택</div>
+        ${profOpts}
+      </div>
+    </div>
+  `;
+}
+
+function toggleCard(id) {
+  const body = document.getElementById('card-body-' + id);
+  body.classList.toggle('open');
+}
+
+function toggleProfInCheck(subId, profIdx, el) {
+  // 같은 과목의 다른 교수 체크 해제
+  const s = SUBJECTS.find(s => s.id === subId);
+  s.professors.forEach((_, i) => {
+    const chk = document.getElementById(`check-prof-${subId}-${i}`);
+    if (chk) chk.style.display = 'none';
+  });
+  document.querySelectorAll(`[id^="check-prof-${subId}"]`).forEach(el => el.style.display='none');
+  // 현재 선택
+  if (state.profSelected[subId] === profIdx) {
+    delete state.profSelected[subId];
+    document.querySelectorAll('.prof-option').forEach(o => { if(o.contains(el) || o===el) o.classList.remove('selected'); });
+  } else {
+    state.profSelected[subId] = profIdx;
+    el.classList.add('selected');
+    document.getElementById(`check-prof-${subId}-${profIdx}`).style.display = 'flex';
+    showToast(`${s.professors[profIdx].name} 선택됨!`);
+  }
+}
+
+// ══════════════════════════════════════
+// 마법사
+// ══════════════════════════════════════
+function renderMakeScreen() {
+  renderWizProgress();
+  renderProfSelect();
+  renderTimeBlocks();
+  renderExcludeList();
+  renderGyoyangGrid();
+}
+
+function renderWizProgress() {
+  const prog = document.getElementById('wiz-progress');
+  const steps = 4;
+  prog.innerHTML = Array.from({length: steps}, (_,i) =>
+    `<div class="wp-step ${i < state.wizStep ? 'done' : ''}"></div>`
+  ).join('');
+  document.getElementById('wiz-step-label').textContent = `단계 ${state.wizStep} / ${steps}`;
+}
+
+function nextStep(n) {
+  document.querySelectorAll('.wizard-page').forEach(p => p.classList.remove('active'));
+  state.wizStep = n;
+  renderWizProgress();
+  const page = document.getElementById('wpage-' + n);
+  if (page) page.classList.add('active');
+  if (n === 4) startGeneration();
+  window.scrollTo(0, 0);
+}
+
+function renderProfSelect() {
+  const reqSubs = SUBJECTS.filter(s => s.type === 'req' || s.type === 'elec');
+  document.getElementById('prof-select-list').innerHTML = reqSubs.map(s => `
+    <div style="border:1px solid var(--gray-border);border-radius:var(--radius-sm);overflow:hidden;">
+      <div style="padding:10px 14px;background:var(--gray-light);display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <div style="font-size:13px;font-weight:800;">${s.name}</div>
+          <div style="font-size:11px;color:var(--text-sub);">${s.credit}학점 · ${s.tag}</div>
+        </div>
+        <span style="font-size:10px;color:var(--text-sub);font-weight:700;">AI 자동선택 가능</span>
+      </div>
+      <div style="padding:8px 10px;display:flex;flex-direction:column;gap:6px;">
+        <div class="prof-option ${state.profSelected[s.id]===null?'selected':''}" onclick="selectProf('${s.id}',null,this)">
+          <div><div class="prof-name">🤖 AI가 자동으로 선택</div><div class="prof-time">공강·시간 조건에 맞게 AI가 골라줘요</div></div>
+          ${state.profSelected[s.id]===null||state.profSelected[s.id]===undefined?'<div class="prof-check">✓</div>':''}
+        </div>
+        ${s.professors.map((p,i) => `
+          <div class="prof-option ${state.profSelected[s.id]===i?'selected':''}" onclick="selectProf('${s.id}',${i},this)">
+            <div>
+              <div class="prof-name">${p.name}</div>
+              <div class="prof-time">${p.label}</div>
+              <div class="prof-room">${p.room}</div>
+            </div>
+            ${state.profSelected[s.id]===i?'<div class="prof-check">✓</div>':''}
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function selectProf(subId, profIdx, el) {
+  state.profSelected[subId] = profIdx;
+  // 같은 과목 카드 내 선택 초기화
+  const card = el.closest('[style]');
+  card.querySelectorAll('.prof-option').forEach(o => {
+    o.classList.remove('selected');
+    const chk = o.querySelector('.prof-check');
+    if (chk) chk.remove();
+  });
+  el.classList.add('selected');
+  const chk = document.createElement('div');
+  chk.className = 'prof-check';
+  chk.textContent = '✓';
+  el.appendChild(chk);
+  const s = SUBJECTS.find(s => s.id === subId);
+  const label = profIdx === null ? 'AI 자동선택' : s.professors[profIdx].name;
+  showToast(`${s.name}: ${label}`);
+}
+
+function renderTimeBlocks() {
+  const wrap = document.getElementById('time-blocks');
+  const slots = ['9시','10시','11시','12시','13시','14시','15시','16시','17시'];
+  const slotKeys = ['9','10','11','12','13','14','15','16','17'];
+  wrap.innerHTML = DAYS.map(day => {
+    const isOff = state.offDays.includes(day);
+    return `
+      <div class="time-block-row">
+        <div class="tbl-day">${day}</div>
+        <div class="tbl-slots">
+          ${slotKeys.map((t,i) => {
+            const blocked = (state.blockedSlots[day]||[]).includes(t);
+            const offClass = isOff ? 'off-block' : '';
+            const blockedClass = !isOff && blocked ? 'blocked' : '';
+            return `<div class="tbl-slot ${offClass} ${blockedClass}" data-day="${day}" data-time="${t}" onclick="toggleSlot('${day}','${t}',this)">${slots[i]}</div>`;
+          }).join('')}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function toggleDay(el) {
+  const day = el.dataset.day;
+  if (state.offDays.includes(day)) {
+    state.offDays = state.offDays.filter(d => d !== day);
+    el.classList.remove('selected');
+  } else {
+    state.offDays.push(day);
+    el.classList.add('selected');
+  }
+  renderTimeBlocks();
+}
+
+function toggleSlot(day, time, el) {
+  if (state.offDays.includes(day)) return;
+  if (!state.blockedSlots[day]) state.blockedSlots[day] = [];
+  if (state.blockedSlots[day].includes(time)) {
+    state.blockedSlots[day] = state.blockedSlots[day].filter(t => t !== time);
+    el.classList.remove('blocked');
+  } else {
+    state.blockedSlots[day].push(time);
+    el.classList.add('blocked');
+  }
+}
+
+function toggle1st(checked) {
+  state.block1st = checked;
+  DAYS.forEach(day => {
+    if (!state.blockedSlots[day]) state.blockedSlots[day] = [];
+    if (checked) {
+      if (!state.blockedSlots[day].includes('9')) state.blockedSlots[day].push('9');
+    } else {
+      state.blockedSlots[day] = state.blockedSlots[day].filter(t => t !== '9');
+    }
+  });
+  renderTimeBlocks();
+}
+
+function renderExcludeList() {
+  const electSubs = SUBJECTS.filter(s => s.type === 'elec');
+  document.getElementById('exclude-list').innerHTML = electSubs.map(s => `
+    <div class="toggle-row" style="cursor:pointer;" onclick="toggleExclude('${s.id}',this)">
+      <div>
+        <div class="toggle-label">${s.name}</div>
+        <div class="toggle-sub">${s.credit}학점 · ${s.tag}</div>
+      </div>
+      <div id="excl-icon-${s.id}" style="font-size:18px;color:var(--gray);">○</div>
+    </div>
+  `).join('');
+}
+
+function toggleExclude(id, el) {
+  if (state.excludedSubjects.includes(id)) {
+    state.excludedSubjects = state.excludedSubjects.filter(e => e !== id);
+    document.getElementById('excl-icon-' + id).textContent = '○';
+    document.getElementById('excl-icon-' + id).style.color = 'var(--gray)';
+    el.style.background = '';
+  } else {
+    state.excludedSubjects.push(id);
+    document.getElementById('excl-icon-' + id).textContent = '✕';
+    document.getElementById('excl-icon-' + id).style.color = 'var(--danger)';
+    el.style.background = 'var(--danger-pale)';
+    showToast('제외됨: ' + SUBJECTS.find(s=>s.id===id).name);
+  }
+}
+
+const GYOYANG_AREAS = [
+  {key:'인문I', label:'인문 I', sub:'인간과 문명의 이해'},
+  {key:'인문II', label:'인문 II', sub:'역사·철학·문화'},
+  {key:'소통', label:'소통', sub:'글쓰기·발표·토론'},
+  {key:'창의', label:'창의', sub:'창의적 사고와 표현'},
+  {key:'글로벌', label:'글로벌', sub:'글로벌 리더십·외국어'},
+];
+
+function renderGyoyangGrid() {
+  document.getElementById('gyoyang-grid').innerHTML = GYOYANG_AREAS.map(a => {
+    const isDone = state.doneGyoyang.includes(a.key);
+    return `
+      <div class="gy-card ${isDone?'selected':''}" onclick="toggleGyoyang('${a.key}',this)">
+        <div class="gy-name">${a.label}</div>
+        <div class="gy-sub">${a.sub}</div>
+        <div class="gy-status">${isDone?'✅ 이수 완료':'○ 미이수'}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function toggleGyoyang(key, el) {
+  if (state.doneGyoyang.includes(key)) {
+    state.doneGyoyang = state.doneGyoyang.filter(k => k !== key);
+    el.classList.remove('selected');
+    el.querySelector('.gy-status').textContent = '○ 미이수';
+  } else {
+    state.doneGyoyang.push(key);
+    el.classList.add('selected');
+    el.querySelector('.gy-status').textContent = '✅ 이수 완료';
+    showToast(`${key} 영역 이수 완료 체크!`);
+  }
+}
+
+// ══════════════════════════════════════
+// AI 시간표 생성 (샘플 알고리즘)
+// ══════════════════════════════════════
+function startGeneration() {
+  document.getElementById('generating-state').style.display = 'block';
+  document.getElementById('result-state').style.display = 'none';
+
+  setTimeout(() => {
+    const plan = generatePlan();
+    state.generatedPlan = plan;
+    showResult(plan);
+  }, 2000);
+}
+
+function isBlocked(day, time) {
+  if (state.offDays.includes(day)) return true;
+  if (state.block1st && time === '9') return true;
+  if (state.block1st && time === '9') return true;
+  const lunch = document.getElementById('toggle-lunch');
+  if (lunch && lunch.checked && time === '12') return true;
+  return (state.blockedSlots[day] || []).includes(time);
+}
+
+function canPlace(subject, profIdx) {
+  const prof = subject.professors[profIdx];
+  for (const day of prof.days) {
+    for (const t of prof.times) {
+      if (isBlocked(day, t)) return false;
+    }
+  }
+  return true;
+}
+
+function generatePlan() {
+  const planA = [];
+  const usedSlots = {}; // day+time -> true
+
+  function markSlots(prof) {
+    for (const day of prof.days)
+      for (const t of prof.times)
+        usedSlots[day+t] = true;
+  }
+  function slotFree(prof) {
+    for (const day of prof.days)
+      for (const t of prof.times)
+        if (usedSlots[day+t]) return false;
+    return true;
+  }
+
+  // 전공 필수 먼저 배치
+  const reqSubs = SUBJECTS.filter(s => s.type === 'req');
+  for (const s of reqSubs) {
+    let placed = false;
+    // 사용자가 교수 지정했으면 그걸 먼저
+    const prefIdx = state.profSelected[s.id];
+    const tryOrder = prefIdx != null
+      ? [prefIdx, ...s.professors.map((_,i)=>i).filter(i=>i!==prefIdx)]
+      : s.professors.map((_,i)=>i);
+
+    for (const idx of tryOrder) {
+      const prof = s.professors[idx];
+      if (canPlace(s, idx) && slotFree(prof)) {
+        markSlots(prof);
+        planA.push({subject: s, profIdx: idx, planB: false});
+        placed = true;
+        break;
+      }
+    }
+    if (!placed) {
+      // 그냥 첫 번째로
+      markSlots(s.professors[0]);
+      planA.push({subject: s, profIdx: 0, planB: false});
+    }
+  }
+
+  // 전공 선택 (제외 아닌 것)
+  const electSubs = SUBJECTS.filter(s => s.type === 'elec' && !state.excludedSubjects.includes(s.id));
+  for (const s of electSubs) {
+    const prefIdx = state.profSelected[s.id];
+    const tryOrder = prefIdx != null
+      ? [prefIdx, ...s.professors.map((_,i)=>i).filter(i=>i!==prefIdx)]
+      : s.professors.map((_,i)=>i);
+    for (const idx of tryOrder) {
+      const prof = s.professors[idx];
+      if (canPlace(s, idx) && slotFree(prof)) {
+        markSlots(prof);
+        planA.push({subject: s, profIdx: idx, planB: false});
+        break;
+      }
+    }
+  }
+
+  // 핵심교양 — 미이수 영역 중 빈 시간에 배치
+  const neededAreas = GYOYANG_AREAS.filter(a => !state.doneGyoyang.includes(a.key));
+  const coreSubs = SUBJECTS.filter(s => s.type === 'core');
+  let coreCount = 0;
+  for (const area of neededAreas) {
+    if (coreCount >= 2) break;
+    // 해당 영역 과목 찾기
+    const areaSubjects = coreSubs.filter(s => s.tag.includes(area.key.replace('인문I','인문I').replace('인문II','인문II')));
+    for (const s of areaSubjects) {
+      let placed = false;
+      for (let idx = 0; idx < s.professors.length; idx++) {
+        const prof = s.professors[idx];
+        if (canPlace(s, idx) && slotFree(prof)) {
+          markSlots(prof);
+          planA.push({subject: s, profIdx: idx, planB: false});
+          placed = true;
+          coreCount++;
+          break;
+        }
+      }
+      if (placed) break;
+    }
+  }
+
+  // 자유교양으로 21학점 채우기
+  const currentCredits = planA.reduce((sum, item) => sum + item.subject.credit, 0);
+  if (currentCredits < 21) {
+    const freeSubs = SUBJECTS.filter(s => s.type === 'free');
+    for (const s of freeSubs) {
+      if (planA.reduce((sum, item) => sum + item.subject.credit, 0) >= 21) break;
+      for (let idx = 0; idx < s.professors.length; idx++) {
+        const prof = s.professors[idx];
+        if (canPlace(s, idx) && slotFree(prof)) {
+          markSlots(prof);
+          planA.push({subject: s, profIdx: idx, planB: false});
+          break;
+        }
+      }
+    }
+  }
+
+  // 플랜 B: 전공선택 첫 과목을 다른 분반으로 교체
+  const planB = planA.map(item => ({...item}));
+  const electInPlan = planB.find(item => item.subject.type === 'elec');
+  if (electInPlan) {
+    const s = electInPlan.subject;
+    const altIdx = (electInPlan.profIdx + 1) % s.professors.length;
+    electInPlan.profIdx = altIdx;
+    electInPlan.planB = true;
+  }
+
+  return { planA, planB };
+}
+
+function showResult(plan) {
+  document.getElementById('generating-state').style.display = 'none';
+  const rs = document.getElementById('result-state');
+  rs.style.display = 'flex';
+
+  const totalCredits = plan.planA.reduce((s,i) => s + i.subject.credit, 0);
+  const offDayText = state.offDays.length ? state.offDays.join('·') + '요일 공강' : '공강 없음';
+
+  document.getElementById('result-badges').innerHTML = `
+    <div class="rh-badge">총 ${totalCredits}학점</div>
+    <div class="rh-badge">${offDayText}</div>
+    <div class="rh-badge">${plan.planA.length}과목</div>
+    <div class="rh-badge">플랜B 준비 완료</div>
+  `;
+
+  renderTTGrid('result-tt-grid', plan.planA);
+  renderLegend('result-legend', plan.planA);
+  renderResultSubjects(plan.planA);
+}
+
+function switchResultPlan(p, el) {
+  document.querySelectorAll('#wpage-4 .plan-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  const items = p === 'A' ? state.generatedPlan.planA : state.generatedPlan.planB;
+  renderTTGrid('result-tt-grid', items);
+  renderLegend('result-legend', items);
+  renderResultSubjects(items);
+}
+
+function renderResultSubjects(items) {
+  const list = document.getElementById('result-subjects-list');
+  list.innerHTML = items.map(item => {
+    const s = item.subject;
+    const prof = s.professors[item.profIdx];
+    return `
+      <div style="border:1px solid var(--gray-border);border-radius:var(--radius-sm);padding:12px 14px;cursor:pointer;transition:box-shadow .15s;" onclick="openModal('${s.id}',${item.profIdx})" onmouseover="this.style.boxShadow='0 4px 16px rgba(67,56,202,0.12)'" onmouseout="this.style.boxShadow=''">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:10px;height:10px;border-radius:3px;flex-shrink:0;" class="${s.color}" style=""></div>
+            <div>
+              <div style="font-size:13px;font-weight:800;">${s.name} ${item.planB?'<span style="font-size:10px;color:var(--cyan);font-weight:700;">▶ 변경</span>':''}</div>
+              <div style="font-size:11px;color:var(--text-sub);">${prof.name} · ${prof.label}</div>
+            </div>
+          </div>
+          <div style="font-size:11px;font-weight:700;color:var(--primary);">${s.credit}학점</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function applyToHome() {
+  if (!state.generatedPlan) return;
+  document.getElementById('empty-state').style.display = 'none';
+  document.getElementById('timetable-state').style.display = 'flex';
+  const totalCredits = state.generatedPlan.planA.reduce((s,i) => s + i.subject.credit, 0);
+  document.getElementById('home-credit-badge').textContent = `${totalCredits} / 21학점`;
+  document.getElementById('home-credit-sub').textContent = `${state.generatedPlan.planA.length}과목 구성 완료`;
+  renderTTGrid('tt-grid', state.generatedPlan.planA);
+  renderLegend('tt-legend', state.generatedPlan.planA);
+  goScreen('home');
+  showToast('🎉 시간표가 적용됐어요!');
+}
+
+function switchPlan(p, el) {
+  document.querySelectorAll('#timetable-state .plan-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  if (!state.generatedPlan) return;
+  const items = p === 'A' ? state.generatedPlan.planA : state.generatedPlan.planB;
+  renderTTGrid('tt-grid', items);
+  renderLegend('tt-legend', items);
+}
+
+// ══════════════════════════════════════
+// 시간표 그리드 렌더
+// ══════════════════════════════════════
+function renderTTGrid(gridId, items) {
+  const grid = document.getElementById(gridId);
+  if (!grid) return;
+
+  // 슬롯맵 생성: day+time -> item
+  const slotMap = {};
+  for (const item of items) {
+    const prof = item.subject.professors[item.profIdx];
+    for (const day of prof.days) {
+      for (const t of prof.times) {
+        slotMap[day + t] = item;
+      }
+    }
+  }
+
+  const showTimes = ['9','10','11','12','13','14','15','16','17'];
+  let html = '';
+
+  // 헤더
+  html += '<div class="tt-head" style="background:var(--primary);color:rgba(255,255,255,0.6);">-</div>';
+  DAYS.forEach(d => {
+    const isOff = state.offDays.includes(d);
+    html += `<div class="tt-head ${isOff?'off':''}">${d}${isOff?'<br><span style="font-size:8px;">공강</span>':''}</div>`;
+  });
+
+  // 행
+  for (const t of showTimes) {
+    html += `<div class="tt-time">${t}</div>`;
+    DAYS.forEach(d => {
+      const isOff = state.offDays.includes(d);
+      const item = slotMap[d + t];
+      if (isOff) {
+        html += `<div class="tt-cell tt-off"></div>`;
+      } else if (item) {
+        const s = item.subject;
+        const prof = s.professors[item.profIdx];
+        // 첫 번째 시간대에만 라벨 표시
+        if (prof.times[0] === t) {
+          html += `<div class="tt-cell" style="grid-row: span ${prof.times.length};" onclick="openModal('${s.id}',${item.profIdx})">
+            <div class="tt-class ${s.color}" style="inset:1px;">
+              ${s.name}<br><span style="font-weight:600;opacity:0.85;">${prof.name.replace(' 교수','').replace('분반','')}</span>
+            </div>
+          </div>`;
+        }
+        // span된 셀은 건너뜀 (grid auto-flow로 처리됨)
+      } else {
+        html += `<div class="tt-cell"></div>`;
+      }
+    });
+  }
+
+  grid.innerHTML = html;
+}
+
+function renderLegend(legendId, items) {
+  const el = document.getElementById(legendId);
+  if (!el) return;
+  el.innerHTML = items.map(item => {
+    const s = item.subject;
+    const colorMap = {
+      'c-blue':'#4338CA','c-cyan':'#0891B2','c-purple':'#7C3AED',
+      'c-green':'#059669','c-amber':'#D97706','c-pink':'#DB2777'
+    };
+    return `
+      <div class="legend-item" onclick="openModal('${s.id}',${item.profIdx})">
+        <div class="legend-dot" style="background:${colorMap[s.color]||'#888'};"></div>
+        ${s.name}
+      </div>
+    `;
+  }).join('');
+}
+
+// ══════════════════════════════════════
+// 모달
+// ══════════════════════════════════════
+function openModal(subId, profIdx) {
+  const s = SUBJECTS.find(s => s.id === subId);
+  if (!s) return;
+  const prof = s.professors[profIdx];
+  document.getElementById('modal-name').textContent = s.name;
+  document.getElementById('modal-prof').textContent = `${prof.name} · ${prof.label} · ${prof.room}`;
+
+  const tagLabels = {req:'전공 필수',elec:'전공 선택',core:'핵심교양',free:'자유교양'};
+  document.getElementById('modal-info').innerHTML = `
+    <div class="modal-row"><span class="modal-key">구분</span><span class="modal-val">${tagLabels[s.type]}</span></div>
+    <div class="modal-row"><span class="modal-key">학점</span><span class="modal-val">${s.credit}학점</span></div>
+    <div class="modal-row"><span class="modal-key">시간</span><span class="modal-val">${prof.label}</span></div>
+    <div class="modal-row"><span class="modal-key">강의실</span><span class="modal-val">${prof.room}</span></div>
+  `;
+  document.getElementById('modal-reasons').innerHTML = s.reasons.map(r => `
+    <div class="reason-item"><div class="ri-dot"></div><div class="ri-text">${r}</div></div>
+  `).join('');
+
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modal-overlay')) {
+    document.getElementById('modal-overlay').classList.remove('open');
+  }
+}
+
+// ══════════════════════════════════════
+// 토스트
+// ══════════════════════════════════════
+let toastTimer;
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2000);
+}
+
+// 초기화
+renderCheckScreen();
+renderMakeScreen();
+</script>
+</body>
+</html>
