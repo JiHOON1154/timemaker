@@ -2,55 +2,88 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>TimeMaker — 모빌리티전력전자융합전공</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
-:root{--primary:#4338CA;--primary-light:#6366F1;--primary-pale:#EEF2FF;--primary-border:#C7D2FE;--cyan:#0891B2;--cyan-pale:#CFFAFE;--success:#059669;--success-pale:#DCFCE7;--warning:#D97706;--warning-pale:#FEF3C7;--danger:#DC2626;--danger-pale:#FEE2E2;--purple:#7C3AED;--purple-pale:#EDE9FE;--gray:#6B7280;--gray-light:#F3F4F6;--gray-border:#E5E7EB;--text:#111827;--text-sub:#6B7280;--bg:#F0F1FF;--white:#ffffff;--r:16px;--rsm:10px}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;justify-content:center;padding:16px}
-.app{width:100%;max-width:420px;display:flex;flex-direction:column}
-.screen{display:none;flex-direction:column;min-height:100vh}
+:root{--p:#4338CA;--pp:#EEF2FF;--pb:#C7D2FE;--pl:#6366F1;--cy:#0891B2;--cyp:#CFFAFE;--ok:#059669;--okp:#DCFCE7;--wa:#D97706;--wap:#FEF3C7;--er:#DC2626;--erp:#FEE2E2;--pu:#7C3AED;--pup:#EDE9FE;--gr:#6B7280;--gl:#F3F4F6;--gb:#E5E7EB;--tx:#111827;--ts:#6B7280;--bg:#F0F1FF;--wh:#fff;--r:16px;--rs:10px}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;display:flex;justify-content:center;padding:12px}
+.app{width:100%;max-width:430px}
+.screen{display:none;flex-direction:column;min-height:100vh;border-radius:var(--r);overflow:hidden;box-shadow:0 8px 32px rgba(67,56,202,.12)}
 .screen.active{display:flex}
-.header{background:var(--primary);border-radius:var(--r) var(--r) 0 0;padding:18px 18px 0;flex-shrink:0}
-.header-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
-.logo{font-size:18px;font-weight:900;color:#fff;letter-spacing:-0.5px}
+/* 헤더 */
+.hd{background:var(--p);padding:16px 16px 0;flex-shrink:0}
+.hd-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.logo{font-size:17px;font-weight:900;color:#fff;letter-spacing:-.5px}
 .logo span{color:#A5B4FC}
-.dept{font-size:10px;color:rgba(255,255,255,0.6);font-weight:600;text-align:right;line-height:1.4}
-.htabs{display:flex;gap:5px}
-.htab{flex:1;padding:9px 0;border-radius:var(--rsm) var(--rsm) 0 0;font-size:12px;font-weight:700;cursor:pointer;text-align:center;color:rgba(255,255,255,0.55);background:rgba(255,255,255,0.08);border:none;transition:all .2s;font-family:'Nunito',sans-serif}
-.htab.active{background:var(--white);color:var(--primary)}
-.htab:hover:not(.active){background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.8)}
-.body{background:var(--white);flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:14px}
-.bnav{display:flex;justify-content:space-around;align-items:center;padding:7px 0 11px;background:var(--white);border-radius:0 0 var(--r) var(--r);border-top:1px solid var(--gray-border);flex-shrink:0}
+.dept{font-size:9px;color:rgba(255,255,255,.6);font-weight:700;text-align:right;line-height:1.5}
+.htabs{display:flex;gap:4px}
+.htab{flex:1;padding:9px 2px;border-radius:var(--rs) var(--rs) 0 0;font-size:11px;font-weight:800;cursor:pointer;text-align:center;color:rgba(255,255,255,.5);background:rgba(255,255,255,.08);border:none;transition:all .2s;font-family:'Nunito',sans-serif;letter-spacing:-.2px}
+.htab.active{background:var(--wh);color:var(--p)}
+.htab:hover:not(.active){background:rgba(255,255,255,.15);color:rgba(255,255,255,.85)}
+/* 바디 */
+.bd{background:var(--wh);flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:14px}
+/* 바텀 네비 */
+.bn{display:flex;background:var(--wh);border-top:1px solid var(--gb);padding:6px 0 10px;flex-shrink:0}
 .bni{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;padding:3px 0}
-.bni-icon{font-size:19px}
-.bni-label{font-size:10px;font-weight:700;color:var(--gray)}
-.bni.active .bni-label{color:var(--primary)}
-.sec-title{font-size:12px;font-weight:800;color:var(--primary);margin-bottom:8px;display:flex;align-items:center;gap:5px}
-.sbadge{font-size:10px;font-weight:700;background:var(--primary-pale);color:var(--primary);padding:2px 7px;border-radius:20px}
-.btn-p{background:var(--primary);color:#fff;border:none;border-radius:var(--rsm);padding:13px;font-size:13px;font-weight:800;cursor:pointer;width:100%;font-family:'Nunito',sans-serif;transition:all .15s}
-.btn-p:hover{background:#3730A3}
-.btn-o{background:var(--white);color:var(--primary);border:1.5px solid var(--primary-border);border-radius:var(--rsm);padding:11px;font-size:12px;font-weight:700;cursor:pointer;width:100%;font-family:'Nunito',sans-serif;transition:all .15s}
-.btn-o:hover{background:var(--primary-pale)}
+.bni-ic{font-size:18px}
+.bni-lb{font-size:9px;font-weight:700;color:var(--gr)}
+.bni.active .bni-lb{color:var(--p)}
+/* 공통 버튼 */
+.btn{border:none;border-radius:var(--rs);font-size:13px;font-weight:800;cursor:pointer;width:100%;font-family:'Nunito',sans-serif;transition:all .15s;padding:13px;letter-spacing:-.2px}
+.btn-p{background:var(--p);color:#fff}.btn-p:hover{background:#3730A3}.btn-p:active{transform:scale(.98)}
+.btn-o{background:var(--wh);color:var(--p);border:1.5px solid var(--pb)}.btn-o:hover{background:var(--pp)}
+.btn-sm{padding:9px;font-size:11px}
+/* 섹션 타이틀 */
+.stitle{font-size:12px;font-weight:800;color:var(--p);margin-bottom:8px;display:flex;align-items:center;gap:5px}
+.sbadge{font-size:9px;font-weight:700;background:var(--pp);color:var(--p);padding:2px 7px;border-radius:20px}
+/* 카드 */
+.card{background:var(--wh);border:1px solid var(--gb);border-radius:var(--rs);overflow:hidden}
+.card-hd{padding:11px 13px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:background .15s}
+.card-hd:hover{background:var(--gl)}
+.card-name{font-size:13px;font-weight:800}
+.card-sub{font-size:10px;color:var(--ts);margin-top:1px}
+.card-tag{font-size:9px;font-weight:700;padding:2px 7px;border-radius:5px;white-space:nowrap}
+.tag-req{background:var(--erp);color:var(--er)}
+.tag-core{background:var(--okp);color:var(--ok)}
+.tag-free{background:var(--wap);color:var(--wa)}
+.card-bd{display:none;border-top:1px solid var(--gb);padding:10px 13px;background:#FAFBFF}
+.card-bd.open{display:block}
+/* 교수 옵션 */
+.popt{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:var(--wh);border-radius:8px;margin-bottom:5px;border:1.5px solid var(--gb);cursor:pointer;transition:all .15s}
+.popt:last-child{margin-bottom:0}
+.popt:hover{border-color:var(--pb);background:var(--pp)}
+.popt.sel{border-color:var(--p);background:var(--pp)}
+.pname{font-size:12px;font-weight:800}
+.ptime{font-size:10px;color:var(--ts);margin-top:1px}
+.proom{font-size:9px;color:var(--ts)}
+.pchk{color:var(--p);font-weight:900;font-size:14px;flex-shrink:0}
 /* 홈 */
-.home-info{display:flex;justify-content:space-between;align-items:center}
-.hi-title{font-size:15px;font-weight:800}
-.hi-sub{font-size:11px;color:var(--text-sub);margin-top:2px}
-.cbadge{background:var(--primary-pale);color:var(--primary);font-size:12px;font-weight:800;padding:5px 11px;border-radius:20px}
-.empty-tt{border:2px dashed var(--primary-border);border-radius:var(--rsm);padding:36px 18px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:9px}
-.et-icon{font-size:38px}
-.et-title{font-size:14px;font-weight:800;color:var(--primary)}
-.et-sub{font-size:12px;color:var(--text-sub);line-height:1.6}
+.home-top{display:flex;justify-content:space-between;align-items:center}
+.ht-l .ht-title{font-size:15px;font-weight:800}
+.ht-l .ht-sub{font-size:10px;color:var(--ts);margin-top:2px}
+.crbadge{background:var(--pp);color:var(--p);font-size:11px;font-weight:800;padding:5px 12px;border-radius:20px}
+/* D-day */
+.dday{background:linear-gradient(135deg,var(--p),#6366F1);border-radius:var(--rs);padding:12px 16px;display:flex;justify-content:space-between;align-items:center}
+.dd-label{font-size:11px;color:rgba(255,255,255,.75);font-weight:700}
+.dd-val{font-size:22px;font-weight:900;color:#fff;letter-spacing:-.5px}
+.dd-sub{font-size:9px;color:rgba(255,255,255,.6);margin-top:2px}
+/* 빈 시간표 */
+.empty-tt{border:2px dashed var(--pb);border-radius:var(--rs);padding:36px 16px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px}
+.et-ic{font-size:36px}
+.et-title{font-size:14px;font-weight:800;color:var(--p)}
+.et-sub{font-size:11px;color:var(--ts);line-height:1.6}
 /* 시간표 그리드 */
-.tt-wrap{border-radius:var(--rsm);overflow:hidden;border:1px solid var(--gray-border)}
-.tt-grid{display:grid;grid-template-columns:30px repeat(5,1fr);font-size:9px}
-.tt-head{background:var(--primary);color:rgba(255,255,255,0.9);font-weight:800;text-align:center;padding:6px 1px;font-size:10px}
-.tt-head.off{background:#818CF8}
-.tt-time{background:var(--primary-pale);color:var(--primary);font-weight:700;text-align:center;padding:2px 1px;font-size:8px;border-bottom:1px solid var(--primary-border);display:flex;align-items:center;justify-content:center;min-height:32px}
-.tt-cell{border-bottom:1px solid var(--gray-border);border-right:1px solid var(--gray-border);min-height:32px;position:relative;cursor:pointer}
+.tt-wrap{border-radius:var(--rs);overflow:hidden;border:1px solid var(--gb)}
+.tt-grid{display:grid;grid-template-columns:28px repeat(5,1fr);font-size:8px}
+.tt-hd{background:var(--p);color:rgba(255,255,255,.9);font-weight:800;text-align:center;padding:6px 1px;font-size:9px}
+.tt-hd.off{background:#818CF8}
+.tt-time{background:var(--pp);color:var(--p);font-weight:700;text-align:center;padding:2px 1px;font-size:7.5px;border-bottom:1px solid var(--pb);display:flex;align-items:center;justify-content:center;min-height:30px}
+.tt-cell{border-bottom:1px solid var(--gb);border-right:1px solid var(--gb);min-height:30px;position:relative;cursor:pointer}
 .tt-cell:last-child{border-right:none}
-.tt-class{position:absolute;inset:1px;border-radius:5px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:7px;font-weight:800;text-align:center;line-height:1.25;cursor:pointer;transition:opacity .15s;padding:2px}
+.tt-class{position:absolute;inset:1px;border-radius:5px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:7px;font-weight:800;text-align:center;line-height:1.3;padding:2px;transition:opacity .15s}
 .tt-class:hover{opacity:.85}
 .tt-off{background:#EEF2FF}
 .c-blue{background:#4338CA;color:#fff}
@@ -59,209 +92,249 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 .c-green{background:#059669;color:#fff}
 .c-amber{background:#D97706;color:#fff}
 .c-pink{background:#DB2777;color:#fff}
-.legend{display:flex;flex-wrap:wrap;gap:5px}
-.legend-item{display:flex;align-items:center;gap:4px;font-size:9px;font-weight:700;background:var(--gray-light);border-radius:5px;padding:3px 7px;cursor:pointer;transition:all .15s}
-.legend-item:hover{background:var(--primary-pale)}
-.ldot{width:9px;height:9px;border-radius:2px;flex-shrink:0}
+/* 범례 */
+.legend{display:flex;flex-wrap:wrap;gap:4px}
+.leg-item{display:flex;align-items:center;gap:4px;font-size:9px;font-weight:700;background:var(--gl);border-radius:5px;padding:3px 7px;cursor:pointer}
+.leg-item:hover{background:var(--pp)}
+.ldot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+/* 플랜 탭 */
 .plan-tabs{display:flex;gap:5px}
-.plan-tab{flex:1;padding:9px;border-radius:var(--rsm);border:1.5px solid var(--gray-border);text-align:center;font-size:12px;font-weight:800;cursor:pointer;transition:all .15s;background:var(--white)}
-.plan-tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}
-/* 과목 카드 */
-.subj-card{border:1px solid var(--gray-border);border-radius:var(--rsm);overflow:hidden;cursor:pointer;transition:box-shadow .15s}
-.subj-card:hover{box-shadow:0 3px 12px rgba(67,56,202,.1)}
-.sc-header{padding:11px 13px;display:flex;justify-content:space-between;align-items:center}
-.sc-name{font-size:13px;font-weight:800}
-.sc-credit{font-size:11px;color:var(--text-sub);font-weight:600;margin-top:1px}
-.sc-tag{font-size:9px;font-weight:700;padding:2px 7px;border-radius:5px}
-.tag-req{background:var(--danger-pale);color:var(--danger)}
-.tag-core{background:var(--success-pale);color:var(--success)}
-.tag-free{background:var(--warning-pale);color:var(--warning)}
-.sc-body{display:none;border-top:1px solid var(--gray-border);padding:10px 13px;background:var(--gray-light)}
-.sc-body.open{display:block}
-.prof-opt{display:flex;justify-content:space-between;align-items:center;padding:7px 9px;background:var(--white);border-radius:7px;margin-bottom:5px;border:1.5px solid var(--gray-border);font-size:11px;cursor:pointer;transition:all .15s}
-.prof-opt:last-child{margin-bottom:0}
-.prof-opt:hover{border-color:var(--primary-border);background:var(--primary-pale)}
-.prof-opt.selected{border-color:var(--primary);background:var(--primary-pale)}
-.pname{font-weight:700;font-size:12px}
-.ptime{color:var(--text-sub);font-size:10px;margin-top:1px}
-.proom{color:var(--text-sub);font-size:9px}
-.pcheck{color:var(--primary);font-weight:800;font-size:13px}
+.plan-tab{flex:1;padding:9px;border-radius:var(--rs);border:1.5px solid var(--gb);text-align:center;font-size:12px;font-weight:800;cursor:pointer;transition:all .15s;background:var(--wh)}
+.plan-tab.active{background:var(--p);color:#fff;border-color:var(--p)}
+/* 과목확인 - 영역 탭 */
+.area-tabs{display:flex;gap:4px;overflow-x:auto;padding-bottom:2px;-ms-overflow-style:none;scrollbar-width:none}
+.area-tabs::-webkit-scrollbar{display:none}
+.area-tab{flex-shrink:0;padding:6px 12px;border-radius:20px;font-size:11px;font-weight:800;cursor:pointer;border:1.5px solid var(--gb);background:var(--wh);color:var(--ts);transition:all .15s;white-space:nowrap}
+.area-tab.active{background:var(--p);color:#fff;border-color:var(--p)}
 /* 마법사 */
-.wiz-prog{display:flex;gap:3px}
-.wp-step{flex:1;height:5px;border-radius:3px;background:var(--primary-border);transition:background .3s}
-.wp-step.done{background:var(--primary)}
-.wp-label{font-size:10px;color:var(--text-sub);font-weight:700;text-align:center;margin-top:5px}
+.wiz-bar{display:flex;gap:3px}
+.wstep{flex:1;height:5px;border-radius:3px;background:var(--pb);transition:background .3s}
+.wstep.done{background:var(--p)}
+.wlabel{font-size:10px;color:var(--ts);font-weight:700;text-align:center;margin-top:5px}
 .wpage{display:none;flex-direction:column;gap:13px}
 .wpage.active{display:flex}
 .wiz-title{font-size:16px;font-weight:900;line-height:1.35}
-.wiz-sub{font-size:11px;color:var(--text-sub);margin-top:2px;line-height:1.5}
-.day-chips{display:flex;gap:6px;justify-content:space-between}
-.day-chip{flex:1;padding:11px 3px;border-radius:9px;border:1.5px solid var(--gray-border);text-align:center;font-size:13px;font-weight:800;cursor:pointer;transition:all .15s;background:var(--white)}
-.day-chip:hover{border-color:var(--primary-border);background:var(--primary-pale)}
-.day-chip.selected{border-color:var(--primary);background:var(--primary);color:#fff}
-.tbwrap{display:flex;flex-direction:column;gap:7px}
-.tbrow{display:flex;align-items:center;gap:6px}
-.tbl-day{font-size:11px;font-weight:800;width:22px;color:var(--primary);flex-shrink:0}
-.tbl-slots{display:flex;gap:3px;flex:1}
-.tbl-slot{flex:1;padding:6px 1px;border-radius:5px;border:1.5px solid var(--gray-border);text-align:center;font-size:8px;font-weight:700;cursor:pointer;transition:all .15s;background:var(--white);color:var(--text-sub)}
-.tbl-slot:hover{border-color:var(--danger-pale);background:var(--danger-pale)}
-.tbl-slot.blocked{border-color:var(--danger);background:var(--danger-pale);color:var(--danger)}
-.tbl-slot.off-block{background:var(--primary-pale);border-color:var(--primary-border);color:var(--primary);pointer-events:none}
-.toggle-row{display:flex;justify-content:space-between;align-items:center;padding:11px 13px;background:var(--gray-light);border-radius:var(--rsm)}
-.toggle-label{font-size:12px;font-weight:700}
-.toggle-sub{font-size:10px;color:var(--text-sub);margin-top:2px}
-.toggle{position:relative;width:42px;height:23px;flex-shrink:0}
-.toggle input{display:none}
-.toggle-track{position:absolute;inset:0;border-radius:11px;background:var(--gray-border);cursor:pointer;transition:background .2s}
-.toggle input:checked+.toggle-track{background:var(--primary)}
-.toggle-thumb{position:absolute;width:17px;height:17px;background:#fff;border-radius:50%;top:3px;left:3px;transition:transform .2s;pointer-events:none}
-.toggle input:checked~.toggle-thumb{transform:translateX(19px)}
-.gy-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
-.gy-card{border:1.5px solid var(--gray-border);border-radius:var(--rsm);padding:10px;cursor:pointer;transition:all .15s;background:var(--white)}
-.gy-card:hover{border-color:var(--primary-border);background:var(--primary-pale)}
-.gy-card.selected{border-color:var(--primary);background:var(--primary);color:#fff}
-.gy-name{font-size:12px;font-weight:800}
-.gy-sub{font-size:10px;opacity:.7;margin-top:2px}
-.gy-status{font-size:10px;font-weight:700;margin-top:5px}
-/* 결과 */
-.result-header{background:linear-gradient(135deg,var(--primary) 0%,#6366F1 100%);border-radius:var(--rsm);padding:14px;color:#fff}
-.rh-title{font-size:15px;font-weight:900}
-.rh-sub{font-size:10px;color:rgba(255,255,255,.75);margin-top:2px}
-.rh-badges{display:flex;gap:5px;margin-top:9px;flex-wrap:wrap}
-.rh-badge{background:rgba(255,255,255,.2);border-radius:5px;font-size:9px;font-weight:700;padding:3px 7px}
+.wiz-sub{font-size:11px;color:var(--ts);margin-top:3px;line-height:1.6}
+/* 요일 칩 */
+.day-chips{display:flex;gap:5px}
+.day-chip{flex:1;padding:11px 2px;border-radius:9px;border:1.5px solid var(--gb);text-align:center;font-size:13px;font-weight:800;cursor:pointer;transition:all .15s;background:var(--wh)}
+.day-chip:hover{border-color:var(--pb);background:var(--pp)}
+.day-chip.sel{background:var(--p);color:#fff;border-color:var(--p)}
+/* 시간 블록 */
+.tbwrap{display:flex;flex-direction:column;gap:6px}
+.tbrow{display:flex;align-items:center;gap:5px}
+.tbd{font-size:11px;font-weight:800;width:20px;color:var(--p);flex-shrink:0}
+.tbslots{display:flex;gap:2px;flex:1}
+.tbslot{flex:1;padding:6px 1px;border-radius:5px;border:1.5px solid var(--gb);text-align:center;font-size:7.5px;font-weight:700;cursor:pointer;transition:all .15s;background:var(--wh);color:var(--ts)}
+.tbslot:hover{border-color:var(--erp);background:var(--erp)}
+.tbslot.blocked{border-color:var(--er);background:var(--erp);color:var(--er)}
+.tbslot.offday{background:var(--pp);border-color:var(--pb);color:var(--p);pointer-events:none}
+/* 토글 */
+.tgl-row{display:flex;justify-content:space-between;align-items:center;padding:11px 13px;background:var(--gl);border-radius:var(--rs)}
+.tgl-label{font-size:12px;font-weight:700}
+.tgl-sub{font-size:10px;color:var(--ts);margin-top:2px}
+.tgl{position:relative;width:42px;height:23px;flex-shrink:0}
+.tgl input{display:none}
+.tgl-track{position:absolute;inset:0;border-radius:11px;background:var(--gb);cursor:pointer;transition:background .2s}
+.tgl input:checked+.tgl-track{background:var(--p)}
+.tgl-thumb{position:absolute;width:17px;height:17px;background:#fff;border-radius:50%;top:3px;left:3px;transition:transform .2s;pointer-events:none}
+.tgl input:checked~.tgl-thumb{transform:translateX(19px)}
+/* 교양 선택 */
+.gyarea-tabs{display:flex;gap:4px;overflow-x:auto;-ms-overflow-style:none;scrollbar-width:none}
+.gyarea-tabs::-webkit-scrollbar{display:none}
+.gyatab{flex-shrink:0;padding:6px 10px;border-radius:20px;font-size:10px;font-weight:800;cursor:pointer;border:1.5px solid var(--gb);background:var(--wh);color:var(--ts);transition:all .15s}
+.gyatab.active{background:var(--p);color:#fff;border-color:var(--p)}
+.gyatab.done{background:var(--okp);color:var(--ok);border-color:var(--ok)}
+.gyatab.has-sel{border-color:var(--p);color:var(--p);font-weight:900}
+.gy-subj-list{display:flex;flex-direction:column;gap:6px;max-height:280px;overflow-y:auto}
+.gy-subj{border:1.5px solid var(--gb);border-radius:var(--rs);overflow:hidden;transition:all .15s}
+.gy-subj:hover{border-color:var(--pb)}
+.gy-subj.sel-subj{border-color:var(--p);background:var(--pp)}
+.gy-subj-hd{padding:10px 12px;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+.gy-subj-name{font-size:12px;font-weight:800}
+.gy-subj-info{font-size:9px;color:var(--ts);margin-top:1px}
+.gy-subj-bd{display:none;border-top:1px solid var(--gb);padding:8px 10px;background:var(--gl)}
+.gy-subj-bd.open{display:block}
+/* 조건 요약 */
+.summary-box{background:var(--pp);border:1.5px solid var(--pb);border-radius:var(--rs);padding:12px 14px}
+.sum-title{font-size:11px;font-weight:800;color:var(--p);margin-bottom:8px}
+.sum-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--pb);font-size:11px}
+.sum-row:last-child{border-bottom:none}
+.sum-key{color:var(--ts);font-weight:600}
+.sum-val{font-weight:800;color:var(--tx);text-align:right;max-width:60%}
+/* 결과 헤더 */
+.res-hd{background:linear-gradient(135deg,var(--p),#6366F1);border-radius:var(--rs);padding:14px;color:#fff}
+.res-title{font-size:15px;font-weight:900}
+.res-sub{font-size:10px;color:rgba(255,255,255,.75);margin-top:2px}
+.res-badges{display:flex;gap:4px;margin-top:8px;flex-wrap:wrap}
+.rbadge{background:rgba(255,255,255,.2);border-radius:5px;font-size:9px;font-weight:700;padding:3px 7px}
+/* 플랜 비교 */
+.plan-diff{background:var(--wap);border:1.5px solid #FDE68A;border-radius:var(--rs);padding:10px 12px;font-size:11px}
+.pd-title{font-weight:800;color:var(--wa);margin-bottom:5px}
+.pd-item{display:flex;gap:6px;align-items:center;margin-top:4px}
+.pd-arrow{color:var(--wa);font-weight:900}
+/* 학점 바 */
+.credit-bar-wrap{background:var(--gl);border-radius:var(--rs);padding:10px 12px}
+.cb-top{display:flex;justify-content:space-between;margin-bottom:6px;font-size:11px;font-weight:700}
+.cb-bar{background:var(--gb);border-radius:4px;height:8px;overflow:hidden}
+.cb-fill{background:var(--p);height:100%;border-radius:4px;transition:width .5s}
+/* 검색 */
+.search-wrap{position:relative}
+.search-input{width:100%;border:1.5px solid var(--gb);border-radius:var(--rs);padding:10px 36px 10px 14px;font-size:12px;font-family:'Nunito',sans-serif;outline:none;transition:border-color .15s}
+.search-input:focus{border-color:var(--p)}
+.search-icon{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--ts)}
 /* 모달 */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;align-items:flex-end;justify-content:center;padding:0 16px}
-.modal-overlay.open{display:flex}
-.modal{background:var(--white);border-radius:var(--r) var(--r) 0 0;width:100%;max-width:420px;max-height:78vh;overflow-y:auto;padding:18px;animation:slideUp .25s ease}
-@keyframes slideUp{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
-.modal-handle{width:38px;height:4px;background:var(--gray-border);border-radius:2px;margin:0 auto 14px}
-.modal-sname{font-size:19px;font-weight:900;margin-bottom:3px}
-.modal-prof{font-size:12px;color:var(--text-sub);margin-bottom:14px}
-.modal-sec{margin-bottom:12px}
-.msec-title{font-size:10px;font-weight:800;color:var(--primary);margin-bottom:7px;letter-spacing:.04em}
-.mrow{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--gray-light);font-size:12px}
+.modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;align-items:flex-end;justify-content:center;padding:0 12px}
+.modal-ov.open{display:flex}
+.modal{background:var(--wh);border-radius:var(--r) var(--r) 0 0;width:100%;max-width:430px;max-height:80vh;overflow-y:auto;padding:16px;animation:sUp .25s ease}
+@keyframes sUp{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
+.mhandle{width:36px;height:4px;background:var(--gb);border-radius:2px;margin:0 auto 14px}
+.msname{font-size:18px;font-weight:900;margin-bottom:3px}
+.msprof{font-size:11px;color:var(--ts);margin-bottom:14px}
+.msec{margin-bottom:12px}
+.mstitle{font-size:10px;font-weight:800;color:var(--p);margin-bottom:7px;letter-spacing:.04em}
+.mrow{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--gl);font-size:12px}
 .mrow:last-child{border-bottom:none}
-.mkey{color:var(--text-sub);font-weight:600}
+.mkey{color:var(--ts);font-weight:600}
 .mval{font-weight:800}
-.reason-list{display:flex;flex-direction:column;gap:7px}
-.ri{display:flex;gap:7px;background:var(--primary-pale);border-radius:7px;padding:9px 11px}
-.ri-dot{width:5px;height:5px;border-radius:50%;background:var(--primary);flex-shrink:0;margin-top:4px}
-.ri-text{font-size:11px;color:var(--primary);font-weight:600;line-height:1.5}
+.reason-list{display:flex;flex-direction:column;gap:6px}
+.ri{display:flex;gap:7px;background:var(--pp);border-radius:7px;padding:8px 10px}
+.ri-dot{width:5px;height:5px;border-radius:50%;background:var(--p);flex-shrink:0;margin-top:4px}
+.ri-text{font-size:11px;color:var(--p);font-weight:600;line-height:1.5}
 /* 토스트 */
-.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(55px);background:#1F2937;color:#fff;font-size:12px;font-weight:700;padding:11px 18px;border-radius:18px;white-space:nowrap;transition:transform .3s;z-index:200;font-family:'Nunito',sans-serif}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(50px);background:#1F2937;color:#fff;font-size:12px;font-weight:700;padding:10px 18px;border-radius:20px;white-space:nowrap;transition:transform .3s;z-index:200;font-family:'Nunito',sans-serif}
 .toast.show{transform:translateX(-50%) translateY(0)}
-.divider{border:none;border-top:1px solid var(--gray-border);margin:3px 0}
+.divider{border:none;border-top:1px solid var(--gb)}
 @keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
 <div class="app">
 
-<!-- ── 홈 ── -->
+<!-- ══ 홈 ══ -->
 <div id="sc-home" class="screen active">
-  <div class="header">
-    <div class="header-top">
+  <div class="hd">
+    <div class="hd-top">
       <div class="logo">Time<span>Maker</span></div>
-      <div class="dept">모빌리티전력전자<br>융합전공 2학년</div>
+      <div class="dept">모빌리티전력전자융합전공<br>2학년 1학기</div>
     </div>
     <div class="htabs">
-      <button class="htab" onclick="goScreen('check')">📋 시간표 확인하기</button>
-      <button class="htab" onclick="goScreen('make')">✨ 시간표 만들기</button>
+      <button class="htab" onclick="go('check')">📋 시간표 확인하기</button>
+      <button class="htab" onclick="go('make')">✨ 시간표 만들기</button>
     </div>
   </div>
-  <div class="body">
-    <div class="home-info">
-      <div><div class="hi-title">2027년 1학기 시간표</div><div class="hi-sub" id="home-sub">시간표를 만들어보세요!</div></div>
-      <div class="cbadge" id="home-credit">0 / 21학점</div>
+  <div class="bd">
+    <div class="dday">
+      <div><div class="dd-label">2027년 수강신청까지</div><div class="dd-val" id="dday-val">D-???</div><div class="dd-sub" id="dday-date">날짜 계산 중...</div></div>
+      <div style="font-size:36px">📅</div>
     </div>
-    <div id="empty-state" class="empty-tt">
-      <div class="et-icon">📅</div>
+    <div class="home-top">
+      <div class="ht-l"><div class="ht-title">2027년 1학기 시간표</div><div class="ht-sub" id="home-sub">시간표를 만들어보세요!</div></div>
+      <div class="crbadge" id="home-cr">0/21학점</div>
+    </div>
+    <div id="empty-st" class="empty-tt">
+      <div class="et-ic">📅</div>
       <div class="et-title">아직 시간표가 없어요</div>
-      <div class="et-sub">위의 <b>시간표 만들기</b>를 눌러<br>나만의 최적 시간표를 추천받아보세요!</div>
+      <div class="et-sub"><b>시간표 만들기</b>를 눌러<br>나만의 최적 시간표를 추천받아보세요!</div>
     </div>
-    <div id="tt-state" style="display:none;flex-direction:column;gap:11px;">
+    <div id="tt-st" style="display:none;flex-direction:column;gap:10px">
       <div class="plan-tabs">
-        <div class="plan-tab active" onclick="switchPlan('A',this)">🏆 플랜 A</div>
-        <div class="plan-tab" onclick="switchPlan('B',this)">🔄 플랜 B</div>
+        <div class="plan-tab active" onclick="switchHomePlan('A',this)">🏆 플랜 A</div>
+        <div class="plan-tab" onclick="switchHomePlan('B',this)">🔄 플랜 B</div>
       </div>
-      <div class="tt-wrap"><div class="tt-grid" id="tt-grid"></div></div>
-      <div class="legend" id="tt-legend"></div>
-      <button class="btn-o" onclick="goScreen('make')">🔧 다시 만들기</button>
+      <div class="tt-wrap"><div class="tt-grid" id="home-tt"></div></div>
+      <div class="legend" id="home-leg"></div>
+      <button class="btn btn-o btn-sm" onclick="saveImage()">📸 시간표 이미지 저장</button>
+      <button class="btn btn-o btn-sm" onclick="go('make')">🔧 조건 수정하고 다시 만들기</button>
     </div>
   </div>
-  <div class="bnav">
-    <div class="bni active"><div class="bni-icon">🏠</div><div class="bni-label">홈</div></div>
-    <div class="bni" onclick="goScreen('check')"><div class="bni-icon">📋</div><div class="bni-label">과목확인</div></div>
-    <div class="bni" onclick="goScreen('make')"><div class="bni-icon">✨</div><div class="bni-label">만들기</div></div>
+  <div class="bn">
+    <div class="bni active"><div class="bni-ic">🏠</div><div class="bni-lb">홈</div></div>
+    <div class="bni" onclick="go('check')"><div class="bni-ic">📋</div><div class="bni-lb">과목확인</div></div>
+    <div class="bni" onclick="go('make')"><div class="bni-ic">✨</div><div class="bni-lb">만들기</div></div>
   </div>
 </div>
 
-<!-- ── 시간표 확인하기 ── -->
+<!-- ══ 시간표 확인하기 ══ -->
 <div id="sc-check" class="screen">
-  <div class="header">
-    <div class="header-top">
-      <button onclick="goScreen('home')" style="background:rgba(255,255,255,.15);border:none;color:#fff;font-size:12px;font-weight:700;padding:5px 11px;border-radius:7px;cursor:pointer;font-family:'Nunito',sans-serif">← 홈</button>
+  <div class="hd">
+    <div class="hd-top">
+      <button onclick="go('home')" style="background:rgba(255,255,255,.15);border:none;color:#fff;font-size:11px;font-weight:700;padding:5px 10px;border-radius:7px;cursor:pointer;font-family:'Nunito',sans-serif">← 홈</button>
       <div class="logo">Time<span>Maker</span></div>
     </div>
     <div class="htabs">
       <button class="htab active">📋 시간표 확인하기</button>
-      <button class="htab" onclick="goScreen('make')">✨ 시간표 만들기</button>
+      <button class="htab" onclick="go('make')">✨ 시간표 만들기</button>
     </div>
   </div>
-  <div class="body">
+  <div class="bd">
+    <!-- 전공필수 -->
     <div>
-      <div class="sec-title">🔴 전공필수 <span class="sbadge">6과목 · 16학점</span></div>
-      <div style="display:flex;flex-direction:column;gap:7px" id="check-req"></div>
+      <div class="stitle">🔴 전공필수 <span class="sbadge">6과목 · 16학점</span></div>
+      <div style="display:flex;flex-direction:column;gap:6px" id="check-req"></div>
     </div>
-    <hr class="divider">
+    <div class="divider"></div>
+    <!-- 핵심교양 영역 탭 -->
     <div>
-      <div class="sec-title">🟢 핵심교양 5영역 <span class="sbadge">1~2과목 권장</span></div>
-      <div style="display:flex;flex-direction:column;gap:7px" id="check-core"></div>
+      <div class="stitle">🟢 핵심교양 <span class="sbadge">5영역</span></div>
+      <div class="area-tabs" id="area-tabs">
+        <div class="area-tab active" data-area="인문I" onclick="switchArea(this)">인문 I</div>
+        <div class="area-tab" data-area="인문II" onclick="switchArea(this)">인문 II</div>
+        <div class="area-tab" data-area="소통" onclick="switchArea(this)">소통</div>
+        <div class="area-tab" data-area="창의" onclick="switchArea(this)">창의</div>
+        <div class="area-tab" data-area="글로벌" onclick="switchArea(this)">글로벌</div>
+      </div>
+      <div style="margin-top:10px;display:flex;flex-direction:column;gap:6px" id="check-core"></div>
     </div>
-    <hr class="divider">
+    <div class="divider"></div>
+    <!-- 자유교양 검색 -->
     <div>
-      <div class="sec-title">🟡 자유교양 <span class="sbadge">학점 채우기</span></div>
-      <div style="display:flex;flex-direction:column;gap:7px" id="check-free"></div>
+      <div class="stitle">🟡 자유교양 <span class="sbadge" id="free-count-badge">77과목</span></div>
+      <div class="search-wrap" style="margin-bottom:8px">
+        <input class="search-input" id="free-search" placeholder="자유교양 과목 검색..." oninput="filterFree(this.value)">
+        <span class="search-icon">🔍</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;max-height:320px;overflow-y:auto" id="check-free"></div>
     </div>
-    <button class="btn-p" onclick="goScreen('make')">✨ 시간표 만들기로 이동</button>
+    <button class="btn btn-p" onclick="go('make')">✨ 시간표 만들기로 이동</button>
   </div>
-  <div class="bnav">
-    <div class="bni" onclick="goScreen('home')"><div class="bni-icon">🏠</div><div class="bni-label">홈</div></div>
-    <div class="bni active"><div class="bni-icon">📋</div><div class="bni-label">과목확인</div></div>
-    <div class="bni" onclick="goScreen('make')"><div class="bni-icon">✨</div><div class="bni-label">만들기</div></div>
+  <div class="bn">
+    <div class="bni" onclick="go('home')"><div class="bni-ic">🏠</div><div class="bni-lb">홈</div></div>
+    <div class="bni active"><div class="bni-ic">📋</div><div class="bni-lb">과목확인</div></div>
+    <div class="bni" onclick="go('make')"><div class="bni-ic">✨</div><div class="bni-lb">만들기</div></div>
   </div>
 </div>
 
-<!-- ── 시간표 만들기 ── -->
+<!-- ══ 시간표 만들기 ══ -->
 <div id="sc-make" class="screen">
-  <div class="header">
-    <div class="header-top">
-      <button onclick="goScreen('home')" style="background:rgba(255,255,255,.15);border:none;color:#fff;font-size:12px;font-weight:700;padding:5px 11px;border-radius:7px;cursor:pointer;font-family:'Nunito',sans-serif">← 홈</button>
+  <div class="hd">
+    <div class="hd-top">
+      <button onclick="go('home')" style="background:rgba(255,255,255,.15);border:none;color:#fff;font-size:11px;font-weight:700;padding:5px 10px;border-radius:7px;cursor:pointer;font-family:'Nunito',sans-serif">← 홈</button>
       <div class="logo">Time<span>Maker</span></div>
     </div>
     <div class="htabs">
-      <button class="htab" onclick="goScreen('check')">📋 시간표 확인하기</button>
+      <button class="htab" onclick="go('check')">📋 시간표 확인하기</button>
       <button class="htab active">✨ 시간표 만들기</button>
     </div>
   </div>
-  <div class="body">
+  <div class="bd">
     <div>
-      <div class="wiz-prog" id="wiz-prog"></div>
-      <div class="wp-label" id="wiz-lbl">단계 1 / 4</div>
+      <div class="wiz-bar" id="wiz-bar"></div>
+      <div class="wlabel" id="wiz-lbl">단계 1 / 5</div>
     </div>
 
     <!-- STEP 1: 교수 선택 -->
     <div class="wpage active" id="wp1">
-      <div><div class="wiz-title">원하는 교수님을<br>선택해주세요</div><div class="wiz-sub">선택 안 하면 AI가 조건에 맞게 자동 선택해요</div></div>
-      <div style="display:flex;flex-direction:column;gap:9px" id="prof-list"></div>
-      <button class="btn-p" onclick="nextStep(2)">다음 → 공강 요일 선택</button>
+      <div><div class="wiz-title">원하는 교수님을 선택해주세요</div><div class="wiz-sub">선택 안 하면 AI가 조건에 맞게 자동 선택해요</div></div>
+      <div style="display:flex;flex-direction:column;gap:8px" id="prof-list"></div>
+      <button class="btn btn-p" onclick="ns(2)">다음 → 공강 요일 선택</button>
     </div>
 
     <!-- STEP 2: 공강 + 시간 제외 -->
     <div class="wpage" id="wp2">
-      <div><div class="wiz-title">공강 요일과<br>제외 시간을 골라주세요</div><div class="wiz-sub">공강은 수업 없는 날, 블록은 수업 빼고 싶은 시간이에요</div></div>
+      <div><div class="wiz-title">공강 요일과 제외 시간을 설정해주세요</div><div class="wiz-sub">요일 탭하면 공강, 시간 칸 탭하면 해당 시간 제외</div></div>
       <div>
-        <div class="sec-title" style="margin-bottom:8px">📅 공강 희망 요일</div>
+        <div class="stitle" style="margin-bottom:8px">📅 공강 희망 요일</div>
         <div class="day-chips" id="day-chips">
           <div class="day-chip" data-day="월" onclick="toggleDay(this)">월</div>
           <div class="day-chip" data-day="화" onclick="toggleDay(this)">화</div>
@@ -271,95 +344,131 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
         </div>
       </div>
       <div>
-        <div class="sec-title" style="margin-bottom:3px">⏰ 요일별 제외 시간</div>
-        <div style="font-size:10px;color:var(--text-sub);margin-bottom:8px">탭하면 해당 시간대 제외. 보라색=공강 처리된 요일</div>
+        <div class="stitle" style="margin-bottom:3px">⏰ 요일별 제외 시간</div>
+        <div style="font-size:10px;color:var(--ts);margin-bottom:8px">탭하면 해당 시간 제외 (보라색=공강 요일)</div>
         <div class="tbwrap" id="time-blocks"></div>
       </div>
-      <div style="display:flex;flex-direction:column;gap:7px">
-        <div class="toggle-row">
-          <div><div class="toggle-label">1교시(8시) 전체 제외</div><div class="toggle-sub">모든 요일 8시 수업 없애기</div></div>
-          <label class="toggle"><input type="checkbox" id="t-1st" onchange="toggle1st(this.checked)"><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
-        </div>
-        <div class="toggle-row">
-          <div><div class="toggle-label">점심시간(12~13시) 확보</div><div class="toggle-sub">5교시(12시) 수업 배정 안 함</div></div>
-          <label class="toggle"><input type="checkbox" id="t-lunch"><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
+      <div>
+        <div class="tgl-row">
+          <div><div class="tgl-label">1교시(9시) 전체 제외</div><div class="tgl-sub">모든 요일 9시 수업 없애기</div></div>
+          <label class="tgl"><input type="checkbox" id="t-1st" onchange="toggle1st(this.checked)"><div class="tgl-track"></div><div class="tgl-thumb"></div></label>
         </div>
       </div>
       <div style="display:flex;gap:7px">
-        <button class="btn-o" style="flex:1" onclick="nextStep(1)">← 이전</button>
-        <button class="btn-p" style="flex:2" onclick="nextStep(3)">다음 → 교양 설정</button>
+        <button class="btn btn-o" style="flex:1" onclick="ns(1)">← 이전</button>
+        <button class="btn btn-p" style="flex:2" onclick="ns(3)">다음 → 교양 선택</button>
       </div>
     </div>
 
-    <!-- STEP 3: 교양 설정 -->
+    <!-- STEP 3: 교양 선택 -->
     <div class="wpage" id="wp3">
-      <div><div class="wiz-title">핵심교양 이수 현황을<br>알려주세요</div><div class="wiz-sub">이미 이수한 영역 선택 → AI가 나머지 영역 빈 시간에 자동 배치해요</div></div>
-      <div>
-        <div class="sec-title">✅ 이미 이수한 핵심교양 영역</div>
-        <div style="font-size:10px;color:var(--text-sub);margin-bottom:9px">1학년 때 들은 영역이 있으면 선택해주세요</div>
-        <div class="gy-grid" id="gy-grid"></div>
+      <div><div class="wiz-title">듣고 싶은 교양 과목을 골라주세요</div><div class="wiz-sub">안 골라도 돼요. 전공만 들을 수도 있어요!</div></div>
+
+      <!-- 핵심교양 학점 현황 -->
+      <div class="credit-bar-wrap">
+        <div class="cb-top"><span>선택 학점</span><span id="sel-cr-txt">전공 16학점</span></div>
+        <div class="cb-bar"><div class="cb-fill" id="sel-cr-bar" style="width:76%"></div></div>
+        <div style="font-size:9px;color:var(--ts);margin-top:4px;text-align:right" id="sel-cr-remain">5학점 더 선택 가능 (최대 21학점)</div>
       </div>
+
+      <!-- 핵심교양 영역 탭 -->
       <div>
-        <div class="sec-title" style="margin-top:4px">📌 원하는 핵심교양 과목</div>
-        <div style="font-size:10px;color:var(--text-sub);margin-bottom:8px">특정 핵심교양 과목을 꼭 듣고 싶으면 선택하세요 (선택사항)</div>
-        <div style="display:flex;flex-direction:column;gap:5px" id="core-pref-list"></div>
+        <div class="stitle" style="margin-bottom:8px">🟢 핵심교양 선택</div>
+        <div class="gyarea-tabs" id="gy-area-tabs">
+          <div class="gyatab active" data-area="인문I" onclick="switchGyArea(this)">인문 I</div>
+          <div class="gyatab" data-area="인문II" onclick="switchGyArea(this)">인문 II</div>
+          <div class="gyatab" data-area="소통" onclick="switchGyArea(this)">소통</div>
+          <div class="gyatab" data-area="창의" onclick="switchGyArea(this)">창의</div>
+          <div class="gyatab" data-area="글로벌" onclick="switchGyArea(this)">글로벌</div>
+        </div>
+        <div class="gy-subj-list" id="gy-subj-list" style="margin-top:8px"></div>
       </div>
+
+      <!-- 자유교양 -->
+      <div>
+        <div class="stitle" style="margin-bottom:8px">🟡 자유교양 선택</div>
+        <div class="search-wrap" style="margin-bottom:7px">
+          <input class="search-input" id="free-search-make" placeholder="과목명으로 검색..." oninput="filterFreeMake(this.value)">
+          <span class="search-icon">🔍</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:5px;max-height:200px;overflow-y:auto" id="free-list-make"></div>
+      </div>
+
       <div style="display:flex;gap:7px">
-        <button class="btn-o" style="flex:1" onclick="nextStep(2)">← 이전</button>
-        <button class="btn-p" style="flex:2" onclick="nextStep(4)">AI 시간표 생성! ✨</button>
+        <button class="btn btn-o" style="flex:1" onclick="ns(2)">← 이전</button>
+        <button class="btn btn-p" style="flex:2" onclick="ns(4)">다음 → 조건 확인</button>
       </div>
     </div>
 
-    <!-- STEP 4: 결과 -->
+    <!-- STEP 4: 조건 요약 -->
     <div class="wpage" id="wp4">
-      <div id="gen-state" style="text-align:center;padding:28px 0">
-        <div style="font-size:46px;margin-bottom:14px;animation:spin 1s linear infinite">⚙️</div>
-        <div style="font-size:16px;font-weight:900;color:var(--primary)">AI가 시간표를 생성 중이에요</div>
-        <div style="font-size:11px;color:var(--text-sub);margin-top:7px;line-height:1.6">조건에 맞는 최적 조합을 탐색 중...<br>잠시만 기다려주세요</div>
+      <div><div class="wiz-title">이런 조건으로 시간표를 만들게요</div><div class="wiz-sub">확인 후 AI 생성 버튼을 눌러주세요!</div></div>
+      <div class="summary-box" id="summary-box"></div>
+      <div style="background:var(--pp);border-radius:var(--rs);padding:10px 12px;font-size:11px;color:var(--p);font-weight:600;line-height:1.6" id="summary-gyoyang"></div>
+      <div style="display:flex;gap:7px">
+        <button class="btn btn-o" style="flex:1" onclick="ns(3)">← 이전</button>
+        <button class="btn btn-p" style="flex:2" onclick="ns(5)">🤖 AI 시간표 생성!</button>
       </div>
-      <div id="res-state" style="display:none;flex-direction:column;gap:13px">
-        <div class="result-header">
-          <div class="rh-title">🎉 시간표 완성!</div>
-          <div class="rh-sub">조건을 분석해 최적 시간표를 만들었어요</div>
-          <div class="rh-badges" id="res-badges"></div>
+    </div>
+
+    <!-- STEP 5: 결과 -->
+    <div class="wpage" id="wp5">
+      <div id="gen-st" style="text-align:center;padding:28px 0">
+        <div style="font-size:44px;margin-bottom:12px;animation:spin 1s linear infinite">⚙️</div>
+        <div style="font-size:15px;font-weight:900;color:var(--p)">AI가 최적 시간표를 생성 중이에요</div>
+        <div style="font-size:11px;color:var(--ts);margin-top:7px;line-height:1.6">조건 분석 중...<br>잠시만 기다려주세요</div>
+      </div>
+      <div id="res-st" style="display:none;flex-direction:column;gap:12px">
+        <div class="res-hd">
+          <div class="res-title">🎉 시간표 완성!</div>
+          <div class="res-sub">조건에 맞는 최적 시간표를 만들었어요</div>
+          <div class="res-badges" id="res-badges"></div>
         </div>
         <div class="plan-tabs">
-          <div class="plan-tab active" onclick="switchResPlan('A',this)">🏆 플랜 A</div>
-          <div class="plan-tab" onclick="switchResPlan('B',this)">🔄 플랜 B</div>
+          <div class="plan-tab active" onclick="switchResPlan('A',this)">🏆 플랜 A (최적)</div>
+          <div class="plan-tab" onclick="switchResPlan('B',this)">🔄 플랜 B (차선)</div>
         </div>
+        <div id="plan-diff-box" style="display:none"></div>
         <div class="tt-wrap"><div class="tt-grid" id="res-tt"></div></div>
-        <div class="legend" id="res-legend"></div>
-        <div id="res-subj-list" style="display:flex;flex-direction:column;gap:7px"></div>
-        <button class="btn-p" onclick="applyHome()">✅ 이 시간표 적용하기</button>
-        <button class="btn-o" onclick="nextStep(1)">🔧 처음부터 다시</button>
+        <div class="legend" id="res-leg"></div>
+        <div id="res-subj-list" style="display:flex;flex-direction:column;gap:6px"></div>
+        <div id="rec-box" style="display:none;background:var(--pp);border:1.5px solid var(--pb);border-radius:var(--rs);padding:12px;font-size:11px;color:var(--p);line-height:1.6"></div>
+        <button class="btn btn-p" onclick="applyHome()">✅ 이 시간표 홈에 적용하기</button>
+        <button class="btn btn-o" onclick="ns(1)">🔧 처음부터 다시 설정</button>
       </div>
     </div>
   </div>
-  <div class="bnav">
-    <div class="bni" onclick="goScreen('home')"><div class="bni-icon">🏠</div><div class="bni-label">홈</div></div>
-    <div class="bni" onclick="goScreen('check')"><div class="bni-icon">📋</div><div class="bni-label">과목확인</div></div>
-    <div class="bni active"><div class="bni-icon">✨</div><div class="bni-label">만들기</div></div>
+  <div class="bn">
+    <div class="bni" onclick="go('home')"><div class="bni-ic">🏠</div><div class="bni-lb">홈</div></div>
+    <div class="bni" onclick="go('check')"><div class="bni-ic">📋</div><div class="bni-lb">과목확인</div></div>
+    <div class="bni active"><div class="bni-ic">✨</div><div class="bni-lb">만들기</div></div>
   </div>
 </div>
 
 </div><!-- app -->
 
 <!-- 모달 -->
-<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+<div class="modal-ov" id="modal" onclick="closeMod(event)">
   <div class="modal">
-    <div class="modal-handle"></div>
-    <div class="modal-sname" id="m-name"></div>
-    <div class="modal-prof" id="m-prof"></div>
-    <div class="modal-sec"><div class="msec-title">📋 기본 정보</div><div id="m-info"></div></div>
-    <div class="modal-sec"><div class="msec-title">🤖 AI 추천 이유</div><div class="reason-list" id="m-reasons"></div></div>
+    <div class="mhandle"></div>
+    <div class="msname" id="m-name"></div>
+    <div class="msprof" id="m-prof"></div>
+    <div class="msec"><div class="mstitle">📋 기본 정보</div><div id="m-info"></div></div>
+    <div class="msec"><div class="mstitle">🤖 AI 추천 이유</div><div class="reason-list" id="m-reasons"></div></div>
   </div>
 </div>
 <div class="toast" id="toast"></div>
 
 <script>
-const SUBJECTS = [{"id":"s_esm","name":"전자수학","credit":3,"type":"req","tag":"전공필수","color":"c-blue","professors":[{"name":"박영일","div":"1","slots":[{"day":"월","times":[2,3],"room":"미래관3층37호실"},{"day":"수","times":[2,3],"room":"미래관3층37호실"}],"label":"1분반 · 월 09:00~11:00, 수 09:00~11:00"},{"name":"장영민","div":"2","slots":[{"day":"월","times":[5,6],"room":"미래관5층27호실"},{"day":"화","times":[5,6],"room":"미래관5층27호실"}],"label":"2분반 · 월 12:00~14:00, 화 12:00~14:00"},{"name":"정경훈","div":"3","slots":[{"day":"수","times":[1,2],"room":"미래관5층23호실"},{"day":"금","times":[1,2],"room":"미래관5층23호실"}],"label":"3분반 · 수 08:00~10:00, 금 08:00~10:00"},{"name":"장혁준","div":"4","slots":[{"day":"화","times":[7,8],"room":"미래관3층36호실"},{"day":"수","times":[8,9],"room":"미래관3층36호실"}],"label":"4분반 · 화 14:00~16:00, 수 15:00~17:00"},{"name":"김태형","div":"5","slots":[{"day":"월","times":[4,5],"room":"미래관5층27호실"},{"day":"수","times":[5,6],"room":"미래관5층27호실"}],"label":"5분반 · 월 11:00~13:00, 수 12:00~14:00"},{"name":"양철관","div":"6","slots":[{"day":"월","times":[1,2],"room":"미래관3층38호실"},{"day":"수","times":[1,2],"room":"미래관3층38호실"}],"label":"6분반 · 월 08:00~10:00, 수 08:00~10:00"}]},{"id":"s_emg","name":"전자기학I","credit":3,"type":"req","tag":"전공필수","color":"c-cyan","professors":[{"name":"박준석","div":"1","slots":[{"day":"화","times":[1,2],"room":"미래관3층37호실"},{"day":"목","times":[4,5],"room":"미래관3층37호실"}],"label":"1분반 · 화 08:00~10:00, 목 11:00~13:00"},{"name":"박준석","div":"2","slots":[{"day":"화","times":[4,5],"room":"미래관5층23호실"},{"day":"목","times":[1,2],"room":"미래관5층23호실"}],"label":"2분반 · 화 11:00~13:00, 목 08:00~10:00"},{"name":"장병준","div":"3","slots":[{"day":"월","times":[8,9],"room":"미래관5층23호실"},{"day":"수","times":[10,11],"room":"미래관5층23호실"}],"label":"3분반 · 월 15:00~17:00, 수 17:00~19:00"},{"name":"장병준","div":"4","slots":[{"day":"월","times":[10,11],"room":"미래관5층23호실"},{"day":"수","times":[8,9],"room":"미래관5층23호실"}],"label":"4분반 · 월 17:00~19:00, 수 15:00~17:00"}]},{"id":"s_cir","name":"회로이론I","credit":3,"type":"req","tag":"전공필수","color":"c-purple","professors":[{"name":"강동욱","div":"1","slots":[{"day":"금","times":[1,2,3],"room":"미래관3층38호실"}],"label":"1분반 · 금 08:00~11:00"},{"name":"김대정","div":"2","slots":[{"day":"화","times":[7,8],"room":"미래관3층38호실"},{"day":"목","times":[8,9],"room":"미래관3층38호실"}],"label":"2분반 · 화 14:00~16:00, 목 15:00~17:00"},{"name":"김대정","div":"3","slots":[{"day":"화","times":[8,9],"room":"미래관3층36호실"},{"day":"목","times":[7,8],"room":"미래관3층36호실"}],"label":"3분반 · 화 15:00~17:00, 목 14:00~16:00"},{"name":"이승민","div":"4","slots":[{"day":"월","times":[4,5],"room":"미래관3층38호실"},{"day":"수","times":[5,6],"room":"미래관3층38호실"}],"label":"4분반 · 월 11:00~13:00, 수 12:00~14:00"},{"name":"김기두","div":"5","slots":[{"day":"월","times":[7,8],"room":"미래관5층24호실"},{"day":"화","times":[8,9],"room":"미래관5층24호실"}],"label":"5분반 · 월 14:00~16:00, 화 15:00~17:00"},{"name":"안현식","div":"6","slots":[{"day":"금","times":[1,2,3],"room":"미래관3층37호실"}],"label":"6분반 · 금 08:00~11:00"}]},{"id":"s_dig","name":"디지털공학","credit":3,"type":"req","tag":"전공필수","color":"c-green","professors":[{"name":"오하령","div":"1","slots":[{"day":"화","times":[2,3],"room":"미래관5층23호실"},{"day":"목","times":[2,3],"room":"미래관5층23호실"}],"label":"1분반 · 화 09:00~11:00, 목 09:00~11:00"},{"name":"성영락","div":"2","slots":[{"day":"월","times":[5,6],"room":"미래관5층23호실"},{"day":"화","times":[5,6],"room":"미래관5층23호실"}],"label":"2분반 · 월 12:00~14:00, 화 12:00~14:00"},{"name":"박영일","div":"3","slots":[{"day":"화","times":[5,6],"room":"미래관3층37호실"},{"day":"목","times":[5,6],"room":"미래관3층37호실"}],"label":"3분반 · 화 12:00~14:00, 목 12:00~14:00"},{"name":"민경식","div":"4","slots":[{"day":"월","times":[4,5],"room":"미래관5층23호실"},{"day":"수","times":[4,5],"room":"미래관5층23호실"}],"label":"4분반 · 월 11:00~13:00, 수 11:00~13:00"},{"name":"오정헌","div":"5","slots":[{"day":"수","times":[8,9],"room":"미래관5층27호실"},{"day":"금","times":[5,6],"room":"미래관5층27호실"}],"label":"5분반 · 수 15:00~17:00, 금 12:00~14:00"},{"name":"모현선","div":"6","slots":[{"day":"월","times":[8,9],"room":"미래관3층38호실"},{"day":"목","times":[7,8],"room":"미래관3층38호실"}],"label":"6분반 · 월 15:00~17:00, 목 14:00~16:00"}]},{"id":"s_dlab","name":"디지털공학실험","credit":1,"type":"req","tag":"전공필수","color":"c-amber","professors":[{"name":"오하령","div":"1","slots":[{"day":"화","times":[7,8],"room":"미래관3층39호실"}],"label":"1분반 · 화 14:00~16:00"},{"name":"장혁준","div":"2","slots":[{"day":"수","times":[2,3],"room":"미래관3층39호실"}],"label":"2분반 · 수 09:00~11:00"},{"name":"민경식","div":"3","slots":[{"day":"목","times":[5,6],"room":"미래관3층40호실"}],"label":"3분반 · 목 12:00~14:00"},{"name":"민경식","div":"4","slots":[{"day":"목","times":[7,8],"room":"미래관3층39호실"}],"label":"4분반 · 목 14:00~16:00"},{"name":"정경훈","div":"5","slots":[{"day":"월","times":[6,7],"room":"미래관3층39호실"}],"label":"5분반 · 월 13:00~15:00"},{"name":"정경훈","div":"6","slots":[{"day":"월","times":[8,9],"room":"미래관3층39호실"}],"label":"6분반 · 월 15:00~17:00"},{"name":"오정헌","div":"7","slots":[{"day":"수","times":[5,6,7],"room":"미래관3층39호실"}],"label":"7분반 · 수 12:00~15:00"},{"name":"모현선","div":"8","slots":[{"day":"수","times":[7,8,9],"room":"미래관3층40호실"}],"label":"8분반 · 수 14:00~17:00"},{"name":"모현선","div":"9","slots":[{"day":"금","times":[2,3],"room":"미래관3층40호실"}],"label":"9분반 · 금 09:00~11:00"},{"name":"김기두","div":"10","slots":[{"day":"화","times":[2,3],"room":"미래관3층39호실"}],"label":"10분반 · 화 09:00~11:00"},{"name":"김기두","div":"11","slots":[{"day":"목","times":[2,3],"room":"미래관3층39호실"}],"label":"11분반 · 목 09:00~11:00"}]},{"id":"s_prog","name":"프로그래밍언어","credit":3,"type":"req","tag":"전공필수","color":"c-pink","professors":[{"name":"오하령","div":"1","slots":[{"day":"화","times":[5,6],"room":"미래관4층49호실"},{"day":"목","times":[5,6],"room":"미래관4층49호실"}],"label":"1분반 · 화 12:00~14:00, 목 12:00~14:00"},{"name":"성영락","div":"2","slots":[{"day":"화","times":[7,8],"room":"미래관4층49호실"},{"day":"목","times":[2,3],"room":"미래관4층49호실"}],"label":"2분반 · 화 14:00~16:00, 목 09:00~11:00"},{"name":"문찬우","div":"3","slots":[{"day":"화","times":[1,2],"room":"미래관4층49호실"},{"day":"금","times":[3,4],"room":"미래관4층49호실"}],"label":"3분반 · 화 08:00~10:00, 금 10:00~12:00"},{"name":"김지혜","div":"4","slots":[{"day":"월","times":[1,2],"room":"미래관4층49호실"},{"day":"수","times":[1,2],"room":"미래관4층49호실"}],"label":"4분반 · 월 08:00~10:00, 수 08:00~10:00"},{"name":"한용수","div":"5","slots":[{"day":"화","times":[3,4],"room":"미래관4층49호실"},{"day":"목","times":[7,8],"room":"미래관4층49호실"}],"label":"5분반 · 화 10:00~12:00, 목 14:00~16:00"},{"name":"박범서","div":"6","slots":[{"day":"금","times":[5,6,7,8],"room":"미래관4층49호실"}],"label":"6분반 · 금 12:00~16:00"}]},{"id":"gc_01","name":"그리스신화와서양의문명","credit":3,"type":"core","tag":"핵심교양(인문I)","color":"c-blue","area":"인문I","professors":[{"name":"박규철","div":"01","slots":[{"day":"화","times":[5,6],"room":"북악관3층5호실"},{"day":"목","times":[5,6],"room":"북악관3층5호실"}],"label":"01분반 · 화 12:00~14:00, 목 12:00~14:00"},{"name":"박규철","div":"02","slots":[{"day":"화","times":[8,9],"room":"북악관3층5호실"},{"day":"목","times":[8,9],"room":"북악관3층5호실"}],"label":"02분반 · 화 15:00~17:00, 목 15:00~17:00"},{"name":"송현종","div":"03","slots":[{"day":"수","times":[7,8,9],"room":"미래관2층4호실"}],"label":"03분반 · 수 14:00~17:00"}]},{"id":"gc_02","name":"삶과윤리","credit":3,"type":"core","tag":"핵심교양(인문I)","color":"c-blue","area":"인문I","professors":[{"name":"조종화","div":"01","slots":[{"day":"화","times":[4,5],"room":"미래관2층4호실"},{"day":"목","times":[4,5],"room":"미래관2층4호실"}],"label":"01분반 · 화 11:00~13:00, 목 11:00~13:00"},{"name":"박규철","div":"02","slots":[{"day":"화","times":[2,3],"room":"공학관5층22호실"},{"day":"목","times":[2,3],"room":"공학관5층22호실"}],"label":"02분반 · 화 09:00~11:00, 목 09:00~11:00"},{"name":"이근세","div":"03","slots":[{"day":"수","times":[7,8],"room":"북악관3층4호실"},{"day":"금","times":[7,8],"room":"북악관3층4호실"}],"label":"03분반 · 수 14:00~16:00, 금 14:00~16:00"},{"name":"김한승","div":"04","slots":[{"day":"수","times":[4,5],"room":"북악관4층2호실"},{"day":"금","times":[4,5],"room":"북악관4층2호실"}],"label":"04분반 · 수 11:00~13:00, 금 11:00~13:00"},{"name":"박규철","div":"05","slots":[{"day":"화","times":[7,8],"room":"북악관6층5호실"},{"day":"목","times":[7,8],"room":"북악관6층5호실"}],"label":"05분반 · 화 14:00~16:00, 목 14:00~16:00"}]},{"id":"gc_03","name":"역사란무엇인가","credit":3,"type":"core","tag":"핵심교양(인문I)","color":"c-blue","area":"인문I","professors":[{"name":"윤은주","div":"01","slots":[{"day":"월","times":[4,5],"room":"북악관3층1호실"},{"day":"수","times":[4,5],"room":"북악관3층1호실"}],"label":"01분반 · 월 11:00~13:00, 수 11:00~13:00"},{"name":"윤은주","div":"02","slots":[{"day":"월","times":[5,6],"room":"북악관3층1호실"},{"day":"수","times":[5,6],"room":"북악관3층1호실"}],"label":"02분반 · 월 12:00~14:00, 수 12:00~14:00"},{"name":"윤은주","div":"03","slots":[{"day":"화","times":[1,2],"room":"북악관8층5호실"},{"day":"목","times":[1,2],"room":"북악관8층5호실"}],"label":"03분반 · 화 08:00~10:00, 목 08:00~10:00"}]},{"id":"gc_04","name":"임시정부와독립운동","credit":3,"type":"core","tag":"핵심교양(인문I)","color":"c-blue","area":"인문I","professors":[{"name":"이계형","div":"01","slots":[{"day":"화","times":[1,2],"room":"북악관4층3호실"},{"day":"목","times":[1,2],"room":"북악관4층3호실"}],"label":"01분반 · 화 08:00~10:00, 목 08:00~10:00"},{"name":"황선익","div":"02","slots":[{"day":"화","times":[2,3],"room":"북악관3층1호실"},{"day":"목","times":[2,3],"room":"북악관3층1호실"}],"label":"02분반 · 화 09:00~11:00, 목 09:00~11:00"},{"name":"이계형","div":"03","slots":[{"day":"화","times":[4,5],"room":"북악관3층1호실"},{"day":"목","times":[4,5],"room":"북악관3층1호실"}],"label":"03분반 · 화 11:00~13:00, 목 11:00~13:00"},{"name":"이계형","div":"04","slots":[{"day":"수","times":[5,6],"room":"북악관8층5호실"},{"day":"금","times":[5,6],"room":"북악관8층5호실"}],"label":"04분반 · 수 12:00~14:00, 금 12:00~14:00"}]},{"id":"gc_05","name":"철학의물음들","credit":3,"type":"core","tag":"핵심교양(인문I)","color":"c-blue","area":"인문I","professors":[{"name":"이근세","div":"02","slots":[{"day":"화","times":[2,3],"room":"북악관6층4호실"},{"day":"목","times":[2,3],"room":"북악관6층4호실"}],"label":"02분반 · 화 09:00~11:00, 목 09:00~11:00"},{"name":"김한승","div":"03","slots":[{"day":"수","times":[7,8],"room":"북악관11층11호실"},{"day":"금","times":[7,8],"room":"북악관11층11호실"}],"label":"03분반 · 수 14:00~16:00, 금 14:00~16:00"},{"name":"조종화","div":"04","slots":[{"day":"화","times":[2,3],"room":"미래관3층19호실"},{"day":"목","times":[2,3],"room":"미래관3층19호실"}],"label":"04분반 · 화 09:00~11:00, 목 09:00~11:00"},{"name":"조종화","div":"05","slots":[{"day":"수","times":[7,8],"room":"법학관3층3호실"},{"day":"금","times":[7,8],"room":"법학관3층3호실"}],"label":"05분반 · 수 14:00~16:00, 금 14:00~16:00"}]},{"id":"gc_06","name":"한국역사의이해","credit":3,"type":"core","tag":"핵심교양(인문I)","color":"c-blue","area":"인문I","professors":[{"name":"한준수","div":"01","slots":[{"day":"수","times":[5,6],"room":"북악관6층5호실"},{"day":"금","times":[5,6],"room":"북악관6층5호실"}],"label":"01분반 · 수 12:00~14:00, 금 12:00~14:00"},{"name":"남무희","div":"02","slots":[{"day":"월","times":[1,2],"room":"북악관8층5호실"},{"day":"수","times":[1,2],"room":"북악관8층5호실"}],"label":"02분반 · 월 08:00~10:00, 수 08:00~10:00"},{"name":"한준수","div":"03","slots":[{"day":"수","times":[4,5],"room":"북악관4층7호실"},{"day":"금","times":[4,5],"room":"북악관4층7호실"}],"label":"03분반 · 수 11:00~13:00, 금 11:00~13:00"},{"name":"김연민","div":"04","slots":[{"day":"수","times":[7,8],"room":"북악관4층7호실"},{"day":"금","times":[7,8],"room":"북악관4층7호실"}],"label":"04분반 · 수 14:00~16:00, 금 14:00~16:00"},{"name":"김연민","div":"05","slots":[{"day":"화","times":[2,3],"room":"북악관3층4호실"},{"day":"목","times":[2,3],"room":"북악관3층4호실"}],"label":"05분반 · 화 09:00~11:00, 목 09:00~11:00"},{"name":"여성구","div":"06","slots":[{"day":"화","times":[4,5],"room":"북악관4층7호실"},{"day":"목","times":[4,5],"room":"북악관4층7호실"}],"label":"06분반 · 화 11:00~13:00, 목 11:00~13:00"},{"name":"김정자","div":"07","slots":[{"day":"화","times":[1,2],"room":"북악관11층11호실"},{"day":"목","times":[1,2],"room":"북악관11층11호실"}],"label":"07분반 · 화 08:00~10:00, 목 08:00~10:00"},{"name":"남무희","div":"08","slots":[{"day":"화","times":[4,5],"room":"법학관3층3호실"},{"day":"목","times":[4,5],"room":"법학관3층3호실"}],"label":"08분반 · 화 11:00~13:00, 목 11:00~13:00"}]},{"id":"gc_07","name":"공연예술읽기(연극)","credit":3,"type":"core","tag":"핵심교양(인문II)","color":"c-cyan","area":"인문II","professors":[{"name":"문현정","div":"01","slots":[{"day":"화","times":[1,2],"room":"예술관1층19호실"},{"day":"목","times":[1,2],"room":"예술관1층19호실"}],"label":"01분반 · 화 08:00~10:00, 목 08:00~10:00"},{"name":"문현정","div":"02","slots":[{"day":"화","times":[2,3],"room":"예술관1층19호실"},{"day":"목","times":[2,3],"room":"예술관1층19호실"}],"label":"02분반 · 화 09:00~11:00, 목 09:00~11:00"}]},{"id":"gc_08","name":"디자인의이해","credit":3,"type":"core","tag":"핵심교양(인문II)","color":"c-cyan","area":"인문II","professors":[{"name":"심유리","div":"01","slots":[{"day":"목","times":[4,5,6],"room":"조형관3층9호실"}],"label":"01분반 · 목 11:00~14:00"},{"name":"윤나리","div":"03","slots":[{"day":"목","times":[7,8,9],"room":"조형관3층9호실"}],"label":"03분반 · 목 14:00~17:00"},{"name":"윤나리","div":"04","slots":[{"day":"월","times":[1,2,3],"room":"조형관3층9호실"}],"label":"04분반 · 월 08:00~11:00"}]},{"id":"gc_09","name":"문학속의심리학","credit":3,"type":"core","tag":"핵심교양(인문II)","color":"c-cyan","area":"인문II","professors":[{"name":"박진","div":"01","slots":[{"day":"화","times":[4,5],"room":"북악관8층2호실"},{"day":"목","times":[4,5],"room":"북악관8층2호실"}],"label":"01분반 · 화 11:00~13:00, 목 11:00~13:00"},{"name":"박진","div":"02","slots":[{"day":"수","times":[7,8,9],"room":"북악관8층2호실"}],"label":"02분반 · 수 14:00~17:00"},{"name":"신제원","div":"03","slots":[{"day":"월","times":[2,3,4,5],"room":"북악관6층4호실"}],"label":"03분반 · 월 09:00~13:00"}]},{"id":"gc_10","name":"문화이론과대중문화","credit":3,"type":"core","tag":"핵심교양(인문II)","color":"c-cyan","area":"인문II","professors":[{"name":"박진","div":"01","slots":[{"day":"화","times":[7,8],"room":"북악관8층5호실"},{"day":"목","times":[7,8],"room":"북악관8층5호실"}],"label":"01분반 · 화 14:00~16:00, 목 14:00~16:00"},{"name":"박진","div":"02","slots":[{"day":"화","times":[2,3],"room":"북악관6층5호실"},{"day":"목","times":[2,3],"room":"북악관6층5호실"}],"label":"02분반 · 화 09:00~11:00, 목 09:00~11:00"},{"name":"김남혁","div":"03","slots":[{"day":"화","times":[5,6],"room":"북악관6층10호실"},{"day":"목","times":[5,6],"room":"북악관6층10호실"}],"label":"03분반 · 화 12:00~14:00, 목 12:00~14:00"}]},{"id":"gc_11","name":"미술의이해","credit":3,"type":"core","tag":"핵심교양(인문II)","color":"c-cyan","area":"인문II","professors":[{"name":"최지혜","div":"01","slots":[{"day":"금","times":[1,2,3],"room":"예술관지하1층10호실"}],"label":"01분반 · 금 08:00~11:00"},{"name":"손상미","div":"02","slots":[{"day":"화","times":[5,6],"room":"예술관지하1층10호실"},{"day":"목","times":[5,6],"room":"예술관지하1층10호실"}],"label":"02분반 · 화 12:00~14:00, 목 12:00~14:00"},{"name":"손상미","div":"03","slots":[{"day":"금","times":[4,5,6],"room":"예술관지하1층10호실"}],"label":"03분반 · 금 11:00~14:00"},{"name":"손상미","div":"05","slots":[{"day":"화","times":[1,2],"room":"예술관지하1층10호실"},{"day":"목","times":[1,2],"room":"예술관지하1층10호실"}],"label":"05분반 · 화 08:00~10:00, 목 08:00~10:00"}]},{"id":"gc_12","name":"음악의이해","credit":3,"type":"core","tag":"핵심교양(인문II)","color":"c-cyan","area":"인문II","professors":[{"name":"박종현","div":"02","slots":[{"day":"화","times":[5,6],"room":"북악관3층1호실"},{"day":"목","times":[5,6],"room":"북악관3층1호실"}],"label":"02분반 · 화 12:00~14:00, 목 12:00~14:00"},{"name":"김희선","div":"03","slots":[{"day":"월","times":[2,3,4,5],"room":"북악관8층2호실"}],"label":"03분반 · 월 09:00~13:00"}]},{"id":"gc_13","name":"한국문학의이해","credit":3,"type":"core","tag":"핵심교양(인문II)","color":"c-cyan","area":"인문II","professors":[{"name":"배수찬","div":"01","slots":[{"day":"월","times":[2,3,4,5],"room":"미래관1층14호실"}],"label":"01분반 · 월 09:00~13:00"},{"name":"조재현","div":"02","slots":[{"day":"화","times":[2,3],"room":"북악관11층11호실"},{"day":"목","times":[2,3],"room":"북악관11층11호실"}],"label":"02분반 · 화 09:00~11:00, 목 09:00~11:00"},{"name":"서연주","div":"03","slots":[{"day":"수","times":[7,8],"room":"북악관3층1호실"},{"day":"금","times":[7,8],"room":"북악관3층1호실"}],"label":"03분반 · 수 14:00~16:00, 금 14:00~16:00"},{"name":"이철송","div":"04","slots":[{"day":"수","times":[8,9],"room":"경상관1층3호실"},{"day":"금","times":[8,9],"room":"경상관1층3호실"}],"label":"04분반 · 수 15:00~17:00, 금 15:00~17:00"},{"name":"박인희","div":"05","slots":[{"day":"화","times":[4,5],"room":"북악관11층11호실"},{"day":"목","times":[4,5],"room":"북악관11층11호실"}],"label":"05분반 · 화 11:00~13:00, 목 11:00~13:00"},{"name":"김남혁","div":"06","slots":[{"day":"수","times":[5,6],"room":"북악관8층2호실"},{"day":"금","times":[5,6],"room":"북악관8층2호실"}],"label":"06분반 · 수 12:00~14:00, 금 12:00~14:00"},{"name":"최은혜","div":"07","slots":[{"day":"수","times":[5,6],"room":"국제관2층1-2호실"},{"day":"금","times":[5,6],"room":"국제관2층1-2호실"}],"label":"07분반 · 수 12:00~14:00, 금 12:00~14:00"}]},{"id":"gc_14","name":"한문과문화","credit":3,"type":"core","tag":"핵심교양(인문II)","color":"c-cyan","area":"인문II","professors":[{"name":"이명아","div":"01","slots":[{"day":"화","times":[1,2],"room":"북악관6층10호실"},{"day":"목","times":[1,2],"room":"북악관6층10호실"}],"label":"01분반 · 화 08:00~10:00, 목 08:00~10:00"},{"name":"오한나","div":"02","slots":[{"day":"화","times":[5,6],"room":"북악관8층5호실"},{"day":"목","times":[5,6],"room":"북악관8층5호실"}],"label":"02분반 · 화 12:00~14:00, 목 12:00~14:00"},{"name":"김주아","div":"03","slots":[{"day":"화","times":[4,5],"room":"북악관8층5호실"},{"day":"목","times":[4,5],"room":"북악관8층5호실"}],"label":"03분반 · 화 11:00~13:00, 목 11:00~13:00"},{"name":"이규일","div":"04","slots":[{"day":"화","times":[5,6],"room":"북악관11층10호실"},{"day":"목","times":[5,6],"room":"북악관11층10호실"}],"label":"04분반 · 화 12:00~14:00, 목 12:00~14:00"},{"name":"한영걸","div":"05","slots":[{"day":"금","times":[7,8,9],"room":"국제관2층1-2호실"}],"label":"05분반 · 금 14:00~17:00"}]},{"id":"gc_15","name":"국제관계의이해와통일","credit":3,"type":"core","tag":"핵심교양(소통)","color":"c-purple","area":"소통","professors":[{"name":"남광규","div":"01","slots":[{"day":"화","times":[5,6],"room":"북악관4층7호실"},{"day":"목","times":[5,6],"room":"북악관4층7호실"}],"label":"01분반 · 화 12:00~14:00, 목 12:00~14:00"},{"name":"이우태","div":"02","slots":[{"day":"월","times":[2,3,4,5],"room":"북악관3층5호실"}],"label":"02분반 · 월 09:00~13:00"}]},{"id":"gc_16","name":"논리와소통","credit":3,"type":"core","tag":"핵심교양(소통)","color":"c-purple","area":"소통","professors":[{"name":"양민정","div":"01","slots":[{"day":"화","times":[2,3],"room":"미래관5층27호실"},{"day":"목","times":[2,3],"room":"미래관5층27호실"}],"label":"01분반 · 화 09:00~11:00, 목 09:00~11:00"},{"name":"조종화","div":"02","slots":[{"day":"수","times":[5,6],"room":"법학관3층3호실"},{"day":"금","times":[5,6],"room":"법학관3층3호실"}],"label":"02분반 · 수 12:00~14:00, 금 12:00~14:00"},{"name":"조종화","div":"03","slots":[{"day":"수","times":[2,3],"room":"북악관5층8호실"},{"day":"금","times":[2,3],"room":"북악관5층8호실"}],"label":"03분반 · 수 09:00~11:00, 금 09:00~11:00"},{"name":"양민정","div":"04","slots":[{"day":"수","times":[4,5],"room":"북악관10층13호실"},{"day":"금","times":[4,5],"room":"북악관10층13호실"}],"label":"04분반 · 수 11:00~13:00, 금 11:00~13:00"}]},{"id":"gc_17","name":"미디어와공동체","credit":3,"type":"core","tag":"핵심교양(소통)","color":"c-purple","area":"소통","professors":[{"name":"김은정","div":"01","slots":[{"day":"목","times":[5,6,7,8],"room":"북악관10층13호실"}],"label":"01분반 · 목 12:00~16:00"},{"name":"조창호","div":"02","slots":[{"day":"월","times":[7,8],"room":"미래관1층2호실"},{"day":"수","times":[7,8],"room":"미래관1층2호실"}],"label":"02분반 · 월 14:00~16:00, 수 14:00~16:00"},{"name":"김성준","div":"03","slots":[{"day":"화","times":[4,5],"room":"북악관11층10호실"},{"day":"목","times":[4,5],"room":"북악관11층10호실"}],"label":"03분반 · 화 11:00~13:00, 목 11:00~13:00"},{"name":"김은정","div":"04","slots":[{"day":"화","times":[2,3],"room":"북악관8층5호실"},{"day":"목","times":[2,3],"room":"북악관8층5호실"}],"label":"04분반 · 화 09:00~11:00, 목 09:00~11:00"},{"name":"김도연","div":"05","slots":[{"day":"금","times":[4,5,6],"room":"북악관6층4호실"}],"label":"05분반 · 금 11:00~14:00"}]},{"id":"gc_18","name":"사회적행동과성격심리학","credit":3,"type":"core","tag":"핵심교양(소통)","color":"c-purple","area":"소통","professors":[{"name":"김지연","div":"01","slots":[{"day":"금","times":[2,3,4,5],"room":"북악관8층2호실"}],"label":"01분반 · 금 09:00~13:00"},{"name":"김지연","div":"02","slots":[{"day":"목","times":[5,6,7,8],"room":"북악관11층11호실"}],"label":"02분반 · 목 12:00~16:00"},{"name":"송수미","div":"03","slots":[{"day":"목","times":[7,8,9],"room":"북악관6층4호실"}],"label":"03분반 · 목 14:00~17:00"}]},{"id":"gc_19","name":"소통과토론","credit":3,"type":"core","tag":"핵심교양(소통)","color":"c-purple","area":"소통","professors":[{"name":"정관용","div":"01","slots":[{"day":"금","times":[5,6,7],"room":"북악관4층7-1호실"}],"label":"01분반 · 금 12:00~15:00"},{"name":"조인숙","div":"02","slots":[{"day":"목","times":[5,6,7,8],"room":"북악관2층5호실"}],"label":"02분반 · 목 12:00~16:00"},{"name":"조인숙","div":"04","slots":[{"day":"목","times":[1,2,3],"room":"북악관7층2호실"}],"label":"04분반 · 목 08:00~11:00"},{"name":"류춘렬","div":"05","slots":[{"day":"수","times":[2,3,4,5],"room":"법학관3층2호실"}],"label":"05분반 · 수 09:00~13:00"},{"name":"김정아","div":"06","slots":[{"day":"금","times":[4,5,6],"room":"북악관4층4호실"}],"label":"06분반 · 금 11:00~14:00"}]},{"id":"gc_20","name":"시민사회와경제","credit":3,"type":"core","tag":"핵심교양(소통)","color":"c-purple","area":"소통","professors":[{"name":"김영욱","div":"01","slots":[{"day":"목","times":[4,5,6],"room":"경상관3층4호실"}],"label":"01분반 · 목 11:00~14:00"},{"name":"이선영","div":"02","slots":[{"day":"금","times":[4,5,6],"room":"경상관3층4호실"}],"label":"02분반 · 금 11:00~14:00"},{"name":"김동욱","div":"03","slots":[{"day":"목","times":[7,8,9],"room":"경상관3층4호실"}],"label":"03분반 · 목 14:00~17:00"},{"name":"오주현","div":"04","slots":[{"day":"금","times":[7,8,9],"room":"경상관3층4호실"}],"label":"04분반 · 금 14:00~17:00"}]},{"id":"gc_21","name":"시민사회의법과소통","credit":3,"type":"core","tag":"핵심교양(소통)","color":"c-purple","area":"소통","professors":[{"name":"정진석","div":"01","slots":[{"day":"화","times":[1,2],"room":"법학관3층2호실"},{"day":"목","times":[1,2],"room":"법학관3층2호실"}],"label":"01분반 · 화 08:00~10:00, 목 08:00~10:00"},{"name":"황승흠","div":"02","slots":[{"day":"화","times":[2,3],"room":"법학관3층2호실"},{"day":"목","times":[2,3],"room":"법학관3층2호실"}],"label":"02분반 · 화 09:00~11:00, 목 09:00~11:00"},{"name":"박민","div":"03","slots":[{"day":"수","times":[4,5],"room":"법학관3층3호실"},{"day":"금","times":[4,5],"room":"법학관3층3호실"}],"label":"03분반 · 수 11:00~13:00, 금 11:00~13:00"}]},{"id":"gc_22","name":"정치와공론","credit":3,"type":"core","tag":"핵심교양(소통)","color":"c-purple","area":"소통","professors":[{"name":"안현상","div":"01","slots":[{"day":"화","times":[1,2],"room":"북악관3층4호실"},{"day":"목","times":[1,2],"room":"북악관3층4호실"}],"label":"01분반 · 화 08:00~10:00, 목 08:00~10:00"},{"name":"우수미","div":"02","slots":[{"day":"화","times":[2,3],"room":"북악관11층10호실"},{"day":"목","times":[2,3],"room":"북악관11층10호실"}],"label":"02분반 · 화 09:00~11:00, 목 09:00~11:00"},{"name":"김재길","div":"04","slots":[{"day":"금","times":[7,8,9],"room":"북악관3층11호실"}],"label":"04분반 · 금 14:00~17:00"},{"name":"윤수찬","div":"05","slots":[{"day":"금","times":[5,6,7,8],"room":"북악관10층13호실"}],"label":"05분반 · 금 12:00~16:00"}]},{"id":"gc_23","name":"커뮤니케이션과삶","credit":3,"type":"core","tag":"핵심교양(소통)","color":"c-purple","area":"소통","professors":[{"name":"한희정","div":"01","slots":[{"day":"화","times":[1,2],"room":"북악관8층2호실"},{"day":"목","times":[1,2],"room":"북악관8층2호실"}],"label":"01분반 · 화 08:00~10:00, 목 08:00~10:00"},{"name":"한희정","div":"02","slots":[{"day":"화","times":[2,3],"room":"북악관8층2호실"},{"day":"목","times":[2,3],"room":"북악관8층2호실"}],"label":"02분반 · 화 09:00~11:00, 목 09:00~11:00"},{"name":"한희정","div":"03","slots":[{"day":"월","times":[4,5,6],"room":"북악관8층5호실"}],"label":"03분반 · 월 11:00~14:00"}]},{"id":"gc_24","name":"통일시대지성인으로서의역할","credit":3,"type":"core","tag":"핵심교양(소통)","color":"c-purple","area":"소통","professors":[{"name":"이종철","div":"01","slots":[{"day":"월","times":[5,6,7,8],"room":"북악관6층4호실"}],"label":"01분반 · 월 12:00~16:00"},{"name":"전병길","div":"02","slots":[{"day":"화","times":[7,8],"room":"미래관2층15호실"},{"day":"목","times":[7,8],"room":"미래관2층15호실"}],"label":"02분반 · 화 14:00~16:00, 목 14:00~16:00"}]},{"id":"gc_25","name":"3D프린팅창의메이커스기초과정","credit":3,"type":"core","tag":"핵심교양(창의)","color":"c-green","area":"창의","professors":[{"name":"김정우","div":"01","slots":[{"day":"수","times":[2,3,4],"room":"조형관별관2층1호실"}],"label":"01분반 · 수 09:00~12:00"},{"name":"김정우","div":"02","slots":[{"day":"목","times":[2,3,4],"room":"조형관별관2층1호실"}],"label":"02분반 · 목 09:00~12:00"}]},{"id":"gc_26","name":"AI로읽는숲","credit":3,"type":"core","tag":"핵심교양(창의)","color":"c-green","area":"창의","professors":[{"name":"강유진","div":"01","slots":[{"day":"월","times":[6,7,8],"room":"미래관1층14호실"}],"label":"01분반 · 월 13:00~16:00"}]},{"id":"gc_27","name":"AI와소프트웨어혁명","credit":3,"type":"core","tag":"핵심교양(창의)","color":"c-green","area":"창의","professors":[{"name":"윤수연","div":"01","slots":[{"day":"수","times":[4,5,6],"room":"공학관2층28호실"}],"label":"01분반 · 수 11:00~14:00"}]},{"id":"gc_28","name":"과학과창의적사고","credit":3,"type":"core","tag":"핵심교양(창의)","color":"c-green","area":"창의","professors":[{"name":"장지훈","div":"01","slots":[{"day":"화","times":[7,8,9],"room":"과학관1층20호실"}],"label":"01분반 · 화 14:00~17:00"},{"name":"명보라","div":"02","slots":[{"day":"화","times":[4,5,6],"room":"과학관3층24호실"}],"label":"02분반 · 화 11:00~14:00"}]},{"id":"gc_29","name":"과학기술과인간사고의변화","credit":3,"type":"core","tag":"핵심교양(창의)","color":"c-green","area":"창의","professors":[{"name":"이근세","div":"01","slots":[{"day":"수","times":[8,9],"room":"북악관3층1호실"},{"day":"금","times":[8,9],"room":"북악관3층1호실"}],"label":"01분반 · 수 15:00~17:00, 금 15:00~17:00"},{"name":"양민정","div":"02","slots":[{"day":"화","times":[5,6],"room":"북악관8층2호실"},{"day":"목","times":[5,6],"room":"북악관8층2호실"}],"label":"02분반 · 화 12:00~14:00, 목 12:00~14:00"},{"name":"양민정","div":"03","slots":[{"day":"화","times":[4,5],"room":"북악관3층11호실"},{"day":"목","times":[4,5],"room":"북악관3층11호실"}],"label":"03분반 · 화 11:00~13:00, 목 11:00~13:00"},{"name":"신혜영","div":"04","slots":[{"day":"금","times":[7,8,9],"room":"북악관8층5호실"}],"label":"04분반 · 금 14:00~17:00"}]},{"id":"gc_30","name":"문명과창의수학","credit":3,"type":"core","tag":"핵심교양(창의)","color":"c-green","area":"창의","professors":[{"name":"김복선","div":"01","slots":[{"day":"화","times":[4,5],"room":"북악관6층10호실"},{"day":"목","times":[4,5],"room":"북악관6층10호실"}],"label":"01분반 · 화 11:00~13:00, 목 11:00~13:00"},{"name":"김복선","div":"02","slots":[{"day":"화","times":[7,8],"room":"북악관8층2호실"},{"day":"목","times":[7,8],"room":"북악관8층2호실"}],"label":"02분반 · 화 14:00~16:00, 목 14:00~16:00"}]},{"id":"gc_31","name":"생명의탄생과이해","credit":3,"type":"core","tag":"핵심교양(창의)","color":"c-green","area":"창의","professors":[{"name":"정용주","div":"01","slots":[{"day":"화","times":[2,3],"room":"과학관지하1층8호실"},{"day":"목","times":[2,3],"room":"과학관지하1층8호실"}],"label":"01분반 · 화 09:00~11:00, 목 09:00~11:00"},{"name":"정용주","div":"02","slots":[{"day":"화","times":[4,5],"room":"과학관1층20호실"},{"day":"목","times":[4,5],"room":"과학관1층20호실"}],"label":"02분반 · 화 11:00~13:00, 목 11:00~13:00"}]},{"id":"gc_32","name":"자기주도스포츠","credit":3,"type":"core","tag":"핵심교양(창의)","color":"c-green","area":"창의","professors":[{"name":"김동현","div":"01","slots":[{"day":"화","times":[1,2],"room":"미래관2층15호실"},{"day":"목","times":[1,2],"room":"미래관2층15호실"}],"label":"01분반 · 화 08:00~10:00, 목 08:00~10:00"},{"name":"김동현","div":"02","slots":[{"day":"화","times":[2,3],"room":"미래관2층15호실"},{"day":"목","times":[2,3],"room":"미래관2층15호실"}],"label":"02분반 · 화 09:00~11:00, 목 09:00~11:00"},{"name":"송희경","div":"03","slots":[{"day":"수","times":[5,6],"room":"미래관1층15호실"},{"day":"금","times":[5,6],"room":"미래관1층15호실"}],"label":"03분반 · 수 12:00~14:00, 금 12:00~14:00"},{"name":"송희경","div":"04","slots":[{"day":"수","times":[7,8],"room":"미래관1층15호실"},{"day":"금","times":[7,8],"room":"미래관1층15호실"}],"label":"04분반 · 수 14:00~16:00, 금 14:00~16:00"},{"name":"이원재","div":"05","slots":[{"day":"화","times":[8,9],"room":"미래관1층15호실"},{"day":"목","times":[8,9],"room":"미래관1층15호실"}],"label":"05분반 · 화 15:00~17:00, 목 15:00~17:00"},{"name":"조영희","div":"06","slots":[{"day":"화","times":[4,5],"room":"미래관2층15호실"},{"day":"목","times":[4,5],"room":"미래관2층15호실"}],"label":"06분반 · 화 11:00~13:00, 목 11:00~13:00"},{"name":"조영희","div":"07","slots":[{"day":"화","times":[5,6],"room":"미래관2층4호실"},{"day":"목","times":[5,6],"room":"미래관2층4호실"}],"label":"07분반 · 화 12:00~14:00, 목 12:00~14:00"},{"name":"양우영","div":"08","slots":[{"day":"수","times":[1,2,3],"room":"미래관1층15호실"}],"label":"08분반 · 수 08:00~11:00"},{"name":"양우영","div":"09","slots":[{"day":"목","times":[1,2,3],"room":"미래관1층15호실"}],"label":"09분반 · 목 08:00~11:00"},{"name":"강연흥","div":"10","slots":[{"day":"금","times":[1,2,3],"room":"미래관1층15호실"}],"label":"10분반 · 금 08:00~11:00"}]},{"id":"gc_33","name":"지구생태계와인간","credit":3,"type":"core","tag":"핵심교양(창의)","color":"c-green","area":"창의","professors":[{"name":"이성숙","div":"01","slots":[{"day":"수","times":[4,5],"room":"미래관2층4호실"},{"day":"금","times":[4,5],"room":"미래관2층4호실"}],"label":"01분반 · 수 11:00~13:00, 금 11:00~13:00"},{"name":"이성숙","div":"02","slots":[{"day":"수","times":[5,6],"room":"미래관2층4호실"},{"day":"금","times":[5,6],"room":"미래관2층4호실"}],"label":"02분반 · 수 12:00~14:00, 금 12:00~14:00"},{"name":"나희진","div":"03","slots":[{"day":"화","times":[1,2],"room":"미래관2층4호실"},{"day":"목","times":[1,2],"room":"미래관2층4호실"}],"label":"03분반 · 화 08:00~10:00, 목 08:00~10:00"},{"name":"임주훈","div":"04","slots":[{"day":"화","times":[2,3],"room":"미래관2층4호실"},{"day":"목","times":[2,3],"room":"미래관2층4호실"}],"label":"04분반 · 화 09:00~11:00, 목 09:00~11:00"}]},{"id":"gc_34","name":"글로벌기업가정신과창업","credit":3,"type":"core","tag":"핵심교양(글로벌)","color":"c-amber","area":"글로벌","professors":[{"name":"정수성","div":"01","slots":[{"day":"화","times":[7,8],"room":"경영관6층13호실"},{"day":"목","times":[7,8],"room":"경영관6층13호실"}],"label":"01분반 · 화 14:00~16:00, 목 14:00~16:00"},{"name":"정수성","div":"02","slots":[{"day":"화","times":[4,5],"room":"경영관1층9호실"},{"day":"목","times":[4,5],"room":"경영관1층9호실"}],"label":"02분반 · 화 11:00~13:00, 목 11:00~13:00"}]},{"id":"gc_35","name":"글로벌미디어문화와영화영어","credit":3,"type":"core","tag":"핵심교양(글로벌)","color":"c-amber","area":"글로벌","professors":[{"name":"류도형","div":"01","slots":[{"day":"월","times":[4,5,6],"room":"북악관7층6호실"}],"label":"01분반 · 월 11:00~14:00"},{"name":"이지현","div":"02","slots":[{"day":"월","times":[7,8,9],"room":"북악관7층6호실"}],"label":"02분반 · 월 14:00~17:00"},{"name":"서지영","div":"03","slots":[{"day":"화","times":[4,5,6],"room":"북악관7층6호실"}],"label":"03분반 · 화 11:00~14:00"},{"name":"노윤아","div":"04","slots":[{"day":"화","times":[7,8,9],"room":"북악관7층6호실"}],"label":"04분반 · 화 14:00~17:00"},{"name":"류도형","div":"05","slots":[{"day":"목","times":[4,5,6],"room":"북악관7층6호실"}],"label":"05분반 · 목 11:00~14:00"},{"name":"류도형","div":"06","slots":[{"day":"목","times":[7,8,9],"room":"북악관7층6호실"}],"label":"06분반 · 목 14:00~17:00"},{"name":"임미진","div":"07","slots":[{"day":"수","times":[4,5,6],"room":"북악관7층6호실"}],"label":"07분반 · 수 11:00~14:00"},{"name":"임미진","div":"08","slots":[{"day":"수","times":[7,8,9],"room":"북악관7층6호실"}],"label":"08분반 · 수 14:00~17:00"}]},{"id":"gc_36","name":"글로벌사회와젠더","credit":3,"type":"core","tag":"핵심교양(글로벌)","color":"c-amber","area":"글로벌","professors":[{"name":"한영선","div":"01","slots":[{"day":"수","times":[4,5,6],"room":"북악관3층5호실"}],"label":"01분반 · 수 11:00~14:00"},{"name":"한영선","div":"02","slots":[{"day":"수","times":[1,2,3],"room":"법학관1층6호실"}],"label":"02분반 · 수 08:00~11:00"}]},{"id":"gc_37","name":"글로벌시대의심리학","credit":3,"type":"core","tag":"핵심교양(글로벌)","color":"c-amber","area":"글로벌","professors":[{"name":"남숙경","div":"01","slots":[{"day":"목","times":[4,5,6],"room":"공학관2층28호실"}],"label":"01분반 · 목 11:00~14:00"},{"name":"오남경","div":"02","slots":[{"day":"월","times":[1,2,3],"room":"북악관6층10호실"}],"label":"02분반 · 월 08:00~11:00"},{"name":"이지은","div":"03","slots":[{"day":"수","times":[4,5],"room":"북악관3층10호실"},{"day":"금","times":[4,5],"room":"북악관3층10호실"}],"label":"03분반 · 수 11:00~13:00, 금 11:00~13:00"}]},{"id":"gc_38","name":"문명과세계화의도전","credit":3,"type":"core","tag":"핵심교양(글로벌)","color":"c-amber","area":"글로벌","professors":[{"name":"안드레이 란코프","div":"02","slots":[{"day":"화","times":[2,3],"room":"북악관4층6호실"},{"day":"목","times":[2,3],"room":"북악관4층6호실"}],"label":"02분반 · 화 09:00~11:00, 목 09:00~11:00"},{"name":"안현상","div":"03","slots":[{"day":"수","times":[5,6],"room":"북악관4층2호실"},{"day":"금","times":[5,6],"room":"북악관4층2호실"}],"label":"03분반 · 수 12:00~14:00, 금 12:00~14:00"},{"name":"안현상","div":"04","slots":[{"day":"금","times":[7,8,9],"room":"북악관4층3호실"}],"label":"04분반 · 금 14:00~17:00"}]},{"id":"gc_39","name":"세계문학의이해","credit":3,"type":"core","tag":"핵심교양(글로벌)","color":"c-amber","area":"글로벌","professors":[{"name":"방승희","div":"03","slots":[{"day":"수","times":[8,9],"room":"북악관11층10호실"},{"day":"금","times":[8,9],"room":"북악관11층10호실"}],"label":"03분반 · 수 15:00~17:00, 금 15:00~17:00"},{"name":"김소연","div":"04","slots":[{"day":"화","times":[5,6],"room":"북악관4층9호실"},{"day":"목","times":[5,6],"room":"북악관4층9호실"}],"label":"04분반 · 화 12:00~14:00, 목 12:00~14:00"}]},{"id":"gc_40","name":"세계역사의이해","credit":3,"type":"core","tag":"핵심교양(글로벌)","color":"c-amber","area":"글로벌","professors":[{"name":"고재백","div":"01","slots":[{"day":"화","times":[1,2,3],"room":"법학관3층3호실"}],"label":"01분반 · 화 08:00~11:00"},{"name":"고재백","div":"03","slots":[{"day":"수","times":[5,6,7,8],"room":"공학관지하1층19호실"}],"label":"03분반 · 수 12:00~16:00"},{"name":"고재백","div":"04","slots":[{"day":"금","times":[7,8,9],"room":"공학관2층46호실"}],"label":"04분반 · 금 14:00~17:00"}]},{"id":"gc_41","name":"현대동아시아의이해","credit":3,"type":"core","tag":"핵심교양(글로벌)","color":"c-amber","area":"글로벌","professors":[{"name":"박창건","div":"01","slots":[{"day":"화","times":[4,5],"room":"북악관4층2호실"},{"day":"목","times":[4,5],"room":"북악관4층2호실"}],"label":"01분반 · 화 11:00~13:00, 목 11:00~13:00"},{"name":"김영진","div":"02","slots":[{"day":"화","times":[2,3],"room":"북악관10층10호실"},{"day":"목","times":[2,3],"room":"북악관10층10호실"}],"label":"02분반 · 화 09:00~11:00, 목 09:00~11:00"},{"name":"김민지","div":"03","slots":[{"day":"수","times":[7,8],"room":"북악관4층2호실"},{"day":"금","times":[7,8],"room":"북악관4층2호실"}],"label":"03분반 · 수 14:00~16:00, 금 14:00~16:00"}]},{"id":"f01","name":"AI·데이터사이언스로만나는글로벌기후위기","credit":3,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"강유진","div":"01","slots":[{"day":"수","times":[6,7,8],"room":"과학관6층11호실"}],"label":"01분반 · 수 13:00~16:00"}]},{"id":"f02","name":"교양재테크","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"배중기","div":"01","slots":[{"day":"화","times":[5,6],"room":"북악관4층5호실"}],"label":"01분반 · 화 12:00~14:00"}]},{"id":"f03","name":"국가경영과공공정책","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"한승희","div":"01","slots":[{"day":"월","times":[2,3],"room":"북악관6층5호실"}],"label":"01분반 · 월 09:00~11:00"}]},{"id":"f04","name":"기초스페인어","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"전수진","div":"01","slots":[{"day":"금","times":[1,2],"room":"북악관10층8호실"}],"label":"01분반 · 금 08:00~10:00"},{"name":"전수진","div":"02","slots":[{"day":"금","times":[3,4],"room":"북악관10층8호실"}],"label":"02분반 · 금 10:00~12:00"}]},{"id":"f05","name":"동아시아근대사와인물","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"김경옥","div":"01","slots":[{"day":"월","times":[7,8],"room":"북악관8층5호실"}],"label":"01분반 · 월 14:00~16:00"}]},{"id":"f06","name":"드라마속인생경험","credit":3,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"고성일","div":"01","slots":[{"day":"수","times":[2,3,4,5],"room":"예술관지하중2층2호실"}],"label":"01분반 · 수 09:00~13:00"}]},{"id":"f07","name":"디지털리터러시","credit":3,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"김세연","div":"01","slots":[{"day":"수","times":[5,6,7,8],"room":"북악관6층4호실"}],"label":"01분반 · 수 12:00~16:00"}]},{"id":"f08","name":"맑시즘의이해","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"김경래","div":"01","slots":[{"day":"금","times":[3,4],"room":"북악관4층5호실"}],"label":"01분반 · 금 10:00~12:00"},{"name":"김경래","div":"02","slots":[{"day":"수","times":[6,7],"room":"북악관2층7호실"}],"label":"02분반 · 수 13:00~15:00"}]},{"id":"f09","name":"목요특강:문화,IT,기업가정신","credit":1,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"김희선","div":"01","slots":[{"day":"목","times":[7,8],"room":"본부관별관1층1호실"}],"label":"01분반 · 목 14:00~16:00"}]},{"id":"f10","name":"목재의비밀","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"김범준","div":"01","slots":[{"day":"목","times":[3,4],"room":"미래관3층20호실"}],"label":"01분반 · 목 10:00~12:00"}]},{"id":"f11","name":"민법의이해","credit":3,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"김소희","div":"01","slots":[{"day":"목","times":[1,2,3],"room":"법학관1층1호실"}],"label":"01분반 · 목 08:00~11:00"},{"name":"김소희","div":"02","slots":[{"day":"목","times":[7,8,9],"room":"법학관1층1호실"}],"label":"02분반 · 목 14:00~17:00"}]},{"id":"f12","name":"박물관전시큐레이팅","credit":3,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"김미정","div":"02","slots":[{"day":"월","times":[5,6,7],"room":"북악관2층11호실"}],"label":"02분반 · 월 12:00~15:00"}]},{"id":"f13","name":"북한역사의이해","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"이수석","div":"01","slots":[{"day":"월","times":[3,4],"room":"북악관4층5호실"}],"label":"01분반 · 월 10:00~12:00"}]},{"id":"f14","name":"빛과아인슈타인","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"심인보","div":"01","slots":[{"day":"수","times":[7,8],"room":"과학관4층22호실"}],"label":"01분반 · 수 14:00~16:00"}]},{"id":"f15","name":"사서삼경의이해","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"한영걸","div":"01","slots":[{"day":"수","times":[3,4,5],"room":"북악관8층2호실"}],"label":"01분반 · 수 10:00~13:00"}]},{"id":"f16","name":"사회심리로본인간과미디어","credit":3,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"조인숙","div":"01","slots":[{"day":"월","times":[5,6,7,8],"room":"북악관8층2호실"}],"label":"01분반 · 월 12:00~16:00"}]},{"id":"f17","name":"생활속의클래식음악","credit":3,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"이수진","div":"01","slots":[{"day":"금","times":[5,6,7,8],"room":"북악관3층5호실"}],"label":"01분반 · 금 12:00~16:00"}]},{"id":"f18","name":"시민혁명과근대사회","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"김경래","div":"01","slots":[{"day":"수","times":[8,9,10],"room":"북악관4층8호실"}],"label":"01분반 · 수 15:00~18:00"}]},{"id":"f19","name":"식물과사회","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"이창배","div":"01","slots":[{"day":"화","times":[4,5],"room":"미래관1층14호실"}],"label":"01분반 · 화 11:00~13:00"}]},{"id":"f20","name":"영상속일본문화읽기","credit":3,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"박선영","div":"01","slots":[{"day":"목","times":[2,3,4,5],"room":"북악관4층3호실"}],"label":"01분반 · 목 09:00~13:00"},{"name":"박경민","div":"02","slots":[{"day":"월","times":[2,3,4,5],"room":"북악관10층13호실"}],"label":"02분반 · 월 09:00~13:00"}]},{"id":"f21","name":"영어발표와토론전략","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"류도형","div":"01","slots":[{"day":"화","times":[8,9],"room":"북악관5층8호실"}],"label":"01분반 · 화 15:00~17:00"}]},{"id":"f22","name":"예술과철학","credit":3,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"양민정","div":"01","slots":[{"day":"수","times":[5,6],"room":"북악관3층10호실"},{"day":"금","times":[5,6],"room":"북악관3층10호실"}],"label":"01분반 · 수 12:00~14:00, 금 12:00~14:00"}]},{"id":"f23","name":"자신있게말하기","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"손규리","div":"01","slots":[{"day":"월","times":[3,4],"room":"북악관2층7호실"}],"label":"01분반 · 월 10:00~12:00"},{"name":"김은정","div":"02","slots":[{"day":"화","times":[4,5],"room":"북악관2층9호실"}],"label":"02분반 · 화 11:00~13:00"},{"name":"손규리","div":"03","slots":[{"day":"월","times":[8,9],"room":"북악관2층11호실"}],"label":"03분반 · 월 15:00~17:00"},{"name":"김은정","div":"04","slots":[{"day":"화","times":[7,8],"room":"북악관2층9호실"}],"label":"04분반 · 화 14:00~16:00"},{"name":"오정근","div":"05","slots":[{"day":"수","times":[3,4],"room":"북악관2층9호실"}],"label":"05분반 · 수 10:00~12:00"},{"name":"김수정","div":"06","slots":[{"day":"목","times":[7,8],"room":"북악관2층9호실"}],"label":"06분반 · 목 14:00~16:00"},{"name":"김수정","div":"07","slots":[{"day":"목","times":[5,6],"room":"북악관2층9호실"}],"label":"07분반 · 목 12:00~14:00"},{"name":"오정근","div":"08","slots":[{"day":"수","times":[8,9],"room":"북악관2층7호실"}],"label":"08분반 · 수 15:00~17:00"}]},{"id":"f24","name":"재료과학의미래","credit":3,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"남호석","div":"01","slots":[{"day":"목","times":[2,3,4,5],"room":"공학관지하1층16호실"}],"label":"01분반 · 목 09:00~13:00"}]},{"id":"f25","name":"증권투자의이해","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"이상인","div":"01","slots":[{"day":"금","times":[6,7],"room":"국제관5층5호실"}],"label":"01분반 · 금 13:00~15:00"}]},{"id":"f26","name":"지리공간의이해","credit":3,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"황진후","div":"01","slots":[{"day":"월","times":[2,3,4,5],"room":"북악관11층11호실"}],"label":"01분반 · 월 09:00~13:00"}]},{"id":"f27","name":"지암이노베이터스스튜디오-오픈AI서비스디자인","credit":3,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"박범서","div":"01","slots":[{"day":"월","times":[7,8,9],"room":"미래관4층49호실"}],"label":"01분반 · 월 14:00~17:00"}]},{"id":"f28","name":"차세대통신의미래","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"주민철","div":"01","slots":[{"day":"화","times":[1],"room":"미래관5층24호실"},{"day":"목","times":[1],"room":"미래관5층24호실"}],"label":"01분반 · 화 08:00~09:00, 목 08:00~09:00"}]},{"id":"f29","name":"현대사회와에너지","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"곽민진","div":"01","slots":[{"day":"월","times":[2,3,4],"room":"미래관2층4호실"}],"label":"01분반 · 월 09:00~12:00"}]},{"id":"f30","name":"인생설계와진로","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"한건수","div":"01","slots":[{"day":"월","times":[3,4],"room":"북악관2층5호실"}],"label":"01분반 · 월 10:00~12:00"},{"name":"한건수","div":"02","slots":[{"day":"월","times":[5,6],"room":"북악관2층5호실"}],"label":"02분반 · 월 12:00~14:00"},{"name":"이현기","div":"03","slots":[{"day":"화","times":[6,7],"room":"법학관3층3호실"}],"label":"03분반 · 화 13:00~15:00"},{"name":"윤성혜","div":"04","slots":[{"day":"금","times":[2,3],"room":"북악관2층5호실"}],"label":"04분반 · 금 09:00~11:00"},{"name":"우성식","div":"07","slots":[{"day":"수","times":[5,6],"room":"북악관2층5호실"}],"label":"07분반 · 수 12:00~14:00"},{"name":"오정근","div":"09","slots":[{"day":"목","times":[3,4],"room":"북악관2층7호실"}],"label":"09분반 · 목 10:00~12:00"},{"name":"우성식","div":"10","slots":[{"day":"수","times":[7,8],"room":"북악관2층9호실"}],"label":"10분반 · 수 14:00~16:00"}]},{"id":"f31","name":"취·창업과진로설계","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"강주성","div":"01","slots":[{"day":"화","times":[3,4],"room":"북악관4층5호실"}],"label":"01분반 · 화 10:00~12:00"},{"name":"강주성","div":"02","slots":[{"day":"화","times":[6,7],"room":"북악관5층8호실"}],"label":"02분반 · 화 13:00~15:00"},{"name":"김태완","div":"03","slots":[{"day":"월","times":[6,7],"room":"법학관1층6호실"}],"label":"03분반 · 월 13:00~15:00"},{"name":"김태완","div":"04","slots":[{"day":"월","times":[8,9],"room":"법학관1층6호실"}],"label":"04분반 · 월 15:00~17:00"},{"name":"박희주","div":"05","slots":[{"day":"수","times":[6,7],"room":"북악관4층5호실"}],"label":"05분반 · 수 13:00~15:00"},{"name":"박희주","div":"06","slots":[{"day":"수","times":[8,9],"room":"북악관4층5호실"}],"label":"06분반 · 수 15:00~17:00"}]},{"id":"f32","name":"친환경전기자동차기술","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"최웅철","div":"01","slots":[{"day":"목","times":[3,4],"room":"공학관2층16호실"}],"label":"01분반 · 목 10:00~12:00"}]},{"id":"f33","name":"한국도시생활사(1880-2000)","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"안드레이 란코프","div":"01","slots":[{"day":"금","times":[5,6],"room":"법학관1층1호실"}],"label":"01분반 · 금 12:00~14:00"}]},{"id":"f34","name":"형법의이해","credit":3,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"이동기","div":"01","slots":[{"day":"금","times":[4,5,6],"room":"법학관2층5호실"}],"label":"01분반 · 금 11:00~14:00"}]},{"id":"f35","name":"에피스테메세미나","credit":3,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"박규철","div":"01","slots":[{"day":"수","times":[4,5,6],"room":"북악관3층9호실"}],"label":"01분반 · 수 11:00~14:00"}]},{"id":"f36","name":"스마트건강과라이프스타일","credit":3,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"권기한","div":"01","slots":[{"day":"월","times":[2,3],"room":"북악관8층1호실"},{"day":"수","times":[2,3],"room":"북악관8층1호실"}],"label":"01분반 · 월 09:00~11:00, 수 09:00~11:00"}]},{"id":"f37","name":"건축학개론","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"김상호","div":"01","slots":[{"day":"월","times":[6,7],"room":"과학관4층22호실"}],"label":"01분반 · 월 13:00~15:00"}]},{"id":"f38","name":"고전과패러디","credit":3,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"조유선","div":"01","slots":[{"day":"목","times":[2,3,4,5],"room":"북악관8층1호실"}],"label":"01분반 · 목 09:00~13:00"}]},{"id":"f39","name":"문화인류학의이해","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"이규호","div":"01","slots":[{"day":"수","times":[7,8],"room":"법학관1층1호실"}],"label":"01분반 · 수 14:00~16:00"}]},{"id":"f40","name":"미래사회의이해","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"오지혜","div":"01","slots":[{"day":"목","times":[4,5],"room":"북악관5층7호실"}],"label":"01분반 · 목 11:00~13:00"}]}];
+const SUBJECTS=[{"id":"s_esm","name":"전자수학","credit":3,"type":"req","tag":"전공필수","color":"c-blue","professors":[{"name":"박영일","div":"1","slots":[{"day":"월","times":[2,3],"room":"미래관3층37호실"},{"day":"수","times":[2,3],"room":"미래관3층37호실"}],"label":"1분반 · 월 10:00~12:00, 수 10:00~12:00"},{"name":"장영민","div":"2","slots":[{"day":"월","times":[5,6],"room":"미래관5층27호실"},{"day":"화","times":[5,6],"room":"미래관5층27호실"}],"label":"2분반 · 월 13:00~15:00, 화 13:00~15:00"},{"name":"정경훈","div":"3","slots":[{"day":"수","times":[1,2],"room":"미래관5층23호실"},{"day":"금","times":[1,2],"room":"미래관5층23호실"}],"label":"3분반 · 수 09:00~11:00, 금 09:00~11:00"},{"name":"장혁준","div":"4","slots":[{"day":"화","times":[7,8],"room":"미래관3층36호실"},{"day":"수","times":[8,9],"room":"미래관3층36호실"}],"label":"4분반 · 화 15:00~17:00, 수 16:00~18:00"},{"name":"김태형","div":"5","slots":[{"day":"월","times":[4,5],"room":"미래관5층27호실"},{"day":"수","times":[5,6],"room":"미래관5층27호실"}],"label":"5분반 · 월 12:00~14:00, 수 13:00~15:00"},{"name":"양철관","div":"6","slots":[{"day":"월","times":[1,2],"room":"미래관3층38호실"},{"day":"수","times":[1,2],"room":"미래관3층38호실"}],"label":"6분반 · 월 09:00~11:00, 수 09:00~11:00"}]},{"id":"s_emg","name":"전자기학I","credit":3,"type":"req","tag":"전공필수","color":"c-cyan","professors":[{"name":"박준석","div":"1","slots":[{"day":"화","times":[1,2],"room":"미래관3층37호실"},{"day":"목","times":[4,5],"room":"미래관3층37호실"}],"label":"1분반 · 화 09:00~11:00, 목 12:00~14:00"},{"name":"박준석","div":"2","slots":[{"day":"화","times":[4,5],"room":"미래관5층23호실"},{"day":"목","times":[1,2],"room":"미래관5층23호실"}],"label":"2분반 · 화 12:00~14:00, 목 09:00~11:00"},{"name":"장병준","div":"3","slots":[{"day":"월","times":[8,9],"room":"미래관5층23호실"},{"day":"수","times":[10,11],"room":"미래관5층23호실"}],"label":"3분반 · 월 16:00~18:00, 수 18:00~20:00"},{"name":"장병준","div":"4","slots":[{"day":"월","times":[10,11],"room":"미래관5층23호실"},{"day":"수","times":[8,9],"room":"미래관5층23호실"}],"label":"4분반 · 월 18:00~20:00, 수 16:00~18:00"}]},{"id":"s_cir","name":"회로이론I","credit":3,"type":"req","tag":"전공필수","color":"c-purple","professors":[{"name":"강동욱","div":"1","slots":[{"day":"금","times":[1,2,3],"room":"미래관3층38호실"}],"label":"1분반 · 금 09:00~12:00"},{"name":"김대정","div":"2","slots":[{"day":"화","times":[7,8],"room":"미래관3층38호실"},{"day":"목","times":[8,9],"room":"미래관3층38호실"}],"label":"2분반 · 화 15:00~17:00, 목 16:00~18:00"},{"name":"김대정","div":"3","slots":[{"day":"화","times":[8,9],"room":"미래관3층36호실"},{"day":"목","times":[7,8],"room":"미래관3층36호실"}],"label":"3분반 · 화 16:00~18:00, 목 15:00~17:00"},{"name":"이승민","div":"4","slots":[{"day":"월","times":[4,5],"room":"미래관3층38호실"},{"day":"수","times":[5,6],"room":"미래관3층38호실"}],"label":"4분반 · 월 12:00~14:00, 수 13:00~15:00"},{"name":"김기두","div":"5","slots":[{"day":"월","times":[7,8],"room":"미래관5층24호실"},{"day":"화","times":[8,9],"room":"미래관5층24호실"}],"label":"5분반 · 월 15:00~17:00, 화 16:00~18:00"},{"name":"안현식","div":"6","slots":[{"day":"금","times":[1,2,3],"room":"미래관3층37호실"}],"label":"6분반 · 금 09:00~12:00"}]},{"id":"s_dig","name":"디지털공학","credit":3,"type":"req","tag":"전공필수","color":"c-green","professors":[{"name":"오하령","div":"1","slots":[{"day":"화","times":[2,3],"room":"미래관5층23호실"},{"day":"목","times":[2,3],"room":"미래관5층23호실"}],"label":"1분반 · 화 10:00~12:00, 목 10:00~12:00"},{"name":"성영락","div":"2","slots":[{"day":"월","times":[5,6],"room":"미래관5층23호실"},{"day":"화","times":[5,6],"room":"미래관5층23호실"}],"label":"2분반 · 월 13:00~15:00, 화 13:00~15:00"},{"name":"박영일","div":"3","slots":[{"day":"화","times":[5,6],"room":"미래관3층37호실"},{"day":"목","times":[5,6],"room":"미래관3층37호실"}],"label":"3분반 · 화 13:00~15:00, 목 13:00~15:00"},{"name":"민경식","div":"4","slots":[{"day":"월","times":[4,5],"room":"미래관5층23호실"},{"day":"수","times":[4,5],"room":"미래관5층23호실"}],"label":"4분반 · 월 12:00~14:00, 수 12:00~14:00"},{"name":"오정헌","div":"5","slots":[{"day":"수","times":[8,9],"room":"미래관5층27호실"},{"day":"금","times":[5,6],"room":"미래관5층27호실"}],"label":"5분반 · 수 16:00~18:00, 금 13:00~15:00"},{"name":"모현선","div":"6","slots":[{"day":"월","times":[8,9],"room":"미래관3층38호실"},{"day":"목","times":[7,8],"room":"미래관3층38호실"}],"label":"6분반 · 월 16:00~18:00, 목 15:00~17:00"}]},{"id":"s_dlab","name":"디지털공학실험","credit":1,"type":"req","tag":"전공필수","color":"c-amber","professors":[{"name":"오하령","div":"1","slots":[{"day":"화","times":[7,8],"room":"미래관3층39호실"}],"label":"1분반 · 화 15:00~17:00"},{"name":"장혁준","div":"2","slots":[{"day":"수","times":[2,3],"room":"미래관3층39호실"}],"label":"2분반 · 수 10:00~12:00"},{"name":"민경식","div":"3","slots":[{"day":"목","times":[5,6],"room":"미래관3층40호실"}],"label":"3분반 · 목 13:00~15:00"},{"name":"민경식","div":"4","slots":[{"day":"목","times":[7,8],"room":"미래관3층39호실"}],"label":"4분반 · 목 15:00~17:00"},{"name":"정경훈","div":"5","slots":[{"day":"월","times":[6,7],"room":"미래관3층39호실"}],"label":"5분반 · 월 14:00~16:00"},{"name":"정경훈","div":"6","slots":[{"day":"월","times":[8,9],"room":"미래관3층39호실"}],"label":"6분반 · 월 16:00~18:00"},{"name":"오정헌","div":"7","slots":[{"day":"수","times":[5,6,7],"room":"미래관3층39호실"}],"label":"7분반 · 수 13:00~16:00"},{"name":"모현선","div":"8","slots":[{"day":"수","times":[7,8,9],"room":"미래관3층40호실"}],"label":"8분반 · 수 15:00~18:00"},{"name":"모현선","div":"9","slots":[{"day":"금","times":[2,3],"room":"미래관3층40호실"}],"label":"9분반 · 금 10:00~12:00"},{"name":"김기두","div":"10","slots":[{"day":"화","times":[2,3],"room":"미래관3층39호실"}],"label":"10분반 · 화 10:00~12:00"},{"name":"김기두","div":"11","slots":[{"day":"목","times":[2,3],"room":"미래관3층39호실"}],"label":"11분반 · 목 10:00~12:00"}]},{"id":"s_prog","name":"프로그래밍언어","credit":3,"type":"req","tag":"전공필수","color":"c-pink","professors":[{"name":"오하령","div":"1","slots":[{"day":"화","times":[5,6],"room":"미래관4층49호실"},{"day":"목","times":[5,6],"room":"미래관4층49호실"}],"label":"1분반 · 화 13:00~15:00, 목 13:00~15:00"},{"name":"성영락","div":"2","slots":[{"day":"화","times":[7,8],"room":"미래관4층49호실"},{"day":"목","times":[2,3],"room":"미래관4층49호실"}],"label":"2분반 · 화 15:00~17:00, 목 10:00~12:00"},{"name":"문찬우","div":"3","slots":[{"day":"화","times":[1,2],"room":"미래관4층49호실"},{"day":"금","times":[3,4],"room":"미래관4층49호실"}],"label":"3분반 · 화 09:00~11:00, 금 11:00~13:00"},{"name":"김지혜","div":"4","slots":[{"day":"월","times":[1,2],"room":"미래관4층49호실"},{"day":"수","times":[1,2],"room":"미래관4층49호실"}],"label":"4분반 · 월 09:00~11:00, 수 09:00~11:00"},{"name":"한용수","div":"5","slots":[{"day":"화","times":[3,4],"room":"미래관4층49호실"},{"day":"목","times":[7,8],"room":"미래관4층49호실"}],"label":"5분반 · 화 11:00~13:00, 목 15:00~17:00"},{"name":"박범서","div":"6","slots":[{"day":"금","times":[5,6,7,8],"room":"미래관4층49호실"}],"label":"6분반 · 금 13:00~17:00"}]},{"id":"gc_01","name":"그리스신화와서양의문명","credit":3,"type":"core","tag":"핵심교양(인문I)","area":"인문I","color":"c-blue","professors":[{"name":"박규철","div":"01","slots":[{"day":"화","times":[5,6],"room":"북악관3층5호실"},{"day":"목","times":[5,6],"room":"북악관3층5호실"}],"label":"01분반 · 화 13:00~15:00, 목 13:00~15:00"},{"name":"박규철","div":"02","slots":[{"day":"화","times":[8,9],"room":"북악관3층5호실"},{"day":"목","times":[8,9],"room":"북악관3층5호실"}],"label":"02분반 · 화 16:00~18:00, 목 16:00~18:00"},{"name":"송현종","div":"03","slots":[{"day":"수","times":[7,8,9],"room":"미래관2층4호실"}],"label":"03분반 · 수 15:00~18:00"}]},{"id":"gc_02","name":"삶과윤리","credit":3,"type":"core","tag":"핵심교양(인문I)","area":"인문I","color":"c-blue","professors":[{"name":"조종화","div":"01","slots":[{"day":"화","times":[4,5],"room":"미래관2층4호실"},{"day":"목","times":[4,5],"room":"미래관2층4호실"}],"label":"01분반 · 화 12:00~14:00, 목 12:00~14:00"},{"name":"박규철","div":"02","slots":[{"day":"화","times":[2,3],"room":"공학관5층22호실"},{"day":"목","times":[2,3],"room":"공학관5층22호실"}],"label":"02분반 · 화 10:00~12:00, 목 10:00~12:00"},{"name":"이근세","div":"03","slots":[{"day":"수","times":[7,8],"room":"북악관3층4호실"},{"day":"금","times":[7,8],"room":"북악관3층4호실"}],"label":"03분반 · 수 15:00~17:00, 금 15:00~17:00"},{"name":"김한승","div":"04","slots":[{"day":"수","times":[4,5],"room":"북악관4층2호실"},{"day":"금","times":[4,5],"room":"북악관4층2호실"}],"label":"04분반 · 수 12:00~14:00, 금 12:00~14:00"},{"name":"박규철","div":"05","slots":[{"day":"화","times":[7,8],"room":"북악관6층5호실"},{"day":"목","times":[7,8],"room":"북악관6층5호실"}],"label":"05분반 · 화 15:00~17:00, 목 15:00~17:00"}]},{"id":"gc_03","name":"시민정신과사회봉사","credit":3,"type":"core","tag":"핵심교양(인문I)","area":"인문I","color":"c-blue","professors":[{"name":"여현철","div":"01","slots":[{"day":"수","times":[2,3],"room":"북악관6층4호실"},{"day":"금","times":[2,3],"room":"북악관6층4호실"}],"label":"01분반 · 수 10:00~12:00, 금 10:00~12:00"},{"name":"오지혜","div":"02","slots":[{"day":"수","times":[5,6],"room":"북악관5층8호실"},{"day":"금","times":[5,6],"room":"북악관5층8호실"}],"label":"02분반 · 수 13:00~15:00, 금 13:00~15:00"},{"name":"오지혜","div":"03","slots":[{"day":"수","times":[4,5],"room":"북악관5층8호실"},{"day":"금","times":[4,5],"room":"북악관5층8호실"}],"label":"03분반 · 수 12:00~14:00, 금 12:00~14:00"},{"name":"남광규","div":"04","slots":[{"day":"화","times":[4,5],"room":"북악관10층13호실"},{"day":"목","times":[4,5],"room":"북악관10층13호실"}],"label":"04분반 · 화 12:00~14:00, 목 12:00~14:00"}]},{"id":"gc_04","name":"역사란무엇인가","credit":3,"type":"core","tag":"핵심교양(인문I)","area":"인문I","color":"c-blue","professors":[{"name":"윤은주","div":"01","slots":[{"day":"월","times":[4,5],"room":"북악관3층1호실"},{"day":"수","times":[4,5],"room":"북악관3층1호실"}],"label":"01분반 · 월 12:00~14:00, 수 12:00~14:00"},{"name":"윤은주","div":"02","slots":[{"day":"월","times":[5,6],"room":"북악관3층1호실"},{"day":"수","times":[5,6],"room":"북악관3층1호실"}],"label":"02분반 · 월 13:00~15:00, 수 13:00~15:00"},{"name":"윤은주","div":"03","slots":[{"day":"화","times":[1,2],"room":"북악관8층5호실"},{"day":"목","times":[1,2],"room":"북악관8층5호실"}],"label":"03분반 · 화 09:00~11:00, 목 09:00~11:00"}]},{"id":"gc_05","name":"임시정부와독립운동","credit":3,"type":"core","tag":"핵심교양(인문I)","area":"인문I","color":"c-blue","professors":[{"name":"이계형","div":"01","slots":[{"day":"화","times":[1,2],"room":"북악관4층3호실"},{"day":"목","times":[1,2],"room":"북악관4층3호실"}],"label":"01분반 · 화 09:00~11:00, 목 09:00~11:00"},{"name":"황선익","div":"02","slots":[{"day":"화","times":[2,3],"room":"북악관3층1호실"},{"day":"목","times":[2,3],"room":"북악관3층1호실"}],"label":"02분반 · 화 10:00~12:00, 목 10:00~12:00"},{"name":"이계형","div":"03","slots":[{"day":"화","times":[4,5],"room":"북악관3층1호실"},{"day":"목","times":[4,5],"room":"북악관3층1호실"}],"label":"03분반 · 화 12:00~14:00, 목 12:00~14:00"},{"name":"이계형","div":"04","slots":[{"day":"수","times":[5,6],"room":"북악관8층5호실"},{"day":"금","times":[5,6],"room":"북악관8층5호실"}],"label":"04분반 · 수 13:00~15:00, 금 13:00~15:00"}]},{"id":"gc_06","name":"철학의물음들","credit":3,"type":"core","tag":"핵심교양(인문I)","area":"인문I","color":"c-blue","professors":[{"name":"이근세","div":"02","slots":[{"day":"화","times":[2,3],"room":"북악관6층4호실"},{"day":"목","times":[2,3],"room":"북악관6층4호실"}],"label":"02분반 · 화 10:00~12:00, 목 10:00~12:00"},{"name":"김한승","div":"03","slots":[{"day":"수","times":[7,8],"room":"북악관11층11호실"},{"day":"금","times":[7,8],"room":"북악관11층11호실"}],"label":"03분반 · 수 15:00~17:00, 금 15:00~17:00"},{"name":"조종화","div":"04","slots":[{"day":"화","times":[2,3],"room":"미래관3층19호실"},{"day":"목","times":[2,3],"room":"미래관3층19호실"}],"label":"04분반 · 화 10:00~12:00, 목 10:00~12:00"},{"name":"조종화","div":"05","slots":[{"day":"수","times":[7,8],"room":"법학관3층3호실"},{"day":"금","times":[7,8],"room":"법학관3층3호실"}],"label":"05분반 · 수 15:00~17:00, 금 15:00~17:00"},{"name":"피터리","div":"01","slots":[{"day":"화","times":[4,5],"room":"공학관지하1층14호실"},{"day":"목","times":[4,5],"room":"공학관지하1층14호실"}],"label":"01분반 · 화 12:00~14:00, 목 12:00~14:00"}]},{"id":"gc_07","name":"한국역사의이해","credit":3,"type":"core","tag":"핵심교양(인문I)","area":"인문I","color":"c-blue","professors":[{"name":"한준수","div":"01","slots":[{"day":"수","times":[5,6],"room":"북악관6층5호실"},{"day":"금","times":[5,6],"room":"북악관6층5호실"}],"label":"01분반 · 수 13:00~15:00, 금 13:00~15:00"},{"name":"남무희","div":"02","slots":[{"day":"월","times":[1,2],"room":"북악관8층5호실"},{"day":"수","times":[1,2],"room":"북악관8층5호실"}],"label":"02분반 · 월 09:00~11:00, 수 09:00~11:00"},{"name":"한준수","div":"03","slots":[{"day":"수","times":[4,5],"room":"북악관4층7호실"},{"day":"금","times":[4,5],"room":"북악관4층7호실"}],"label":"03분반 · 수 12:00~14:00, 금 12:00~14:00"},{"name":"김연민","div":"04","slots":[{"day":"수","times":[7,8],"room":"북악관4층7호실"},{"day":"금","times":[7,8],"room":"북악관4층7호실"}],"label":"04분반 · 수 15:00~17:00, 금 15:00~17:00"},{"name":"김연민","div":"05","slots":[{"day":"화","times":[2,3],"room":"북악관3층4호실"},{"day":"목","times":[2,3],"room":"북악관3층4호실"}],"label":"05분반 · 화 10:00~12:00, 목 10:00~12:00"},{"name":"여성구","div":"06","slots":[{"day":"화","times":[4,5],"room":"북악관4층7호실"},{"day":"목","times":[4,5],"room":"북악관4층7호실"}],"label":"06분반 · 화 12:00~14:00, 목 12:00~14:00"},{"name":"김정자","div":"07","slots":[{"day":"화","times":[1,2],"room":"북악관11층11호실"},{"day":"목","times":[1,2],"room":"북악관11층11호실"}],"label":"07분반 · 화 09:00~11:00, 목 09:00~11:00"},{"name":"남무희","div":"08","slots":[{"day":"화","times":[4,5],"room":"법학관3층3호실"},{"day":"목","times":[4,5],"room":"법학관3층3호실"}],"label":"08분반 · 화 12:00~14:00, 목 12:00~14:00"}]},{"id":"gc_08","name":"공연예술읽기(무용)","credit":3,"type":"core","tag":"핵심교양(인문II)","area":"인문II","color":"c-cyan","professors":[{"name":"현혜선","div":"01","slots":[{"day":"화","times":[1,2,3],"room":"예술관1층18호실"}],"label":"01분반 · 화 09:00~12:00"}]},{"id":"gc_09","name":"공연예술읽기(연극)","credit":3,"type":"core","tag":"핵심교양(인문II)","area":"인문II","color":"c-cyan","professors":[{"name":"문현정","div":"01","slots":[{"day":"화","times":[1,2],"room":"예술관1층19호실"},{"day":"목","times":[1,2],"room":"예술관1층19호실"}],"label":"01분반 · 화 09:00~11:00, 목 09:00~11:00"},{"name":"문현정","div":"02","slots":[{"day":"화","times":[2,3],"room":"예술관1층19호실"},{"day":"목","times":[2,3],"room":"예술관1층19호실"}],"label":"02분반 · 화 10:00~12:00, 목 10:00~12:00"}]},{"id":"gc_10","name":"디자인의이해","credit":3,"type":"core","tag":"핵심교양(인문II)","area":"인문II","color":"c-cyan","professors":[{"name":"심유리","div":"01","slots":[{"day":"목","times":[4,5,6],"room":"조형관3층9호실"}],"label":"01분반 · 목 12:00~15:00"},{"name":"연명흠","div":"02","slots":[{"day":"화","times":[5,6,7],"room":"조형관3층14호실"}],"label":"02분반 · 화 13:00~16:00"},{"name":"윤나리","div":"03","slots":[{"day":"목","times":[7,8,9],"room":"조형관3층9호실"}],"label":"03분반 · 목 15:00~18:00"},{"name":"윤나리","div":"04","slots":[{"day":"월","times":[1,2,3],"room":"조형관3층9호실"}],"label":"04분반 · 월 09:00~12:00"}]},{"id":"gc_11","name":"문학,세상을만나다","credit":3,"type":"core","tag":"핵심교양(인문II)","area":"인문II","color":"c-cyan","professors":[{"name":"정선태","div":"01","slots":[{"day":"화","times":[5,6,7,8],"room":"본부관별관1층1호실"}],"label":"01분반 · 화 13:00~17:00"}]},{"id":"gc_12","name":"문학속의심리학","credit":3,"type":"core","tag":"핵심교양(인문II)","area":"인문II","color":"c-cyan","professors":[{"name":"박진","div":"01","slots":[{"day":"화","times":[4,5],"room":"북악관8층2호실"},{"day":"목","times":[4,5],"room":"북악관8층2호실"}],"label":"01분반 · 화 12:00~14:00, 목 12:00~14:00"},{"name":"박진","div":"02","slots":[{"day":"수","times":[7,8,9],"room":"북악관8층2호실"}],"label":"02분반 · 수 15:00~18:00"},{"name":"신제원","div":"03","slots":[{"day":"월","times":[2,3,4,5],"room":"북악관6층4호실"}],"label":"03분반 · 월 10:00~14:00"}]},{"id":"gc_13","name":"문화이론과대중문화","credit":3,"type":"core","tag":"핵심교양(인문II)","area":"인문II","color":"c-cyan","professors":[{"name":"박진","div":"01","slots":[{"day":"화","times":[7,8],"room":"북악관8층5호실"},{"day":"목","times":[7,8],"room":"북악관8층5호실"}],"label":"01분반 · 화 15:00~17:00, 목 15:00~17:00"},{"name":"박진","div":"02","slots":[{"day":"화","times":[2,3],"room":"북악관6층5호실"},{"day":"목","times":[2,3],"room":"북악관6층5호실"}],"label":"02분반 · 화 10:00~12:00, 목 10:00~12:00"},{"name":"김남혁","div":"03","slots":[{"day":"화","times":[5,6],"room":"북악관6층10호실"},{"day":"목","times":[5,6],"room":"북악관6층10호실"}],"label":"03분반 · 화 13:00~15:00, 목 13:00~15:00"}]},{"id":"gc_14","name":"미술의이해","credit":3,"type":"core","tag":"핵심교양(인문II)","area":"인문II","color":"c-cyan","professors":[{"name":"최지혜","div":"01","slots":[{"day":"금","times":[1,2,3],"room":"예술관지하1층10호실"}],"label":"01분반 · 금 09:00~12:00"},{"name":"손상미","div":"02","slots":[{"day":"화","times":[5,6],"room":"예술관지하1층10호실"},{"day":"목","times":[5,6],"room":"예술관지하1층10호실"}],"label":"02분반 · 화 13:00~15:00, 목 13:00~15:00"},{"name":"손상미","div":"03","slots":[{"day":"금","times":[4,5,6],"room":"예술관지하1층10호실"}],"label":"03분반 · 금 12:00~15:00"},{"name":"허윤정","div":"04","slots":[{"day":"금","times":[7,8,9],"room":"예술관지하1층10호실"}],"label":"04분반 · 금 15:00~18:00"},{"name":"손상미","div":"05","slots":[{"day":"화","times":[1,2],"room":"예술관지하1층10호실"},{"day":"목","times":[1,2],"room":"예술관지하1층10호실"}],"label":"05분반 · 화 09:00~11:00, 목 09:00~11:00"}]},{"id":"gc_15","name":"음악의이해","credit":3,"type":"core","tag":"핵심교양(인문II)","area":"인문II","color":"c-cyan","professors":[{"name":"박종현","div":"01","slots":[{"day":"화","times":[7,8],"room":"북악관5층7호실"},{"day":"목","times":[7,8],"room":"북악관5층7호실"}],"label":"01분반 · 화 15:00~17:00, 목 15:00~17:00"},{"name":"박종현","div":"02","slots":[{"day":"화","times":[5,6],"room":"북악관3층1호실"},{"day":"목","times":[5,6],"room":"북악관3층1호실"}],"label":"02분반 · 화 13:00~15:00, 목 13:00~15:00"},{"name":"김희선","div":"03","slots":[{"day":"월","times":[2,3,4,5],"room":"북악관8층2호실"}],"label":"03분반 · 월 10:00~14:00"}]},{"id":"gc_16","name":"한국문학의이해","credit":3,"type":"core","tag":"핵심교양(인문II)","area":"인문II","color":"c-cyan","professors":[{"name":"배수찬","div":"01","slots":[{"day":"월","times":[2,3,4,5],"room":"미래관1층14호실"}],"label":"01분반 · 월 10:00~14:00"},{"name":"조재현","div":"02","slots":[{"day":"화","times":[2,3],"room":"북악관11층11호실"},{"day":"목","times":[2,3],"room":"북악관11층11호실"}],"label":"02분반 · 화 10:00~12:00, 목 10:00~12:00"},{"name":"서연주","div":"03","slots":[{"day":"수","times":[7,8],"room":"북악관3층1호실"},{"day":"금","times":[7,8],"room":"북악관3층1호실"}],"label":"03분반 · 수 15:00~17:00, 금 15:00~17:00"},{"name":"이철송","div":"04","slots":[{"day":"수","times":[8,9],"room":"경상관1층3호실"},{"day":"금","times":[8,9],"room":"경상관1층3호실"}],"label":"04분반 · 수 16:00~18:00, 금 16:00~18:00"},{"name":"박인희","div":"05","slots":[{"day":"화","times":[4,5],"room":"북악관11층11호실"},{"day":"목","times":[4,5],"room":"북악관11층11호실"}],"label":"05분반 · 화 12:00~14:00, 목 12:00~14:00"},{"name":"김남혁","div":"06","slots":[{"day":"수","times":[5,6],"room":"북악관8층2호실"},{"day":"금","times":[5,6],"room":"북악관8층2호실"}],"label":"06분반 · 수 13:00~15:00, 금 13:00~15:00"},{"name":"최은혜","div":"07","slots":[{"day":"수","times":[5,6],"room":"국제관2층1-2호실"},{"day":"금","times":[5,6],"room":"국제관2층1-2호실"}],"label":"07분반 · 수 13:00~15:00, 금 13:00~15:00"}]},{"id":"gc_17","name":"한문과문화","credit":3,"type":"core","tag":"핵심교양(인문II)","area":"인문II","color":"c-cyan","professors":[{"name":"이명아","div":"01","slots":[{"day":"화","times":[1,2],"room":"북악관6층10호실"},{"day":"목","times":[1,2],"room":"북악관6층10호실"}],"label":"01분반 · 화 09:00~11:00, 목 09:00~11:00"},{"name":"오한나","div":"02","slots":[{"day":"화","times":[5,6],"room":"북악관8층5호실"},{"day":"목","times":[5,6],"room":"북악관8층5호실"}],"label":"02분반 · 화 13:00~15:00, 목 13:00~15:00"},{"name":"김주아","div":"03","slots":[{"day":"화","times":[4,5],"room":"북악관8층5호실"},{"day":"목","times":[4,5],"room":"북악관8층5호실"}],"label":"03분반 · 화 12:00~14:00, 목 12:00~14:00"},{"name":"이규일","div":"04","slots":[{"day":"화","times":[5,6],"room":"북악관11층10호실"},{"day":"목","times":[5,6],"room":"북악관11층10호실"}],"label":"04분반 · 화 13:00~15:00, 목 13:00~15:00"},{"name":"한영걸","div":"05","slots":[{"day":"금","times":[7,8,9],"room":"국제관2층1-2호실"}],"label":"05분반 · 금 15:00~18:00"}]},{"id":"gc_18","name":"국제관계의이해와통일","credit":3,"type":"core","tag":"핵심교양(소통)","area":"소통","color":"c-purple","professors":[{"name":"남광규","div":"01","slots":[{"day":"화","times":[5,6],"room":"북악관4층7호실"},{"day":"목","times":[5,6],"room":"북악관4층7호실"}],"label":"01분반 · 화 13:00~15:00, 목 13:00~15:00"},{"name":"이우태","div":"02","slots":[{"day":"월","times":[2,3,4,5],"room":"북악관3층5호실"}],"label":"02분반 · 월 10:00~14:00"}]},{"id":"gc_19","name":"논리와소통","credit":3,"type":"core","tag":"핵심교양(소통)","area":"소통","color":"c-purple","professors":[{"name":"양민정","div":"01","slots":[{"day":"화","times":[2,3],"room":"미래관5층27호실"},{"day":"목","times":[2,3],"room":"미래관5층27호실"}],"label":"01분반 · 화 10:00~12:00, 목 10:00~12:00"},{"name":"조종화","div":"02","slots":[{"day":"수","times":[5,6],"room":"법학관3층3호실"},{"day":"금","times":[5,6],"room":"법학관3층3호실"}],"label":"02분반 · 수 13:00~15:00, 금 13:00~15:00"},{"name":"조종화","div":"03","slots":[{"day":"수","times":[2,3],"room":"북악관5층8호실"},{"day":"금","times":[2,3],"room":"북악관5층8호실"}],"label":"03분반 · 수 10:00~12:00, 금 10:00~12:00"},{"name":"양민정","div":"04","slots":[{"day":"수","times":[4,5],"room":"북악관10층13호실"},{"day":"금","times":[4,5],"room":"북악관10층13호실"}],"label":"04분반 · 수 12:00~14:00, 금 12:00~14:00"}]},{"id":"gc_20","name":"미디어와공동체","credit":3,"type":"core","tag":"핵심교양(소통)","area":"소통","color":"c-purple","professors":[{"name":"김은정","div":"01","slots":[{"day":"목","times":[5,6,7,8],"room":"북악관10층13호실"}],"label":"01분반 · 목 13:00~17:00"},{"name":"조창호","div":"02","slots":[{"day":"월","times":[7,8],"room":"미래관1층2호실"},{"day":"수","times":[7,8],"room":"미래관1층2호실"}],"label":"02분반 · 월 15:00~17:00, 수 15:00~17:00"},{"name":"김성준","div":"03","slots":[{"day":"화","times":[4,5],"room":"북악관11층10호실"},{"day":"목","times":[4,5],"room":"북악관11층10호실"}],"label":"03분반 · 화 12:00~14:00, 목 12:00~14:00"},{"name":"김은정","div":"04","slots":[{"day":"화","times":[2,3],"room":"북악관8층5호실"},{"day":"목","times":[2,3],"room":"북악관8층5호실"}],"label":"04분반 · 화 10:00~12:00, 목 10:00~12:00"},{"name":"김도연","div":"05","slots":[{"day":"금","times":[4,5,6],"room":"북악관6층4호실"}],"label":"05분반 · 금 12:00~15:00"},{"name":"박영려","div":"06","slots":[{"day":"월","times":[2,3,4,5],"room":"미래관3층19호실"}],"label":"06분반 · 월 10:00~14:00"}]},{"id":"gc_21","name":"사회적행동과성격심리학","credit":3,"type":"core","tag":"핵심교양(소통)","area":"소통","color":"c-purple","professors":[{"name":"김지연","div":"01","slots":[{"day":"금","times":[2,3,4,5],"room":"북악관8층2호실"}],"label":"01분반 · 금 10:00~14:00"},{"name":"김지연","div":"02","slots":[{"day":"목","times":[5,6,7,8],"room":"북악관11층11호실"}],"label":"02분반 · 목 13:00~17:00"},{"name":"송수미","div":"03","slots":[{"day":"목","times":[7,8,9],"room":"북악관6층4호실"}],"label":"03분반 · 목 15:00~18:00"}]},{"id":"gc_22","name":"소통과토론","credit":3,"type":"core","tag":"핵심교양(소통)","area":"소통","color":"c-purple","professors":[{"name":"정관용","div":"01","slots":[{"day":"금","times":[5,6,7],"room":"북악관4층7-1호실"}],"label":"01분반 · 금 13:00~16:00"},{"name":"조인숙","div":"02","slots":[{"day":"목","times":[5,6,7,8],"room":"북악관2층5호실"}],"label":"02분반 · 목 13:00~17:00"},{"name":"박영려","div":"03","slots":[{"day":"금","times":[7,8,9],"room":"북악관10층10호실"}],"label":"03분반 · 금 15:00~18:00"},{"name":"조인숙","div":"04","slots":[{"day":"목","times":[1,2,3],"room":"북악관7층2호실"}],"label":"04분반 · 목 09:00~12:00"},{"name":"류춘렬","div":"05","slots":[{"day":"수","times":[2,3,4,5],"room":"법학관3층2호실"}],"label":"05분반 · 수 10:00~14:00"},{"name":"김정아","div":"06","slots":[{"day":"금","times":[4,5,6],"room":"북악관4층4호실"}],"label":"06분반 · 금 12:00~15:00"}]},{"id":"gc_23","name":"시민사회와경제","credit":3,"type":"core","tag":"핵심교양(소통)","area":"소통","color":"c-purple","professors":[{"name":"김영욱","div":"01","slots":[{"day":"목","times":[4,5,6],"room":"경상관3층4호실"}],"label":"01분반 · 목 12:00~15:00"},{"name":"이선영","div":"02","slots":[{"day":"금","times":[4,5,6],"room":"경상관3층4호실"}],"label":"02분반 · 금 12:00~15:00"},{"name":"김동욱","div":"03","slots":[{"day":"목","times":[7,8,9],"room":"경상관3층4호실"}],"label":"03분반 · 목 15:00~18:00"},{"name":"오주현","div":"04","slots":[{"day":"금","times":[7,8,9],"room":"경상관3층4호실"}],"label":"04분반 · 금 15:00~18:00"}]},{"id":"gc_24","name":"시민사회의법과소통","credit":3,"type":"core","tag":"핵심교양(소통)","area":"소통","color":"c-purple","professors":[{"name":"정진석","div":"01","slots":[{"day":"화","times":[1,2],"room":"법학관3층2호실"},{"day":"목","times":[1,2],"room":"법학관3층2호실"}],"label":"01분반 · 화 09:00~11:00, 목 09:00~11:00"},{"name":"황승흠","div":"02","slots":[{"day":"화","times":[2,3],"room":"법학관3층2호실"},{"day":"목","times":[2,3],"room":"법학관3층2호실"}],"label":"02분반 · 화 10:00~12:00, 목 10:00~12:00"},{"name":"박민","div":"03","slots":[{"day":"수","times":[4,5],"room":"법학관3층3호실"},{"day":"금","times":[4,5],"room":"법학관3층3호실"}],"label":"03분반 · 수 12:00~14:00, 금 12:00~14:00"}]},{"id":"gc_25","name":"정치와공론","credit":3,"type":"core","tag":"핵심교양(소통)","area":"소통","color":"c-purple","professors":[{"name":"안현상","div":"01","slots":[{"day":"화","times":[1,2],"room":"북악관3층4호실"},{"day":"목","times":[1,2],"room":"북악관3층4호실"}],"label":"01분반 · 화 09:00~11:00, 목 09:00~11:00"},{"name":"우수미","div":"02","slots":[{"day":"화","times":[2,3],"room":"북악관11층10호실"},{"day":"목","times":[2,3],"room":"북악관11층10호실"}],"label":"02분반 · 화 10:00~12:00, 목 10:00~12:00"},{"name":"고댕","div":"03","slots":[{"day":"화","times":[7,8,9],"room":"북악관6층4호실"}],"label":"03분반 · 화 15:00~18:00"},{"name":"김재길","div":"04","slots":[{"day":"금","times":[7,8,9],"room":"북악관3층11호실"}],"label":"04분반 · 금 15:00~18:00"},{"name":"윤수찬","div":"05","slots":[{"day":"금","times":[5,6,7,8],"room":"북악관10층13호실"}],"label":"05분반 · 금 13:00~17:00"}]},{"id":"gc_26","name":"커뮤니케이션과삶","credit":3,"type":"core","tag":"핵심교양(소통)","area":"소통","color":"c-purple","professors":[{"name":"한희정","div":"01","slots":[{"day":"화","times":[1,2],"room":"북악관8층2호실"},{"day":"목","times":[1,2],"room":"북악관8층2호실"}],"label":"01분반 · 화 09:00~11:00, 목 09:00~11:00"},{"name":"한희정","div":"02","slots":[{"day":"화","times":[2,3],"room":"북악관8층2호실"},{"day":"목","times":[2,3],"room":"북악관8층2호실"}],"label":"02분반 · 화 10:00~12:00, 목 10:00~12:00"},{"name":"한희정","div":"03","slots":[{"day":"월","times":[4,5,6],"room":"북악관8층5호실"}],"label":"03분반 · 월 12:00~15:00"}]},{"id":"gc_27","name":"통일시대지성인으로서의역할","credit":3,"type":"core","tag":"핵심교양(소통)","area":"소통","color":"c-purple","professors":[{"name":"이종철","div":"01","slots":[{"day":"월","times":[5,6,7,8],"room":"북악관6층4호실"}],"label":"01분반 · 월 13:00~17:00"},{"name":"전병길","div":"02","slots":[{"day":"화","times":[7,8],"room":"미래관2층15호실"},{"day":"목","times":[7,8],"room":"미래관2층15호실"}],"label":"02분반 · 화 15:00~17:00, 목 15:00~17:00"}]},{"id":"gc_28","name":"3D프린팅창의메이커스기초과정","credit":3,"type":"core","tag":"핵심교양(창의)","area":"창의","color":"c-green","professors":[{"name":"김정우","div":"01","slots":[{"day":"수","times":[2,3,4],"room":"조형관별관2층1호실"}],"label":"01분반 · 수 10:00~13:00"},{"name":"김정우","div":"02","slots":[{"day":"목","times":[2,3,4],"room":"조형관별관2층1호실"}],"label":"02분반 · 목 10:00~13:00"}]},{"id":"gc_29","name":"3D프린팅창의메이커스심화과정","credit":3,"type":"core","tag":"핵심교양(창의)","area":"창의","color":"c-green","professors":[{"name":"김정우","div":"01","slots":[{"day":"금","times":[2,3,4],"room":"조형관별관2층1호실"}],"label":"01분반 · 금 10:00~13:00"},{"name":"김정우","div":"02","slots":[{"day":"금","times":[5,6,7],"room":"조형관별관2층1호실"}],"label":"02분반 · 금 13:00~16:00"}]},{"id":"gc_30","name":"AI로읽는숲","credit":3,"type":"core","tag":"핵심교양(창의)","area":"창의","color":"c-green","professors":[{"name":"강유진","div":"01","slots":[{"day":"월","times":[6,7,8],"room":"미래관1층14호실"}],"label":"01분반 · 월 14:00~17:00"}]},{"id":"gc_31","name":"AI와소프트웨어혁명","credit":3,"type":"core","tag":"핵심교양(창의)","area":"창의","color":"c-green","professors":[{"name":"윤수연","div":"01","slots":[{"day":"수","times":[4,5,6],"room":"공학관2층28호실"}],"label":"01분반 · 수 12:00~15:00"}]},{"id":"gc_32","name":"과학과창의적사고","credit":3,"type":"core","tag":"핵심교양(창의)","area":"창의","color":"c-green","professors":[{"name":"장지훈","div":"01","slots":[{"day":"화","times":[7,8,9],"room":"과학관1층20호실"}],"label":"01분반 · 화 15:00~18:00"},{"name":"명보라","div":"02","slots":[{"day":"화","times":[4,5,6],"room":"과학관3층24호실"}],"label":"02분반 · 화 12:00~15:00"}]},{"id":"gc_33","name":"과학기술과인간사고의변화","credit":3,"type":"core","tag":"핵심교양(창의)","area":"창의","color":"c-green","professors":[{"name":"이근세","div":"01","slots":[{"day":"수","times":[8,9],"room":"북악관3층1호실"},{"day":"금","times":[8,9],"room":"북악관3층1호실"}],"label":"01분반 · 수 16:00~18:00, 금 16:00~18:00"},{"name":"양민정","div":"02","slots":[{"day":"화","times":[5,6],"room":"북악관8층2호실"},{"day":"목","times":[5,6],"room":"북악관8층2호실"}],"label":"02분반 · 화 13:00~15:00, 목 13:00~15:00"},{"name":"양민정","div":"03","slots":[{"day":"화","times":[4,5],"room":"북악관3층11호실"},{"day":"목","times":[4,5],"room":"북악관3층11호실"}],"label":"03분반 · 화 12:00~14:00, 목 12:00~14:00"},{"name":"신혜영","div":"04","slots":[{"day":"금","times":[7,8,9],"room":"북악관8층5호실"}],"label":"04분반 · 금 15:00~18:00"}]},{"id":"gc_34","name":"문명과창의수학","credit":3,"type":"core","tag":"핵심교양(창의)","area":"창의","color":"c-green","professors":[{"name":"김복선","div":"01","slots":[{"day":"화","times":[4,5],"room":"북악관6층10호실"},{"day":"목","times":[4,5],"room":"북악관6층10호실"}],"label":"01분반 · 화 12:00~14:00, 목 12:00~14:00"},{"name":"김복선","div":"02","slots":[{"day":"화","times":[7,8],"room":"북악관8층2호실"},{"day":"목","times":[7,8],"room":"북악관8층2호실"}],"label":"02분반 · 화 15:00~17:00, 목 15:00~17:00"}]},{"id":"gc_35","name":"생명의탄생과이해","credit":3,"type":"core","tag":"핵심교양(창의)","area":"창의","color":"c-green","professors":[{"name":"정용주","div":"01","slots":[{"day":"화","times":[2,3],"room":"과학관지하1층8호실"},{"day":"목","times":[2,3],"room":"과학관지하1층8호실"}],"label":"01분반 · 화 10:00~12:00, 목 10:00~12:00"},{"name":"정용주","div":"02","slots":[{"day":"화","times":[4,5],"room":"과학관1층20호실"},{"day":"목","times":[4,5],"room":"과학관1층20호실"}],"label":"02분반 · 화 12:00~14:00, 목 12:00~14:00"}]},{"id":"gc_36","name":"자기주도스포츠","credit":3,"type":"core","tag":"핵심교양(창의)","area":"창의","color":"c-green","professors":[{"name":"김동현","div":"01","slots":[{"day":"화","times":[1,2],"room":"미래관2층15호실"},{"day":"목","times":[1,2],"room":"미래관2층15호실"}],"label":"01분반 · 화 09:00~11:00, 목 09:00~11:00"},{"name":"김동현","div":"02","slots":[{"day":"화","times":[2,3],"room":"미래관2층15호실"},{"day":"목","times":[2,3],"room":"미래관2층15호실"}],"label":"02분반 · 화 10:00~12:00, 목 10:00~12:00"},{"name":"송희경","div":"03","slots":[{"day":"수","times":[5,6],"room":"미래관1층15호실"},{"day":"금","times":[5,6],"room":"미래관1층15호실"}],"label":"03분반 · 수 13:00~15:00, 금 13:00~15:00"},{"name":"송희경","div":"04","slots":[{"day":"수","times":[7,8],"room":"미래관1층15호실"},{"day":"금","times":[7,8],"room":"미래관1층15호실"}],"label":"04분반 · 수 15:00~17:00, 금 15:00~17:00"},{"name":"이원재","div":"05","slots":[{"day":"화","times":[8,9],"room":"미래관1층15호실"},{"day":"목","times":[8,9],"room":"미래관1층15호실"}],"label":"05분반 · 화 16:00~18:00, 목 16:00~18:00"},{"name":"조영희","div":"06","slots":[{"day":"화","times":[4,5],"room":"미래관2층15호실"},{"day":"목","times":[4,5],"room":"미래관2층15호실"}],"label":"06분반 · 화 12:00~14:00, 목 12:00~14:00"},{"name":"조영희","div":"07","slots":[{"day":"화","times":[5,6],"room":"미래관2층4호실"},{"day":"목","times":[5,6],"room":"미래관2층4호실"}],"label":"07분반 · 화 13:00~15:00, 목 13:00~15:00"},{"name":"양우영","div":"08","slots":[{"day":"수","times":[1,2,3],"room":"미래관1층15호실"}],"label":"08분반 · 수 09:00~12:00"},{"name":"양우영","div":"09","slots":[{"day":"목","times":[1,2,3],"room":"미래관1층15호실"}],"label":"09분반 · 목 09:00~12:00"},{"name":"강연흥","div":"10","slots":[{"day":"금","times":[1,2,3],"room":"미래관1층15호실"}],"label":"10분반 · 금 09:00~12:00"}]},{"id":"gc_37","name":"지구생태계와인간","credit":3,"type":"core","tag":"핵심교양(창의)","area":"창의","color":"c-green","professors":[{"name":"이성숙","div":"01","slots":[{"day":"수","times":[4,5],"room":"미래관2층4호실"},{"day":"금","times":[4,5],"room":"미래관2층4호실"}],"label":"01분반 · 수 12:00~14:00, 금 12:00~14:00"},{"name":"이성숙","div":"02","slots":[{"day":"수","times":[5,6],"room":"미래관2층4호실"},{"day":"금","times":[5,6],"room":"미래관2층4호실"}],"label":"02분반 · 수 13:00~15:00, 금 13:00~15:00"},{"name":"나희진","div":"03","slots":[{"day":"화","times":[1,2],"room":"미래관2층4호실"},{"day":"목","times":[1,2],"room":"미래관2층4호실"}],"label":"03분반 · 화 09:00~11:00, 목 09:00~11:00"},{"name":"임주훈","div":"04","slots":[{"day":"화","times":[2,3],"room":"미래관2층4호실"},{"day":"목","times":[2,3],"room":"미래관2층4호실"}],"label":"04분반 · 화 10:00~12:00, 목 10:00~12:00"}]},{"id":"gc_38","name":"글로벌기업가정신과창업","credit":3,"type":"core","tag":"핵심교양(글로벌)","area":"글로벌","color":"c-amber","professors":[{"name":"정수성","div":"01","slots":[{"day":"화","times":[7,8],"room":"경영관6층13호실"},{"day":"목","times":[7,8],"room":"경영관6층13호실"}],"label":"01분반 · 화 15:00~17:00, 목 15:00~17:00"},{"name":"정수성","div":"02","slots":[{"day":"화","times":[4,5],"room":"경영관1층9호실"},{"day":"목","times":[4,5],"room":"경영관1층9호실"}],"label":"02분반 · 화 12:00~14:00, 목 12:00~14:00"}]},{"id":"gc_39","name":"글로벌미디어문화와영화영어","credit":3,"type":"core","tag":"핵심교양(글로벌)","area":"글로벌","color":"c-amber","professors":[{"name":"류도형","div":"01","slots":[{"day":"월","times":[4,5,6],"room":"북악관7층6호실"}],"label":"01분반 · 월 12:00~15:00"},{"name":"이지현","div":"02","slots":[{"day":"월","times":[7,8,9],"room":"북악관7층6호실"}],"label":"02분반 · 월 15:00~18:00"},{"name":"서지영","div":"03","slots":[{"day":"화","times":[4,5,6],"room":"북악관7층6호실"}],"label":"03분반 · 화 12:00~15:00"},{"name":"노윤아","div":"04","slots":[{"day":"화","times":[7,8,9],"room":"북악관7층6호실"}],"label":"04분반 · 화 15:00~18:00"},{"name":"류도형","div":"05","slots":[{"day":"목","times":[4,5,6],"room":"북악관7층6호실"}],"label":"05분반 · 목 12:00~15:00"},{"name":"류도형","div":"06","slots":[{"day":"목","times":[7,8,9],"room":"북악관7층6호실"}],"label":"06분반 · 목 15:00~18:00"},{"name":"임미진","div":"07","slots":[{"day":"수","times":[4,5,6],"room":"북악관7층6호실"}],"label":"07분반 · 수 12:00~15:00"},{"name":"임미진","div":"08","slots":[{"day":"수","times":[7,8,9],"room":"북악관7층6호실"}],"label":"08분반 · 수 15:00~18:00"}]},{"id":"gc_40","name":"글로벌사회와젠더","credit":3,"type":"core","tag":"핵심교양(글로벌)","area":"글로벌","color":"c-amber","professors":[{"name":"한영선","div":"01","slots":[{"day":"수","times":[4,5,6],"room":"북악관3층5호실"}],"label":"01분반 · 수 12:00~15:00"},{"name":"한영선","div":"02","slots":[{"day":"수","times":[1,2,3],"room":"법학관1층6호실"}],"label":"02분반 · 수 09:00~12:00"}]},{"id":"gc_41","name":"글로벌시대의심리학","credit":3,"type":"core","tag":"핵심교양(글로벌)","area":"글로벌","color":"c-amber","professors":[{"name":"남숙경","div":"01","slots":[{"day":"목","times":[4,5,6],"room":"공학관2층28호실"}],"label":"01분반 · 목 12:00~15:00"},{"name":"오남경","div":"02","slots":[{"day":"월","times":[1,2,3],"room":"북악관6층10호실"}],"label":"02분반 · 월 09:00~12:00"},{"name":"이지은","div":"03","slots":[{"day":"수","times":[4,5],"room":"북악관3층10호실"},{"day":"금","times":[4,5],"room":"북악관3층10호실"}],"label":"03분반 · 수 12:00~14:00, 금 12:00~14:00"}]},{"id":"gc_42","name":"리더십챌린지","credit":3,"type":"core","tag":"핵심교양(글로벌)","area":"글로벌","color":"c-amber","professors":[{"name":"민은홍","div":"01","slots":[{"day":"금","times":[5,6,7,8],"room":"경영관1층13호실"}],"label":"01분반 · 금 13:00~17:00"},{"name":"이동희","div":"02","slots":[{"day":"수","times":[4,5,6],"room":"경영관1층13호실"}],"label":"02분반 · 수 12:00~15:00"},{"name":"김재훈","div":"03","slots":[{"day":"목","times":[1,2,3],"room":"북악관4층7호실"}],"label":"03분반 · 목 09:00~12:00"}]},{"id":"gc_43","name":"문명과세계화의도전","credit":3,"type":"core","tag":"핵심교양(글로벌)","area":"글로벌","color":"c-amber","professors":[{"name":"안드레이 란코프","div":"02","slots":[{"day":"화","times":[2,3],"room":"북악관4층6호실"},{"day":"목","times":[2,3],"room":"북악관4층6호실"}],"label":"02분반 · 화 10:00~12:00, 목 10:00~12:00"},{"name":"안현상","div":"03","slots":[{"day":"수","times":[5,6],"room":"북악관4층2호실"},{"day":"금","times":[5,6],"room":"북악관4층2호실"}],"label":"03분반 · 수 13:00~15:00, 금 13:00~15:00"},{"name":"안현상","div":"04","slots":[{"day":"금","times":[7,8,9],"room":"북악관4층3호실"}],"label":"04분반 · 금 15:00~18:00"}]},{"id":"gc_44","name":"세계문학의이해","credit":3,"type":"core","tag":"핵심교양(글로벌)","area":"글로벌","color":"c-amber","professors":[{"name":"지니김","div":"01","slots":[{"day":"화","times":[4,5],"room":"북악관3층5호실"},{"day":"목","times":[4,5],"room":"북악관3층5호실"}],"label":"01분반 · 화 12:00~14:00, 목 12:00~14:00"},{"name":"지니김","div":"02","slots":[{"day":"화","times":[2,3],"room":"북악관6층10호실"},{"day":"목","times":[2,3],"room":"북악관6층10호실"}],"label":"02분반 · 화 10:00~12:00, 목 10:00~12:00"},{"name":"방승희","div":"03","slots":[{"day":"수","times":[8,9],"room":"북악관11층10호실"},{"day":"금","times":[8,9],"room":"북악관11층10호실"}],"label":"03분반 · 수 16:00~18:00, 금 16:00~18:00"},{"name":"김소연","div":"04","slots":[{"day":"화","times":[5,6],"room":"북악관4층9호실"},{"day":"목","times":[5,6],"room":"북악관4층9호실"}],"label":"04분반 · 화 13:00~15:00, 목 13:00~15:00"}]},{"id":"gc_45","name":"세계역사의이해","credit":3,"type":"core","tag":"핵심교양(글로벌)","area":"글로벌","color":"c-amber","professors":[{"name":"고재백","div":"01","slots":[{"day":"화","times":[1,2,3],"room":"법학관3층3호실"}],"label":"01분반 · 화 09:00~12:00"},{"name":"고재백","div":"03","slots":[{"day":"수","times":[5,6,7,8],"room":"공학관지하1층19호실"}],"label":"03분반 · 수 13:00~17:00"},{"name":"고재백","div":"04","slots":[{"day":"금","times":[7,8,9],"room":"공학관2층46호실"}],"label":"04분반 · 금 15:00~18:00"}]},{"id":"gc_46","name":"현대동아시아의이해","credit":3,"type":"core","tag":"핵심교양(글로벌)","area":"글로벌","color":"c-amber","professors":[{"name":"박창건","div":"01","slots":[{"day":"화","times":[4,5],"room":"북악관4층2호실"},{"day":"목","times":[4,5],"room":"북악관4층2호실"}],"label":"01분반 · 화 12:00~14:00, 목 12:00~14:00"},{"name":"김영진","div":"02","slots":[{"day":"화","times":[2,3],"room":"북악관10층10호실"},{"day":"목","times":[2,3],"room":"북악관10층10호실"}],"label":"02분반 · 화 10:00~12:00, 목 10:00~12:00"},{"name":"김민지","div":"03","slots":[{"day":"수","times":[7,8],"room":"북악관4층2호실"},{"day":"금","times":[7,8],"room":"북악관4층2호실"}],"label":"03분반 · 수 15:00~17:00, 금 15:00~17:00"}]},{"id":"f01","name":"AI·데이터사이언스로만나는글로벌기후위기","credit":3,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"강유진","div":"01","slots":[{"day":"수","times":[6,7,8],"room":"과학관6층11호실"}],"label":"01분반 · 수 14:00~17:00"}]},{"id":"f02","name":"건축학개론","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"김상호","div":"01","slots":[{"day":"월","times":[6,7],"room":"과학관4층22호실"}],"label":"01분반 · 월 14:00~16:00"}]},{"id":"f03","name":"고전과패러디","credit":3,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"조유선","div":"01","slots":[{"day":"목","times":[2,3,4,5],"room":"북악관8층1호실"}],"label":"01분반 · 목 10:00~14:00"}]},{"id":"f04","name":"공연줍기","credit":3,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"서희영","div":"01","slots":[{"day":"수","times":[7,8,9],"room":"예술관지하1층10호실"}],"label":"01분반 · 수 15:00~18:00"}]},{"id":"f05","name":"공공기관과진로설계","credit":1,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"김세준","div":"01","slots":[{"day":"금","times":[3,4],"room":"미래관1층14호실"}],"label":"01분반 · 금 11:00~13:00"},{"name":"김세준","div":"02","slots":[{"day":"금","times":[5,6],"room":"미래관1층14호실"}],"label":"02분반 · 금 13:00~15:00"}]},{"id":"f06","name":"교양재테크","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"배중기","div":"01","slots":[{"day":"화","times":[5,6],"room":"북악관4층5호실"}],"label":"01분반 · 화 13:00~15:00"}]},{"id":"f07","name":"국가경영과공공정책","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"한승희","div":"01","slots":[{"day":"월","times":[2,3],"room":"북악관6층5호실"}],"label":"01분반 · 월 10:00~12:00"}]},{"id":"f08","name":"기업가정신특강","credit":1,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"배스완","div":"01","slots":[{"day":"수","times":[2,3],"room":"본부관별관1층1호실"}],"label":"01분반 · 수 10:00~12:00"}]},{"id":"f09","name":"기초검도","credit":1,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"전기제","div":"01","slots":[{"day":"수","times":[6,7],"room":"미래관1층19호실"}],"label":"01분반 · 수 14:00~16:00"},{"name":"전기제","div":"02","slots":[{"day":"수","times":[8,9],"room":"미래관1층19호실"}],"label":"02분반 · 수 16:00~18:00"}]},{"id":"f10","name":"기초스페인어","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"전수진","div":"01","slots":[{"day":"금","times":[1,2],"room":"북악관10층8호실"}],"label":"01분반 · 금 09:00~11:00"},{"name":"전수진","div":"02","slots":[{"day":"금","times":[3,4],"room":"북악관10층8호실"}],"label":"02분반 · 금 11:00~13:00"}]},{"id":"f11","name":"기후위기와사회변동","credit":3,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"임철희","div":"01","slots":[{"day":"수","times":[2,3,4,5],"room":"미래관3층19호실"}],"label":"01분반 · 수 10:00~14:00"}]},{"id":"f12","name":"다례","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"유양석","div":"01","slots":[{"day":"수","times":[5,6],"room":"명원박물관B동지하1층2호실"}],"label":"01분반 · 수 13:00~15:00"},{"name":"유양석","div":"02","slots":[{"day":"수","times":[7,8],"room":"명원박물관B동지하1층2호실"}],"label":"02분반 · 수 15:00~17:00"}]},{"id":"f13","name":"디지털리터러시","credit":3,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"김세연","div":"01","slots":[{"day":"수","times":[5,6,7,8],"room":"북악관6층4호실"}],"label":"01분반 · 수 13:00~17:00"}]},{"id":"f14","name":"동아시아근대사와인물","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"김경옥","div":"01","slots":[{"day":"월","times":[7,8],"room":"북악관8층5호실"}],"label":"01분반 · 월 15:00~17:00"}]},{"id":"f15","name":"드라마속인생경험","credit":3,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"고성일","div":"01","slots":[{"day":"수","times":[2,3,4,5],"room":"예술관지하중2층2호실"}],"label":"01분반 · 수 10:00~14:00"}]},{"id":"f16","name":"맑시즘의이해","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"김경래","div":"01","slots":[{"day":"금","times":[3,4],"room":"북악관4층5호실"}],"label":"01분반 · 금 11:00~13:00"},{"name":"김경래","div":"02","slots":[{"day":"수","times":[6,7],"room":"북악관2층7호실"}],"label":"02분반 · 수 14:00~16:00"}]},{"id":"f17","name":"목요특강:문화,IT,기업가정신","credit":1,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"김희선","div":"01","slots":[{"day":"목","times":[7,8],"room":"본부관별관1층1호실"}],"label":"01분반 · 목 15:00~17:00"}]},{"id":"f18","name":"목재의비밀","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"김범준","div":"01","slots":[{"day":"목","times":[3,4],"room":"미래관3층20호실"}],"label":"01분반 · 목 11:00~13:00"}]},{"id":"f19","name":"몸으로표현하기(무용)","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"최서연","div":"01","slots":[{"day":"목","times":[4,5],"room":"미래관1층19호실"}],"label":"01분반 · 목 12:00~14:00"}]},{"id":"f20","name":"무대미술의이해","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"김인준","div":"01","slots":[{"day":"화","times":[3,4],"room":"예술관지하1층10호실"}],"label":"01분반 · 화 11:00~13:00"}]},{"id":"f21","name":"문학으로만나는사랑과죽음","credit":3,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"박필현","div":"01","slots":[{"day":"목","times":[4,5,6],"room":"북악관6층4호실"}],"label":"01분반 · 목 12:00~15:00"}]},{"id":"f22","name":"문화공간탐방","credit":3,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"고성일","div":"01","slots":[{"day":"목","times":[1,2,3],"room":"예술관1층18호실"}],"label":"01분반 · 목 09:00~12:00"}]},{"id":"f23","name":"문화권으로보는한국사","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"여성구","div":"01","slots":[{"day":"화","times":[1,2],"room":"북악관4층5호실"}],"label":"01분반 · 화 09:00~11:00"}]},{"id":"f24","name":"문화예술교육의이해","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"이선철","div":"01","slots":[{"day":"목","times":[1,2],"room":"예술관지하중2층4호실"}],"label":"01분반 · 목 09:00~11:00"},{"name":"이선철","div":"02","slots":[{"day":"목","times":[3,4],"room":"예술관지하중2층4호실"}],"label":"02분반 · 목 11:00~13:00"}]},{"id":"f25","name":"문화인류학의이해","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"이규호","div":"01","slots":[{"day":"수","times":[7,8],"room":"법학관1층1호실"}],"label":"01분반 · 수 15:00~17:00"}]},{"id":"f26","name":"민법의이해","credit":3,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"김소희","div":"01","slots":[{"day":"목","times":[1,2,3],"room":"법학관1층1호실"}],"label":"01분반 · 목 09:00~12:00"},{"name":"김소희","div":"02","slots":[{"day":"목","times":[7,8,9],"room":"법학관1층1호실"}],"label":"02분반 · 목 15:00~18:00"}]},{"id":"f27","name":"박물관전시큐레이팅","credit":3,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"김미정","div":"02","slots":[{"day":"월","times":[5,6,7],"room":"북악관2층11호실"}],"label":"02분반 · 월 13:00~16:00"},{"name":"장지영","div":"01","slots":[{"day":"목","times":[5,6,7,8],"room":"명원박물관B동지하1층2호실"}],"label":"01분반 · 목 13:00~17:00"}]},{"id":"f29","name":"북한역사의이해","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"이수석","div":"01","slots":[{"day":"월","times":[3,4],"room":"북악관4층5호실"}],"label":"01분반 · 월 11:00~13:00"}]},{"id":"f30","name":"북한의생활문화이해","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"김규리","div":"01","slots":[{"day":"화","times":[7,8],"room":"북악관4층3호실"}],"label":"01분반 · 화 15:00~17:00"}]},{"id":"f31","name":"빛과아인슈타인","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"심인보","div":"01","slots":[{"day":"수","times":[7,8],"room":"과학관4층22호실"}],"label":"01분반 · 수 15:00~17:00"}]},{"id":"f32","name":"사서삼경의이해","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"한영걸","div":"01","slots":[{"day":"수","times":[3,4,5],"room":"북악관8층2호실"}],"label":"01분반 · 수 11:00~14:00"}]},{"id":"f33","name":"사회심리로본인간과미디어","credit":3,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"조인숙","div":"01","slots":[{"day":"월","times":[5,6,7,8],"room":"북악관8층2호실"}],"label":"01분반 · 월 13:00~17:00"}]},{"id":"f34","name":"생활속의클래식음악","credit":3,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"이수진","div":"01","slots":[{"day":"금","times":[5,6,7,8],"room":"북악관3층5호실"}],"label":"01분반 · 금 13:00~17:00"}]},{"id":"f35","name":"수영","credit":1,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"김동현","div":"01","slots":[{"day":"금","times":[7,8],"room":"미래관1층20호실"}],"label":"01분반 · 금 15:00~17:00"},{"name":"김동현","div":"02","slots":[{"day":"금","times":[9,10],"room":"미래관1층20호실"}],"label":"02분반 · 금 17:00~19:00"}]},{"id":"f36","name":"스마트건강과라이프스타일","credit":3,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"권기한","div":"01","slots":[{"day":"월","times":[2,3],"room":"북악관8층1호실"},{"day":"수","times":[2,3],"room":"북악관8층1호실"}],"label":"01분반 · 월 10:00~12:00, 수 10:00~12:00"}]},{"id":"f37","name":"스포츠댄스","credit":1,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"이은혜","div":"01","slots":[{"day":"화","times":[3,4],"room":"미래관1층20호실"}],"label":"01분반 · 화 11:00~13:00"},{"name":"민은지","div":"02","slots":[{"day":"화","times":[6,7],"room":"미래관1층20호실"}],"label":"02분반 · 화 14:00~16:00"}]},{"id":"f38","name":"시민혁명과근대사회","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"김경래","div":"01","slots":[{"day":"수","times":[8,9,10],"room":"북악관4층8호실"}],"label":"01분반 · 수 16:00~19:00"}]},{"id":"f39","name":"식물과사회","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"이창배","div":"01","slots":[{"day":"화","times":[4,5],"room":"미래관1층14호실"}],"label":"01분반 · 화 12:00~14:00"}]},{"id":"f40","name":"식생활의문화적이해","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"남혜경","div":"01","slots":[{"day":"목","times":[5,6],"room":"과학관3층24호실"}],"label":"01분반 · 목 13:00~15:00"}]},{"id":"f41","name":"에피스테메세미나","credit":3,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"박규철","div":"01","slots":[{"day":"수","times":[4,5,6],"room":"북악관3층9호실"}],"label":"01분반 · 수 12:00~15:00"}]},{"id":"f42","name":"영상속일본문화읽기","credit":3,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"박선영","div":"01","slots":[{"day":"목","times":[2,3,4,5],"room":"북악관4층3호실"}],"label":"01분반 · 목 10:00~14:00"},{"name":"박경민","div":"02","slots":[{"day":"월","times":[2,3,4,5],"room":"북악관10층13호실"}],"label":"02분반 · 월 10:00~14:00"}]},{"id":"f43","name":"영어발표와토론전략","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"류도형","div":"01","slots":[{"day":"화","times":[8,9],"room":"북악관5층8호실"}],"label":"01분반 · 화 16:00~18:00"}]},{"id":"f44","name":"예술과철학","credit":3,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"양민정","div":"01","slots":[{"day":"수","times":[5,6],"room":"북악관3층10호실"},{"day":"금","times":[5,6],"room":"북악관3층10호실"}],"label":"01분반 · 수 13:00~15:00, 금 13:00~15:00"}]},{"id":"f45","name":"예술영화감상","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"박서연","div":"01","slots":[{"day":"목","times":[7,8,9],"room":"예술관1층18호실"}],"label":"01분반 · 목 15:00~18:00"}]},{"id":"f46","name":"융합특강","credit":1,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"김희선","div":"01","slots":[{"day":"수","times":[6,7],"room":"본부관별관1층1호실"}],"label":"01분반 · 수 14:00~16:00"}]},{"id":"f47","name":"의회정치의이해","credit":3,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"윤수찬","div":"01","slots":[{"day":"목","times":[5,6,7,8],"room":"북악관3층11호실"}],"label":"01분반 · 목 13:00~17:00"}]},{"id":"f48","name":"이미지로생각하고표현하기","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"이준형","div":"01","slots":[{"day":"월","times":[1,2,3],"room":"예술관1층17호실"}],"label":"01분반 · 월 09:00~12:00"}]},{"id":"f49","name":"인공지능(AI)과무용예술","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"이다혜","div":"01","slots":[{"day":"화","times":[6,7],"room":"예술관2층26호실"}],"label":"01분반 · 화 14:00~16:00"}]},{"id":"f50","name":"인생설계와진로","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"한건수","div":"01","slots":[{"day":"월","times":[3,4],"room":"북악관2층5호실"}],"label":"01분반 · 월 11:00~13:00"},{"name":"한건수","div":"02","slots":[{"day":"월","times":[5,6],"room":"북악관2층5호실"}],"label":"02분반 · 월 13:00~15:00"},{"name":"이현기","div":"03","slots":[{"day":"화","times":[6,7],"room":"법학관3층3호실"}],"label":"03분반 · 화 14:00~16:00"},{"name":"윤성혜","div":"04","slots":[{"day":"금","times":[2,3],"room":"북악관2층5호실"}],"label":"04분반 · 금 10:00~12:00"},{"name":"우성식","div":"07","slots":[{"day":"수","times":[5,6],"room":"북악관2층5호실"}],"label":"07분반 · 수 13:00~15:00"},{"name":"오정근","div":"09","slots":[{"day":"목","times":[3,4],"room":"북악관2층7호실"}],"label":"09분반 · 목 11:00~13:00"},{"name":"우성식","div":"10","slots":[{"day":"수","times":[7,8],"room":"북악관2층9호실"}],"label":"10분반 · 수 15:00~17:00"}]},{"id":"f51","name":"일본대중문화론","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"이형주","div":"01","slots":[{"day":"화","times":[2,3],"room":"북악관8층1호실"}],"label":"01분반 · 화 10:00~12:00"}]},{"id":"f52","name":"일본어커뮤니케이션기초","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"YAMADA NAOYUKI","div":"01","slots":[{"day":"화","times":[6,7],"room":"북악관3층6호실"}],"label":"01분반 · 화 14:00~16:00"},{"name":"박경민","div":"02","slots":[{"day":"수","times":[6,7],"room":"북악관10층13호실"}],"label":"02분반 · 수 14:00~16:00"},{"name":"김보예","div":"03","slots":[{"day":"수","times":[5,6],"room":"북악관5층7호실"}],"label":"03분반 · 수 13:00~15:00"}]},{"id":"f53","name":"자신있게말하기","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"손규리","div":"01","slots":[{"day":"월","times":[3,4],"room":"북악관2층7호실"}],"label":"01분반 · 월 11:00~13:00"},{"name":"김은정","div":"02","slots":[{"day":"화","times":[4,5],"room":"북악관2층9호실"}],"label":"02분반 · 화 12:00~14:00"},{"name":"손규리","div":"03","slots":[{"day":"월","times":[8,9],"room":"북악관2층11호실"}],"label":"03분반 · 월 16:00~18:00"},{"name":"김은정","div":"04","slots":[{"day":"화","times":[7,8],"room":"북악관2층9호실"}],"label":"04분반 · 화 15:00~17:00"},{"name":"오정근","div":"05","slots":[{"day":"수","times":[3,4],"room":"북악관2층9호실"}],"label":"05분반 · 수 11:00~13:00"},{"name":"김수정","div":"06","slots":[{"day":"목","times":[7,8],"room":"북악관2층9호실"}],"label":"06분반 · 목 15:00~17:00"},{"name":"김수정","div":"07","slots":[{"day":"목","times":[5,6],"room":"북악관2층9호실"}],"label":"07분반 · 목 13:00~15:00"},{"name":"오정근","div":"08","slots":[{"day":"수","times":[8,9],"room":"북악관2층7호실"}],"label":"08분반 · 수 16:00~18:00"}]},{"id":"f54","name":"재료과학의미래","credit":3,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"남호석","div":"01","slots":[{"day":"목","times":[2,3,4,5],"room":"공학관지하1층16호실"}],"label":"01분반 · 목 10:00~14:00"}]},{"id":"f55","name":"증권투자의이해","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"이상인","div":"01","slots":[{"day":"금","times":[6,7],"room":"국제관5층5호실"}],"label":"01분반 · 금 14:00~16:00"}]},{"id":"f56","name":"지구생태계의이해","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"이성숙","div":"01","slots":[{"day":"수","times":[4,5],"room":"미래관2층4호실"},{"day":"금","times":[4,5],"room":"미래관2층4호실"}],"label":"01분반 · 수 12:00~14:00, 금 12:00~14:00"}]},{"id":"f57","name":"지리공간의이해","credit":3,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"황진후","div":"01","slots":[{"day":"월","times":[2,3,4,5],"room":"북악관11층11호실"}],"label":"01분반 · 월 10:00~14:00"}]},{"id":"f58","name":"지암이노베이터스스튜디오","credit":3,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"박범서","div":"01","slots":[{"day":"월","times":[7,8,9],"room":"미래관4층49호실"}],"label":"01분반 · 월 15:00~18:00"}]},{"id":"f59","name":"차세대통신의미래","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"주민철","div":"01","slots":[{"day":"화","times":[1],"room":"미래관5층24호실"},{"day":"목","times":[1],"room":"미래관5층24호실"}],"label":"01분반 · 화 09:00~10:00, 목 09:00~10:00"}]},{"id":"f60","name":"창의와융합을통한디자인탐구(공간영상의상)","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"김영현","div":"01","slots":[{"day":"월","times":[1,2,3],"room":"조형관별관2층1호실"}],"label":"01분반 · 월 09:00~12:00"}]},{"id":"f61","name":"창의와융합을통한디자인탐구(다차원적접근)","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"손동훈","div":"01","slots":[{"day":"화","times":[7,8,9],"room":"조형관별관2층1호실"}],"label":"01분반 · 화 15:00~18:00"}]},{"id":"f62","name":"창의와융합을통한디자인탐구(형태와기능)","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"민세원","div":"01","slots":[{"day":"수","times":[5,6,7,8],"room":"조형관별관2층1호실"}],"label":"01분반 · 수 13:00~17:00"}]},{"id":"f63","name":"채용시장의이해(이공계)","credit":1,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"이재호","div":"02","slots":[{"day":"화","times":[8,9],"room":"글로벌센터1층1호실"}],"label":"02분반 · 화 16:00~18:00"}]},{"id":"f64","name":"체험뮤지컬","credit":3,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"정경희","div":"01","slots":[{"day":"수","times":[5,6,7,8],"room":"예술관지하중2층2호실"}],"label":"01분반 · 수 13:00~17:00"}]},{"id":"f65","name":"초급골프","credit":1,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"홍준희","div":"01","slots":[{"day":"수","times":[5,6],"room":"미래관1층21호실"}],"label":"01분반 · 수 13:00~15:00"},{"name":"홍준희","div":"02","slots":[{"day":"수","times":[7,8],"room":"미래관1층21호실"}],"label":"02분반 · 수 15:00~17:00"},{"name":"서동욱","div":"03","slots":[{"day":"화","times":[5,6],"room":"미래관1층21호실"}],"label":"03분반 · 화 13:00~15:00"}]},{"id":"f66","name":"초급농구","credit":1,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"황준성","div":"01","slots":[{"day":"수","times":[4,5],"room":"체육관2층1호실"}],"label":"01분반 · 수 12:00~14:00"},{"name":"황준성","div":"02","slots":[{"day":"수","times":[6,7],"room":"체육관2층1호실"}],"label":"02분반 · 수 14:00~16:00"}]},{"id":"f67","name":"춤으로문화읽기","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"서희영","div":"01","slots":[{"day":"목","times":[6,7],"room":"예술관지하3층4호실"}],"label":"01분반 · 목 14:00~16:00"}]},{"id":"f68","name":"취·창업과진로설계","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"강주성","div":"01","slots":[{"day":"화","times":[3,4],"room":"북악관4층5호실"}],"label":"01분반 · 화 11:00~13:00"},{"name":"강주성","div":"02","slots":[{"day":"화","times":[6,7],"room":"북악관5층8호실"}],"label":"02분반 · 화 14:00~16:00"},{"name":"김태완","div":"03","slots":[{"day":"월","times":[6,7],"room":"법학관1층6호실"}],"label":"03분반 · 월 14:00~16:00"},{"name":"김태완","div":"04","slots":[{"day":"월","times":[8,9],"room":"법학관1층6호실"}],"label":"04분반 · 월 16:00~18:00"},{"name":"박희주","div":"05","slots":[{"day":"수","times":[6,7],"room":"북악관4층5호실"}],"label":"05분반 · 수 14:00~16:00"},{"name":"박희주","div":"06","slots":[{"day":"수","times":[8,9],"room":"북악관4층5호실"}],"label":"06분반 · 수 16:00~18:00"}]},{"id":"f69","name":"친환경전기자동차기술","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"최웅철","div":"01","slots":[{"day":"목","times":[3,4],"room":"공학관2층16호실"}],"label":"01분반 · 목 11:00~13:00"}]},{"id":"f70","name":"탁구","credit":1,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"이운용","div":"01","slots":[{"day":"화","times":[9,10],"room":"체육관2층1호실"}],"label":"01분반 · 화 17:00~19:00"}]},{"id":"f71","name":"테니스","credit":1,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"장의종","div":"01","slots":[{"day":"목","times":[2,3],"room":"테니스장1"}],"label":"01분반 · 목 10:00~12:00"},{"name":"장의종","div":"02","slots":[{"day":"목","times":[4,5],"room":"테니스장1"}],"label":"02분반 · 목 12:00~14:00"},{"name":"장의종","div":"03","slots":[{"day":"금","times":[6,7],"room":"테니스장1"}],"label":"03분반 · 금 14:00~16:00"},{"name":"장의종","div":"04","slots":[{"day":"금","times":[8,9],"room":"테니스장1"}],"label":"04분반 · 금 16:00~18:00"},{"name":"장의종","div":"05","slots":[{"day":"금","times":[3,4],"room":"테니스장1"}],"label":"05분반 · 금 11:00~13:00"}]},{"id":"f72","name":"한국도시생활사(1880-2000)","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"안드레이 란코프","div":"01","slots":[{"day":"금","times":[5,6],"room":"법학관1층1호실"}],"label":"01분반 · 금 13:00~15:00"}]},{"id":"f73","name":"현대사회와에너지","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"곽민진","div":"01","slots":[{"day":"월","times":[2,3,4],"room":"미래관2층4호실"}],"label":"01분반 · 월 10:00~13:00"}]},{"id":"f74","name":"현대인의식생활과건강","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"남혜경","div":"01","slots":[{"day":"수","times":[8,9],"room":"법학관3층2호실"}],"label":"01분반 · 수 16:00~18:00"}]},{"id":"f75","name":"형법의이해","credit":3,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"이동기","div":"01","slots":[{"day":"금","times":[4,5,6],"room":"법학관2층5호실"}],"label":"01분반 · 금 12:00~15:00"}]},{"id":"f76","name":"2D/3D그래픽툴:디자인의시작","credit":2,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"천애리","div":"01","slots":[{"day":"목","times":[6,7,8],"room":"조형관별관2층1호실"}],"label":"01분반 · 목 14:00~17:00"}]},{"id":"f77","name":"SY라인만들기","credit":1,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"임채연","div":"01","slots":[{"day":"목","times":[3,4],"room":"미래관1층18호실"}],"label":"01분반 · 목 11:00~13:00"}]},{"id":"f78","name":"e-Test","credit":1,"type":"free","tag":"자유교양","color":"c-pink","professors":[{"name":"이재호","div":"01","slots":[{"day":"수","times":[4,5,6],"room":"공학관지하1층22호실"}],"label":"01분반 · 수 12:00~15:00"},{"name":"이재호","div":"02","slots":[{"day":"수","times":[7,8,9],"room":"공학관지하1층22호실"}],"label":"02분반 · 수 15:00~18:00"}]}];
 
-const REASONS = {
+// ── 상수 ──
+const DAYS=['월','화','수','목','금'];
+const SLOTS=[1,2,3,4,5,6,7,8,9,10];
+const SLOT_H={1:9,2:10,3:11,4:12,5:13,6:14,7:15,8:16,9:17,10:18};
+const AREAS=['인문I','인문II','소통','창의','글로벌'];
+const CMAP={'c-blue':'#4338CA','c-cyan':'#0891B2','c-purple':'#7C3AED','c-green':'#059669','c-amber':'#D97706','c-pink':'#DB2777'};
+const REASONS={
   's_esm':['2학년 1학기 전공필수 과목이에요','공학수학의 핵심 기반 과목','6개 분반으로 원하는 시간 선택 가능'],
   's_emg':['전력전자 이수를 위한 필수 선수과목','4개 분반으로 시간 조합 유연','전자기 이론은 취업 핵심 역량'],
   's_cir':['전기/전자 전공의 핵심 기초 과목','6개 분반으로 선택 폭 넓음','회로 해석 능력은 취업에 필수'],
@@ -367,28 +476,34 @@ const REASONS = {
   's_dlab':['디지털공학 이론을 실습으로 확인','1학점으로 부담 최소화','11개 분반 중 빈 시간에 유연 배치'],
   's_prog':['프로그래밍 기초 역량 함양','취업 시 SW 역량으로 인정','실습 포함 과목으로 실전 경험'],
 };
-const GYOYANG_AREAS = [
-  {key:'인문I',label:'인문 I',sub:'그리스신화·삶과윤리·한국역사 등'},
-  {key:'인문II',label:'인문 II',sub:'음악·미술·한국문학·한문 등'},
-  {key:'소통',label:'소통',sub:'논리와소통·미디어·정치와공론 등'},
-  {key:'창의',label:'창의',sub:'AI·과학적사고·스포츠 등'},
-  {key:'글로벌',label:'글로벌',sub:'세계역사·현대동아시아 등'},
-];
-const AREA_TAG_MAP = {
-  '인문I':'핵심교양(인문I)','인문II':'핵심교양(인문II)',
-  '소통':'핵심교양(소통)','창의':'핵심교양(창의)','글로벌':'핵심교양(글로벌)'
-};
-const DAYS = ['월','화','수','목','금'];
-const SLOT_HOURS = {1:8,2:9,3:10,4:11,5:12,6:13,7:14,8:15,9:16,10:17,11:18,12:19};
 
-const st = {
-  wizStep:1, profSel:{}, offDays:[], blocked:{},
-  block1st:false, blockLunch:false,
-  doneGyoyang:[], prefCore:{},
-  plan:null, activePlan:'A'
+// ── 상태 ──
+const st={
+  wizStep:1,
+  profSel:{},       // {sid: profIdx or null}
+  offDays:[],
+  blocked:{},       // {day:[slots]}
+  block1st:false,
+  selCore:{},       // {sid: profIdx} 사용자가 선택한 핵심교양
+  selFree:{},       // {sid: profIdx}
+  plan:null,
+  curArea:'인문I',
+  curGyArea:'인문I',
+  curCheckArea:'인문I',
 };
 
-function goScreen(n){
+// ── D-day ──
+function calcDday(){
+  const target = new Date('2027-02-17'); // 수강신청 예상일
+  const now = new Date();
+  const diff = Math.ceil((target-now)/(1000*60*60*24));
+  document.getElementById('dday-val').textContent = diff>0?`D-${diff}`:'D-Day!';
+  document.getElementById('dday-date').textContent = '2027년 2월 17일 수강신청';
+}
+calcDday();
+
+// ── 화면 전환 ──
+function go(n){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('sc-'+n).classList.add('active');
   window.scrollTo(0,0);
@@ -398,129 +513,191 @@ function goScreen(n){
 
 // ── 시간표 확인 ──
 function renderCheck(){
-  ['req','core','free'].forEach(t=>{
-    const el = document.getElementById('check-'+t);
-    if(!el) return;
-    const subs = SUBJECTS.filter(s=>s.type===t);
-    el.innerHTML = subs.map(s=>subjectCardHTML(s)).join('');
-  });
+  // 전공필수
+  const req = SUBJECTS.filter(s=>s.type==='req');
+  document.getElementById('check-req').innerHTML = req.map(s=>mkSubjCard(s,'check')).join('');
+  // 핵심교양 - 현재 영역
+  renderCheckCore();
+  // 자유교양
+  renderFreelist('check-free', '', 'check');
+  const freeCnt = SUBJECTS.filter(s=>s.type==='free').length;
+  document.getElementById('free-count-badge').textContent = freeCnt+'과목';
 }
 
-function subjectCardHTML(s){
+function switchArea(el){
+  document.querySelectorAll('#area-tabs .area-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  st.curCheckArea = el.dataset.area;
+  renderCheckCore();
+}
+
+function renderCheckCore(){
+  const tag = `핵심교양(${st.curCheckArea})`;
+  const subs = SUBJECTS.filter(s=>s.tag===tag);
+  document.getElementById('check-core').innerHTML = subs.map(s=>mkSubjCard(s,'check')).join('');
+}
+
+function filterFree(q){
+  renderFreelist('check-free', q, 'check');
+}
+
+function renderFreelist(elId, q, mode){
+  const el = document.getElementById(elId);
+  if(!el) return;
+  let subs = SUBJECTS.filter(s=>s.type==='free');
+  if(q) subs = subs.filter(s=>s.name.includes(q)||s.professors.some(p=>p.name.includes(q)));
+  el.innerHTML = subs.map(s=>mkSubjCard(s,mode)).join('');
+}
+
+function mkSubjCard(s, mode){
   const tc = {req:'tag-req',core:'tag-core',free:'tag-free'}[s.type];
-  const profOpts = s.professors.map((p,i)=>`
-    <div class="prof-opt ${st.profSel[s.id]===i?'selected':''}" onclick="toggleProfCheck('${s.id}',${i},this)">
-      <div><div class="pname">${p.name}</div><div class="ptime">${p.label}</div></div>
-      <div class="pcheck" style="display:${st.profSel[s.id]===i?'flex':'none'}">✓</div>
-    </div>`).join('');
-  return `<div class="subj-card" onclick="toggleCard('${s.id}')">
-    <div class="sc-header">
-      <div><div class="sc-name">${s.name}</div><div class="sc-credit">${s.credit}학점 · ${s.tag}</div></div>
-      <span class="sc-tag ${tc}">${s.tag.replace('핵심교양(','').replace(')','').replace('전공필수','전공필수').replace('자유교양','자유교양')}</span>
+  const tagShort = s.tag.replace('핵심교양(','').replace(')','');
+  const profOpts = s.professors.map((p,i)=>{
+    const isSel = mode==='make-prof'
+      ? st.profSel[s.id]===i
+      : mode==='make-core'
+      ? st.selCore[s.id]===i
+      : mode==='make-free'
+      ? st.selFree[s.id]===i
+      : st.profSel[s.id]===i;
+    return `<div class="popt ${isSel?'sel':''}" onclick="selProfCard('${s.id}','${s.type}',${i},'${mode}',this)">
+      <div><div class="pname">${p.name} (${p.div}분반)</div><div class="ptime">${p.label}</div><div class="proom">${p.slots[0]?.room||''}</div></div>
+      ${isSel?'<div class="pchk">✓</div>':''}
+    </div>`;
+  }).join('');
+  const isAnySel = mode==='make-core'&&st.selCore[s.id]!=null
+    || mode==='make-free'&&st.selFree[s.id]!=null;
+  return `<div class="card ${isAnySel?'sel-subj':''}">
+    <div class="card-hd" onclick="toggleCardBd('cb-${mode}-${s.id}')">
+      <div><div class="card-name">${s.name}</div><div class="card-sub">${s.credit}학점 · ${tagShort||s.tag}</div></div>
+      <span class="card-tag ${tc}">${tagShort||s.type==='free'?'자유교양':s.tag}</span>
     </div>
-    <div class="sc-body" id="cb-${s.id}">
-      <div style="font-size:10px;font-weight:700;color:var(--text-sub);margin-bottom:7px">개설 교수 / 시간 선택</div>
+    <div class="card-bd" id="cb-${mode}-${s.id}">
+      <div style="font-size:10px;font-weight:700;color:var(--ts);margin-bottom:7px">교수 / 분반 선택${mode.startsWith('make')?' (듣고 싶은 분반 선택)':''}</div>
+      ${mode==='make-core'||mode==='make-free'?`<div class="popt ${st[mode==='make-core'?'selCore':'selFree'][s.id]==null&&st[mode==='make-core'?'selCore':'selFree'][s.id]!==0?'sel':''}" onclick="selProfCard('${s.id}','${s.type}',null,'${mode}',this)">
+        <div><div class="pname">선택 안 함</div><div class="ptime">이 과목은 시간표에 넣지 않아요</div></div>
+      </div>`:''}
       ${profOpts}
     </div>
   </div>`;
 }
 
-function toggleCard(id){
-  document.getElementById('cb-'+id).classList.toggle('open');
+function toggleCardBd(id){
+  const el = document.getElementById(id);
+  if(el) el.classList.toggle('open');
 }
 
-function toggleProfCheck(sid,idx,el){
-  const s = SUBJECTS.find(s=>s.id===sid);
-  if(st.profSel[sid]===idx){ delete st.profSel[sid]; }
-  else { st.profSel[sid]=idx; showToast(`${s.name}: ${s.professors[idx].name} 선택!`); }
-  renderCheck();
+function selProfCard(sid, stype, idx, mode, el){
+  if(mode==='make-prof'||mode==='check'){
+    st.profSel[sid] = idx;
+    const s = SUBJECTS.find(s=>s.id===sid);
+    if(idx!==null) showToast(`${s.name}: ${s.professors[idx].name} 선택!`);
+  } else if(mode==='make-core'){
+    if(idx===null){ delete st.selCore[sid]; }
+    else {
+      st.selCore[sid]=idx;
+      const s=SUBJECTS.find(s=>s.id===sid);
+      showToast(`${s.name} 선택!`);
+    }
+    updateCreditBar();
+  } else if(mode==='make-free'){
+    if(idx===null){ delete st.selFree[sid]; }
+    else {
+      st.selFree[sid]=idx;
+      const s=SUBJECTS.find(s=>s.id===sid);
+      showToast(`${s.name} 선택!`);
+    }
+    updateCreditBar();
+  }
+  if(mode==='make-core') renderGySubjList();
+  else if(mode==='make-free') filterFreeMake(document.getElementById('free-search-make')?.value||'');
+  else renderCheck();
 }
 
 // ── 마법사 ──
 function renderMake(){
-  renderWizProg();
+  renderWizBar();
   renderProfList();
   renderTimeBlocks();
-  renderGy();
-  renderCorePref();
+  renderGyAreaTabs();
+  renderGySubjList();
+  filterFreeMake('');
+  updateCreditBar();
 }
 
-function renderWizProg(){
-  const el = document.getElementById('wiz-prog');
-  el.innerHTML = [1,2,3,4].map(i=>`<div class="wp-step ${i<=st.wizStep?'done':''}"></div>`).join('');
-  document.getElementById('wiz-lbl').textContent = `단계 ${st.wizStep} / 4`;
+function renderWizBar(){
+  document.getElementById('wiz-bar').innerHTML=[1,2,3,4,5].map(i=>`<div class="wstep ${i<=st.wizStep?'done':''}"></div>`).join('');
+  document.getElementById('wiz-lbl').textContent=`단계 ${st.wizStep} / 5`;
 }
 
-function nextStep(n){
+function ns(n){
   document.querySelectorAll('.wpage').forEach(p=>p.classList.remove('active'));
   st.wizStep=n;
-  renderWizProg();
+  renderWizBar();
   document.getElementById('wp'+n).classList.add('active');
-  if(n===4) startGen();
+  if(n===4) renderSummary();
+  if(n===5) startGen();
   window.scrollTo(0,0);
 }
 
 function renderProfList(){
-  const reqSubs = SUBJECTS.filter(s=>s.type==='req');
-  document.getElementById('prof-list').innerHTML = reqSubs.map(s=>`
-    <div style="border:1px solid var(--gray-border);border-radius:var(--rsm);overflow:hidden">
-      <div style="padding:9px 13px;background:var(--gray-light);display:flex;justify-content:space-between;align-items:center">
-        <div><div style="font-size:12px;font-weight:800">${s.name}</div><div style="font-size:10px;color:var(--text-sub)">${s.credit}학점 · ${s.tag}</div></div>
-        <span style="font-size:9px;color:var(--text-sub);font-weight:700">AI 자동선택 가능</span>
+  const req=SUBJECTS.filter(s=>s.type==='req');
+  document.getElementById('prof-list').innerHTML=req.map(s=>`
+    <div style="border:1px solid var(--gb);border-radius:var(--rs);overflow:hidden">
+      <div style="padding:9px 12px;background:var(--gl);display:flex;justify-content:space-between;align-items:center">
+        <div><div style="font-size:12px;font-weight:800">${s.name}</div><div style="font-size:10px;color:var(--ts)">${s.credit}학점 · ${s.tag}</div></div>
+        <span style="font-size:9px;color:var(--ts);font-weight:700">선택 안 하면 AI 자동</span>
       </div>
-      <div style="padding:7px 9px;display:flex;flex-direction:column;gap:5px">
-        <div class="prof-opt ${st.profSel[s.id]==null||st.profSel[s.id]===undefined?'selected':''}" onclick="selProf('${s.id}',null,this)">
-          <div><div class="pname">🤖 AI 자동선택</div><div class="ptime">조건에 맞게 AI가 최적 분반 선택</div></div>
-          ${st.profSel[s.id]==null||st.profSel[s.id]===undefined?'<div class="pcheck">✓</div>':''}
+      <div style="padding:7px 9px;display:flex;flex-direction:column;gap:4px">
+        <div class="popt ${st.profSel[s.id]==null?'sel':''}" onclick="selProfWiz('${s.id}',null,this)">
+          <div><div class="pname">🤖 AI 자동선택</div><div class="ptime">조건에 맞게 최적 분반 선택</div></div>
+          ${st.profSel[s.id]==null?'<div class="pchk">✓</div>':''}
         </div>
         ${s.professors.map((p,i)=>`
-          <div class="prof-opt ${st.profSel[s.id]===i?'selected':''}" onclick="selProf('${s.id}',${i},this)">
-            <div><div class="pname">${p.name} (${p.div}분반)</div><div class="ptime">${p.label}</div></div>
-            ${st.profSel[s.id]===i?'<div class="pcheck">✓</div>':''}
+          <div class="popt ${st.profSel[s.id]===i?'sel':''}" onclick="selProfWiz('${s.id}',${i},this)">
+            <div><div class="pname">${p.name} (${p.div}분반)</div><div class="ptime">${p.label}</div><div class="proom">${p.slots[0]?.room||''}</div></div>
+            ${st.profSel[s.id]===i?'<div class="pchk">✓</div>':''}
           </div>`).join('')}
       </div>
     </div>`).join('');
 }
 
-function selProf(sid,idx,el){
+function selProfWiz(sid,idx,el){
   st.profSel[sid]=idx;
   renderProfList();
-  const s=SUBJECTS.find(s=>s.id===sid);
-  showToast(`${s.name}: ${idx===null?'AI 자동선택':s.professors[idx].name}`);
+  if(idx!==null){const s=SUBJECTS.find(s=>s.id===sid);showToast(`${s.name}: ${s.professors[idx].name}`);}
 }
 
 function renderTimeBlocks(){
-  const slots = ['8시','9시','10시','11시','12시','13시','14시','15시','16시'];
-  const slotNums = [1,2,3,4,5,6,7,8,9];
-  document.getElementById('time-blocks').innerHTML = DAYS.map(day=>{
-    const isOff = st.offDays.includes(day);
+  const slotLabels=['9시','10시','11시','12시','13시','14시','15시','16시','17시'];
+  const slotNums=[1,2,3,4,5,6,7,8,9];
+  document.getElementById('time-blocks').innerHTML=DAYS.map(d=>{
+    const isOff=st.offDays.includes(d);
     return `<div class="tbrow">
-      <div class="tbl-day">${day}</div>
-      <div class="tbl-slots">
-        ${slotNums.map((n,i)=>{
-          const blocked = (st.blocked[day]||[]).includes(n);
-          return `<div class="tbl-slot ${isOff?'off-block':blocked?'blocked':''}" onclick="toggleSlot('${day}',${n},this)">${slots[i]}</div>`;
-        }).join('')}
-      </div>
+      <div class="tbd">${d}</div>
+      <div class="tbslots">${slotNums.map((n,i)=>{
+        const bl=(st.blocked[d]||[]).includes(n);
+        return `<div class="tbslot ${isOff?'offday':bl?'blocked':''}" onclick="toggleSlot('${d}',${n},this)">${slotLabels[i]}</div>`;
+      }).join('')}</div>
     </div>`;
   }).join('');
+  // 토글 상태 복원
+  document.getElementById('t-1st').checked=st.block1st;
 }
 
 function toggleDay(el){
-  const day=el.dataset.day;
-  if(st.offDays.includes(day)) st.offDays=st.offDays.filter(d=>d!==day);
-  else st.offDays.push(day);
+  const d=el.dataset.day;
+  if(st.offDays.includes(d)) st.offDays=st.offDays.filter(x=>x!==d);
+  else st.offDays.push(d);
+  el.classList.toggle('sel',st.offDays.includes(d));
   renderTimeBlocks();
-  document.querySelectorAll('.day-chip').forEach(c=>{
-    c.classList.toggle('selected',st.offDays.includes(c.dataset.day));
-  });
 }
 
-function toggleSlot(day,n,el){
-  if(st.offDays.includes(day)) return;
-  if(!st.blocked[day]) st.blocked[day]=[];
-  if(st.blocked[day].includes(n)) st.blocked[day]=st.blocked[day].filter(t=>t!==n);
-  else st.blocked[day].push(n);
+function toggleSlot(d,n,el){
+  if(st.offDays.includes(d)) return;
+  if(!st.blocked[d]) st.blocked[d]=[];
+  if(st.blocked[d].includes(n)) st.blocked[d]=st.blocked[d].filter(t=>t!==n);
+  else st.blocked[d].push(n);
   renderTimeBlocks();
 }
 
@@ -528,83 +705,152 @@ function toggle1st(c){
   st.block1st=c;
   DAYS.forEach(d=>{
     if(!st.blocked[d]) st.blocked[d]=[];
-    if(c){ if(!st.blocked[d].includes(1)) st.blocked[d].push(1); }
+    if(c){if(!st.blocked[d].includes(1))st.blocked[d].push(1);}
     else st.blocked[d]=st.blocked[d].filter(t=>t!==1);
   });
   renderTimeBlocks();
 }
 
-function renderGy(){
-  document.getElementById('gy-grid').innerHTML = GYOYANG_AREAS.map(a=>`
-    <div class="gy-card ${st.doneGyoyang.includes(a.key)?'selected':''}" onclick="toggleGy('${a.key}',this)">
-      <div class="gy-name">${a.label}</div>
-      <div class="gy-sub">${a.sub}</div>
-      <div class="gy-status">${st.doneGyoyang.includes(a.key)?'✅ 이수 완료':'○ 미이수'}</div>
-    </div>`).join('');
+// ── 교양 선택 ──
+function renderGyAreaTabs(){
+  document.querySelectorAll('#gy-area-tabs .gyatab').forEach(t=>{
+    const area=t.dataset.area;
+    const hasSel=SUBJECTS.filter(s=>s.area===area&&st.selCore[s.id]!=null).length>0;
+    t.classList.toggle('has-sel',hasSel);
+    t.classList.toggle('active',area===st.curGyArea);
+  });
 }
 
-function toggleGy(key,el){
-  if(st.doneGyoyang.includes(key)) st.doneGyoyang=st.doneGyoyang.filter(k=>k!==key);
-  else { st.doneGyoyang.push(key); showToast(`${key} 영역 이수 완료 체크!`); }
-  renderGy();
+function switchGyArea(el){
+  st.curGyArea=el.dataset.area;
+  document.querySelectorAll('#gy-area-tabs .gyatab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  renderGySubjList();
 }
 
-function renderCorePref(){
-  const coreNames = [...new Set(SUBJECTS.filter(s=>s.type==='core').map(s=>s.name))];
-  document.getElementById('core-pref-list').innerHTML = coreNames.slice(0,12).map(name=>{
-    const s = SUBJECTS.find(sub=>sub.name===name&&sub.type==='core');
-    const area = s.tag.replace('핵심교양(','').replace(')','');
-    const sel = st.prefCore[name];
-    return `<div class="toggle-row" style="cursor:pointer" onclick="toggleCorePref('${name}',this)">
-      <div><div class="toggle-label">${name}</div><div class="toggle-sub">${area} 영역 · ${s.credit}학점</div></div>
-      <div style="font-size:16px;color:${sel?'var(--primary)':'var(--gray)'}">${sel?'★':'☆'}</div>
+function renderGySubjList(){
+  const tag=`핵심교양(${st.curGyArea})`;
+  const subs=SUBJECTS.filter(s=>s.tag===tag);
+  const el=document.getElementById('gy-subj-list');
+  el.innerHTML=subs.map(s=>{
+    const selIdx=st.selCore[s.id];
+    const isSel=selIdx!=null;
+    return `<div class="gy-subj ${isSel?'sel-subj':''}">
+      <div class="gy-subj-hd" onclick="toggleCardBd('gy-${s.id}')">
+        <div>
+          <div class="gy-subj-name">${s.name} ${isSel?'<span style="color:var(--p);font-size:9px">✓ 선택됨</span>':''}</div>
+          <div class="gy-subj-info">${s.credit}학점 · ${s.professors.length}개 분반</div>
+        </div>
+        <span style="font-size:16px">${isSel?'🔵':'○'}</span>
+      </div>
+      <div class="gy-subj-bd" id="gy-${s.id}">
+        <div class="popt" onclick="selProfCard('${s.id}','core',null,'make-core',this)" style="margin-bottom:5px">
+          <div><div class="pname">❌ 선택 안 함</div></div>
+          ${!isSel?'<div class="pchk">✓</div>':''}
+        </div>
+        ${s.professors.map((p,i)=>`
+          <div class="popt ${selIdx===i?'sel':''}" onclick="selProfCard('${s.id}','core',${i},'make-core',this)" style="margin-bottom:5px">
+            <div><div class="pname">${p.name} (${p.div}분반)</div><div class="ptime">${p.label}</div><div class="proom">${p.slots[0]?.room||''}</div></div>
+            ${selIdx===i?'<div class="pchk">✓</div>':''}
+          </div>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+  renderGyAreaTabs();
+}
+
+function filterFreeMake(q){
+  let subs=SUBJECTS.filter(s=>s.type==='free');
+  if(q) subs=subs.filter(s=>s.name.includes(q)||s.professors.some(p=>p.name.includes(q)));
+  const el=document.getElementById('free-list-make');
+  el.innerHTML=subs.map(s=>{
+    const selIdx=st.selFree[s.id];
+    const isSel=selIdx!=null;
+    return `<div class="gy-subj ${isSel?'sel-subj':''}">
+      <div class="gy-subj-hd" onclick="toggleCardBd('fmk-${s.id}')">
+        <div>
+          <div class="gy-subj-name">${s.name} ${isSel?'<span style="color:var(--p);font-size:9px">✓</span>':''}</div>
+          <div class="gy-subj-info">${s.credit}학점 · ${s.professors.length}개 분반</div>
+        </div>
+        <span style="font-size:14px">${isSel?'🔵':'○'}</span>
+      </div>
+      <div class="gy-subj-bd" id="fmk-${s.id}">
+        <div class="popt" onclick="selProfCard('${s.id}','free',null,'make-free',this)" style="margin-bottom:5px">
+          <div><div class="pname">❌ 선택 안 함</div></div>
+          ${!isSel?'<div class="pchk">✓</div>':''}
+        </div>
+        ${s.professors.map((p,i)=>`
+          <div class="popt ${selIdx===i?'sel':''}" onclick="selProfCard('${s.id}','free',${i},'make-free',this)" style="margin-bottom:5px">
+            <div><div class="pname">${p.name} (${p.div}분반)</div><div class="ptime">${p.label}</div></div>
+            ${selIdx===i?'<div class="pchk">✓</div>':''}
+          </div>`).join('')}
+      </div>
     </div>`;
   }).join('');
 }
 
-function toggleCorePref(name,el){
-  st.prefCore[name]=!st.prefCore[name];
-  renderCorePref();
-  if(st.prefCore[name]) showToast(`${name} 선호 과목 추가!`);
+function updateCreditBar(){
+  const reqCr=16;
+  const coreCr=Object.entries(st.selCore).reduce((sum,[sid])=>{
+    const s=SUBJECTS.find(s=>s.id===sid);
+    return sum+(s?s.credit:0);
+  },0);
+  const freeCr=Object.entries(st.selFree).reduce((sum,[sid])=>{
+    const s=SUBJECTS.find(s=>s.id===sid);
+    return sum+(s?s.credit:0);
+  },0);
+  const total=reqCr+coreCr+freeCr;
+  const pct=Math.min(100,Math.round(total/21*100));
+  document.getElementById('sel-cr-txt').textContent=`전공 16 + 교양 ${coreCr+freeCr} = ${total}학점`;
+  document.getElementById('sel-cr-bar').style.width=pct+'%';
+  const remain=21-total;
+  document.getElementById('sel-cr-remain').textContent=remain>0?`${remain}학점 더 선택 가능`:remain===0?'21학점 꽉 찼어요! 👍':'⚠️ 21학점 초과';
+}
+
+// ── 조건 요약 ──
+function renderSummary(){
+  const offTxt=st.offDays.length?st.offDays.join('·')+'요일 공강':'공강 없음';
+  const blockedTxt=Object.entries(st.blocked).filter(([d,ts])=>ts.length&&!st.offDays.includes(d)).map(([d,ts])=>`${d}: ${ts.map(t=>SLOT_H[t]+'시').join(',')}`).join(' / ')||'없음';
+  const profTxt=SUBJECTS.filter(s=>s.type==='req'&&st.profSel[s.id]!=null).map(s=>`${s.name}(${s.professors[st.profSel[s.id]].name})`).join(', ')||'AI 자동선택';
+  document.getElementById('summary-box').innerHTML=`
+    <div class="sum-title">📋 선택된 조건</div>
+    <div class="sum-row"><span class="sum-key">전공필수</span><span class="sum-val">6과목 16학점 (필수 포함)</span></div>
+    <div class="sum-row"><span class="sum-key">교수 지정</span><span class="sum-val">${profTxt}</span></div>
+    <div class="sum-row"><span class="sum-key">공강 요일</span><span class="sum-val">${offTxt}</span></div>
+    <div class="sum-row"><span class="sum-key">제외 시간</span><span class="sum-val">${blockedTxt}</span></div>
+    <div class="sum-row"><span class="sum-key">1교시 제외</span><span class="sum-val">${st.block1st?'예':'아니오'}</span></div>
+  `;
+  const coreList=Object.keys(st.selCore).map(sid=>{const s=SUBJECTS.find(s=>s.id===sid);return s?s.name:'';}).filter(Boolean);
+  const freeList=Object.keys(st.selFree).map(sid=>{const s=SUBJECTS.find(s=>s.id===sid);return s?s.name:'';}).filter(Boolean);
+  const gyTxt=[...coreList.map(n=>'🟢'+n),...freeList.map(n=>'🟡'+n)].join(' / ')||'선택 없음 (전공만)';
+  document.getElementById('summary-gyoyang').innerHTML=`<b>교양 선택:</b> ${gyTxt}`;
 }
 
 // ── 알고리즘 ──
-function isBlocked(day,n){
-  if(st.offDays.includes(day)) return true;
-  if(st.block1st && n===1) return true;
-  if(document.getElementById('t-lunch').checked && n===5) return true;
-  return (st.blocked[day]||[]).includes(n);
+function isBlocked(d,n){
+  if(st.offDays.includes(d)) return true;
+  return (st.blocked[d]||[]).includes(n);
 }
-
 function slotsOk(slots){
-  for(const sl of slots)
-    for(const t of sl.times)
-      if(isBlocked(sl.day,t)) return false;
+  for(const sl of slots) for(const t of sl.times) if(isBlocked(sl.day,t)) return false;
   return true;
 }
-
-function hasConflict(usedMap, slots){
-  for(const sl of slots)
-    for(const t of sl.times)
-      if(usedMap[sl.day+t]) return true;
+function hasConflict(used,slots){
+  for(const sl of slots) for(const t of sl.times) if(used[sl.day+t]) return true;
   return false;
 }
-
-function markUsed(usedMap, slots){
-  for(const sl of slots) for(const t of sl.times) usedMap[sl.day+t]=true;
+function markUsed(used,slots){
+  for(const sl of slots) for(const t of sl.times) used[sl.day+t]=true;
 }
 
 function generatePlan(){
   const used={};
   const planA=[];
 
-  // 1. 전공필수 배치
-  const reqSubs = SUBJECTS.filter(s=>s.type==='req');
-  for(const s of reqSubs){
-    const pref = st.profSel[s.id];
-    const order = (pref!=null && pref!==undefined)
-      ? [pref,...s.professors.map((_,i)=>i).filter(i=>i!==pref)]
-      : s.professors.map((_,i)=>i);
+  // 1. 전공필수
+  for(const s of SUBJECTS.filter(s=>s.type==='req')){
+    const pref=st.profSel[s.id];
+    const order=pref!=null?[pref,...s.professors.map((_,i)=>i).filter(i=>i!==pref)]:s.professors.map((_,i)=>i);
     let placed=false;
     for(const idx of order){
       const slots=s.professors[idx].slots;
@@ -620,126 +866,135 @@ function generatePlan(){
     }
   }
 
-  // 2. 핵심교양 배치 (미이수 영역 중)
-  const neededAreas = GYOYANG_AREAS.filter(a=>!st.doneGyoyang.includes(a.key));
-  let coreCount=0;
-  const maxCore=Math.min(2, neededAreas.length);
+  // 2. 사용자가 선택한 핵심교양
+  for(const [sid,profIdx] of Object.entries(st.selCore)){
+    const s=SUBJECTS.find(s=>s.id===sid);
+    if(!s) continue;
+    const slots=s.professors[profIdx].slots;
+    if(!hasConflict(used,slots)){
+      markUsed(used,slots);
+      planA.push({s,profIdx,planB:false});
+    } else {
+      showToast(`⚠️ ${s.name}이 다른 과목과 겹쳐서 제외됐어요`);
+    }
+  }
 
-  // 선호 과목 먼저
-  const prefNames = Object.keys(st.prefCore).filter(k=>st.prefCore[k]);
-  for(const name of prefNames){
-    if(coreCount>=maxCore) break;
-    const coreSubs = SUBJECTS.filter(s=>s.name===name&&s.type==='core');
-    for(const cs of coreSubs){
-      const area = cs.tag.replace('핵심교양(','').replace(')','');
-      if(st.doneGyoyang.includes(area)) continue;
-      let placed=false;
-      for(let i=0;i<cs.professors.length;i++){
-        const slots=cs.professors[i].slots;
+  // 3. 사용자가 선택한 자유교양
+  for(const [sid,profIdx] of Object.entries(st.selFree)){
+    const s=SUBJECTS.find(s=>s.id===sid);
+    if(!s) continue;
+    const slots=s.professors[profIdx].slots;
+    if(!hasConflict(used,slots)){
+      markUsed(used,slots);
+      planA.push({s,profIdx,planB:false});
+    } else {
+      showToast(`⚠️ ${s.name}이 다른 과목과 겹쳐서 제외됐어요`);
+    }
+  }
+
+  // 4. 플랜B: 자유교양/핵심교양 중 마지막 선택 과목을 다른 분반으로
+  const planB=planA.map(p=>({...p}));
+  const flex=[...planB].reverse().find(p=>p.s.type!=='req');
+  if(flex&&flex.s.professors.length>1){
+    const altIdx=(flex.profIdx+1)%flex.s.professors.length;
+    const altSlots=flex.s.professors[altIdx].slots;
+    // 충돌 없으면 교체
+    const usedB={};
+    planB.filter(p=>p!==flex).forEach(p=>markUsed(usedB,p.s.professors[p.profIdx].slots));
+    if(!hasConflict(usedB,altSlots)){
+      flex.profIdx=altIdx;
+      flex.planB=true;
+    }
+  }
+
+  // 5. 교양 미선택 시 추천 생성
+  const coreSelCount=Object.keys(st.selCore).length;
+  const freeSelCount=Object.keys(st.selFree).length;
+  let recMsg='';
+  if(coreSelCount===0&&freeSelCount===0){
+    // 빈 시간에 들을 수 있는 과목 추천
+    const recs=[];
+    for(const s of SUBJECTS.filter(s=>s.type==='core'||s.type==='free')){
+      if(recs.length>=3) break;
+      for(let i=0;i<s.professors.length;i++){
+        const slots=s.professors[i].slots;
         if(slotsOk(slots)&&!hasConflict(used,slots)){
-          markUsed(used,slots);
-          planA.push({s:cs,profIdx:i,planB:false});
-          coreCount++; placed=true; break;
+          recs.push(`${s.name} (${s.professors[i].label})`);
+          break;
         }
       }
-      if(placed) break;
     }
+    if(recs.length) recMsg='💡 빈 시간에 들을 수 있는 추천 교양:<br>'+recs.map(r=>`• ${r}`).join('<br>');
   }
 
-  // 나머지 영역
-  for(const area of neededAreas){
-    if(coreCount>=maxCore) break;
-    const tag = AREA_TAG_MAP[area.key];
-    const coreSubs = SUBJECTS.filter(s=>s.type==='core'&&s.tag===tag);
-    let placed=false;
-    for(const cs of coreSubs){
-      if(planA.find(p=>p.s.id===cs.id)) continue;
-      for(let i=0;i<cs.professors.length;i++){
-        const slots=cs.professors[i].slots;
-        if(slotsOk(slots)&&!hasConflict(used,slots)){
-          markUsed(used,slots);
-          planA.push({s:cs,profIdx:i,planB:false});
-          coreCount++; placed=true; break;
-        }
-      }
-      if(placed) break;
-    }
-  }
-
-  // 3. 자유교양으로 21학점 채우기
-  const freeSubs = SUBJECTS.filter(s=>s.type==='free');
-  for(const fs of freeSubs){
-    const total = planA.reduce((sum,p)=>sum+p.s.credit,0);
-    if(total>=21) break;
-    for(let i=0;i<fs.professors.length;i++){
-      const slots=fs.professors[i].slots;
-      if(slotsOk(slots)&&!hasConflict(used,slots)){
-        markUsed(used,slots);
-        planA.push({s:fs,profIdx:i,planB:false});
-        break;
-      }
-    }
-  }
-
-  // 4. 플랜B: 마지막 자유교양/핵심교양 교수 변경
-  const planB = planA.map(p=>({...p}));
-  const flexItem = [...planB].reverse().find(p=>p.s.type!=='req');
-  if(flexItem){
-    const altIdx=(flexItem.profIdx+1)%flexItem.s.professors.length;
-    flexItem.profIdx=altIdx;
-    flexItem.planB=true;
-  }
-  return {planA,planB};
+  return {planA,planB,recMsg};
 }
 
-// ── 생성 & 결과 ──
 function startGen(){
-  document.getElementById('gen-state').style.display='block';
-  document.getElementById('res-state').style.display='none';
+  document.getElementById('gen-st').style.display='block';
+  document.getElementById('res-st').style.display='none';
   setTimeout(()=>{
     st.plan=generatePlan();
     showResult(st.plan);
-  },2000);
+  },2200);
 }
 
 function showResult(plan){
-  document.getElementById('gen-state').style.display='none';
-  const rs=document.getElementById('res-state');
-  rs.style.display='flex';
+  document.getElementById('gen-st').style.display='none';
+  document.getElementById('res-st').style.display='flex';
   const total=plan.planA.reduce((s,p)=>s+p.s.credit,0);
-  const offTxt=st.offDays.length?st.offDays.join('·')+'요일 공강':'공강 없음';
+  const offTxt=st.offDays.length?st.offDays.join('·')+'요일 공강':'';
   document.getElementById('res-badges').innerHTML=
-    `<div class="rh-badge">총 ${total}학점</div><div class="rh-badge">${offTxt}</div><div class="rh-badge">${plan.planA.length}과목</div><div class="rh-badge">플랜B 준비완료</div>`;
-  renderTT('res-tt', plan.planA);
-  renderLegend('res-legend', plan.planA);
+    `<div class="rbadge">총 ${total}학점</div>${offTxt?`<div class="rbadge">${offTxt}</div>`:''}<div class="rbadge">${plan.planA.length}과목</div><div class="rbadge">플랜B 준비완료</div>`;
+  renderTT('res-tt',plan.planA);
+  renderLeg('res-leg',plan.planA);
   renderResList(plan.planA);
+  // 추천 메시지
+  const rb=document.getElementById('rec-box');
+  if(plan.recMsg){rb.style.display='block';rb.innerHTML=plan.recMsg;}
+  else rb.style.display='none';
+  // 플랜B 차이 표시
+  showPlanDiff(plan);
+}
+
+function showPlanDiff(plan){
+  const diff=plan.planA.map((a,i)=>{
+    const b=plan.planB[i];
+    if(a.profIdx!==b.profIdx) return {s:a.s,fromP:a.s.professors[a.profIdx],toP:b.s.professors[b.profIdx]};
+    return null;
+  }).filter(Boolean);
+  const db=document.getElementById('plan-diff-box');
+  if(diff.length){
+    db.style.display='block';
+    db.innerHTML=`<div class="plan-diff"><div class="pd-title">🔄 플랜B 변경 사항</div>${diff.map(d=>`<div class="pd-item"><span>${d.s.name}</span><span class="pd-arrow">→</span><span>${d.toP.name} (${d.toP.div}분반)</span></div>`).join('')}</div>`;
+  } else db.style.display='none';
 }
 
 function switchResPlan(p,el){
-  document.querySelectorAll('#wp4 .plan-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('#wp5 .plan-tab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
-  const items = p==='A'?st.plan.planA:st.plan.planB;
+  const items=p==='A'?st.plan.planA:st.plan.planB;
   renderTT('res-tt',items);
-  renderLegend('res-legend',items);
+  renderLeg('res-leg',items);
   renderResList(items);
 }
 
 function renderResList(items){
-  document.getElementById('res-subj-list').innerHTML = items.map(item=>{
+  document.getElementById('res-subj-list').innerHTML=items.map(item=>{
     const p=item.s.professors[item.profIdx];
-    return `<div style="border:1px solid var(--gray-border);border-radius:var(--rsm);padding:10px 13px;cursor:pointer;transition:box-shadow .15s"
-      onclick="openModal('${item.s.id}',${item.profIdx})"
-      onmouseover="this.style.boxShadow='0 3px 12px rgba(67,56,202,.1)'"
+    return `<div style="border:1px solid var(--gb);border-radius:var(--rs);padding:10px 12px;cursor:pointer;transition:box-shadow .15s"
+      onclick="openMod('${item.s.id}',${item.profIdx})"
+      onmouseover="this.style.boxShadow='0 2px 10px rgba(67,56,202,.1)'"
       onmouseout="this.style.boxShadow=''">
       <div style="display:flex;justify-content:space-between;align-items:center">
-        <div style="display:flex;align-items:center;gap:7px">
-          <div style="width:9px;height:9px;border-radius:2px;flex-shrink:0" class="${item.s.color}"></div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:8px;height:8px;border-radius:2px;flex-shrink:0;background:${CMAP[item.s.color]||'#888'}"></div>
           <div>
-            <div style="font-size:12px;font-weight:800">${item.s.name}${item.planB?' <span style="font-size:9px;color:var(--cyan);font-weight:700">▶ 변경</span>':''}</div>
-            <div style="font-size:10px;color:var(--text-sub)">${p.name} · ${p.label}</div>
+            <div style="font-size:12px;font-weight:800">${item.s.name}${item.planB?' <span style="font-size:9px;color:var(--cy)">▶변경</span>':''}</div>
+            <div style="font-size:10px;color:var(--ts)">${p.name} · ${p.label}</div>
           </div>
         </div>
-        <div style="font-size:11px;font-weight:700;color:var(--primary)">${item.s.credit}학점</div>
+        <div style="font-size:11px;font-weight:700;color:var(--p)">${item.s.credit}학점</div>
       </div>
     </div>`;
   }).join('');
@@ -747,111 +1002,115 @@ function renderResList(items){
 
 function applyHome(){
   if(!st.plan) return;
-  document.getElementById('empty-state').style.display='none';
-  const tts=document.getElementById('tt-state');
-  tts.style.display='flex';
+  document.getElementById('empty-st').style.display='none';
+  document.getElementById('tt-st').style.display='flex';
   const total=st.plan.planA.reduce((s,p)=>s+p.s.credit,0);
-  document.getElementById('home-credit').textContent=`${total} / 21학점`;
+  document.getElementById('home-cr').textContent=`${total}/21학점`;
   document.getElementById('home-sub').textContent=`${st.plan.planA.length}과목 구성 완료`;
-  renderTT('tt-grid',st.plan.planA);
-  renderLegend('tt-legend',st.plan.planA);
-  goScreen('home');
-  showToast('🎉 시간표가 적용됐어요!');
+  renderTT('home-tt',st.plan.planA);
+  renderLeg('home-leg',st.plan.planA);
+  go('home');
+  showToast('🎉 시간표가 홈에 적용됐어요!');
 }
 
-function switchPlan(p,el){
-  document.querySelectorAll('#tt-state .plan-tab').forEach(t=>t.classList.remove('active'));
+function switchHomePlan(p,el){
+  document.querySelectorAll('#tt-st .plan-tab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
   if(!st.plan) return;
   const items=p==='A'?st.plan.planA:st.plan.planB;
-  renderTT('tt-grid',items);
-  renderLegend('tt-legend',items);
+  renderTT('home-tt',items);
+  renderLeg('home-leg',items);
 }
 
 // ── 시간표 그리드 ──
-function renderTT(gid, items){
+function renderTT(gid,items){
   const grid=document.getElementById(gid);
   if(!grid) return;
   const slotMap={};
   for(const item of items){
     const p=item.s.professors[item.profIdx];
-    for(const sl of p.slots)
-      for(const t of sl.times)
-        slotMap[sl.day+t]=item;
+    for(const sl of p.slots) for(const t of sl.times) slotMap[sl.day+t]=item;
   }
   const showSlots=[1,2,3,4,5,6,7,8,9];
   let html='';
-  html+='<div class="tt-head" style="background:var(--primary);color:rgba(255,255,255,.5);font-size:8px">시간</div>';
+  html+='<div class="tt-hd" style="background:var(--p);color:rgba(255,255,255,.4);font-size:7px">시간</div>';
   DAYS.forEach(d=>{
     const off=st.offDays.includes(d);
-    html+=`<div class="tt-head ${off?'off':''}">${d}${off?'<br><span style="font-size:7px">공강</span>':''}</div>`;
+    html+=`<div class="tt-hd ${off?'off':''}">${d}${off?'<br><span style="font-size:6px">공강</span>':''}</div>`;
   });
   for(const t of showSlots){
-    html+=`<div class="tt-time">${SLOT_HOURS[t]}시</div>`;
+    html+=`<div class="tt-time">${SLOT_H[t]}</div>`;
     DAYS.forEach(d=>{
       const off=st.offDays.includes(d);
       const item=slotMap[d+t];
-      if(off){ html+=`<div class="tt-cell tt-off"></div>`; }
+      if(off){html+=`<div class="tt-cell tt-off"></div>`;}
       else if(item){
         const p=item.s.professors[item.profIdx];
-        const firstSlot=p.slots.find(sl=>sl.day===d);
-        if(firstSlot&&firstSlot.times[0]===t){
-          html+=`<div class="tt-cell" onclick="openModal('${item.s.id}',${item.profIdx})">
-            <div class="tt-class ${item.s.color}">${item.s.name}<br><span style="opacity:.85;font-weight:600;font-size:6px">${p.name.split(' ')[0]}</span></div>
+        const dSlot=p.slots.find(sl=>sl.day===d);
+        if(dSlot&&dSlot.times[0]===t){
+          html+=`<div class="tt-cell" onclick="openMod('${item.s.id}',${item.profIdx})">
+            <div class="tt-class ${item.s.color}">${item.s.name}<br><span style="opacity:.85;font-size:6px">${p.name.split(' ')[0]}</span></div>
           </div>`;
-        } else if(firstSlot&&firstSlot.times.includes(t)){
-          html+=`<div class="tt-cell" onclick="openModal('${item.s.id}',${item.profIdx})"></div>`;
+        } else if(dSlot&&dSlot.times.includes(t)){
+          html+=`<div class="tt-cell" onclick="openMod('${item.s.id}',${item.profIdx})"></div>`;
         } else {
           html+=`<div class="tt-cell"></div>`;
         }
-      } else { html+=`<div class="tt-cell"></div>`; }
+      } else {html+=`<div class="tt-cell"></div>`;}
     });
   }
   grid.innerHTML=html;
 }
 
-function renderLegend(lid, items){
+function renderLeg(lid,items){
   const el=document.getElementById(lid);
   if(!el) return;
-  const cmap={'c-blue':'#4338CA','c-cyan':'#0891B2','c-purple':'#7C3AED','c-green':'#059669','c-amber':'#D97706','c-pink':'#DB2777'};
   el.innerHTML=items.map(item=>`
-    <div class="legend-item" onclick="openModal('${item.s.id}',${item.profIdx})">
-      <div class="ldot" style="background:${cmap[item.s.color]||'#888'}"></div>${item.s.name}
+    <div class="leg-item" onclick="openMod('${item.s.id}',${item.profIdx})">
+      <div class="ldot" style="background:${CMAP[item.s.color]||'#888'}"></div>${item.s.name}
     </div>`).join('');
 }
 
 // ── 모달 ──
-function openModal(sid,pidx){
+function openMod(sid,pidx){
   const s=SUBJECTS.find(s=>s.id===sid);
   if(!s) return;
   const p=s.professors[pidx];
   document.getElementById('m-name').textContent=s.name;
-  document.getElementById('m-prof').textContent=`${p.name} · ${p.label}`;
-  const tl={req:'전공필수',core:'핵심교양',free:'자유교양'};
+  document.getElementById('m-prof').textContent=`${p.name} · ${p.label} · ${p.slots[0]?.room||''}`;
   document.getElementById('m-info').innerHTML=`
     <div class="mrow"><span class="mkey">구분</span><span class="mval">${s.tag}</span></div>
     <div class="mrow"><span class="mkey">학점</span><span class="mval">${s.credit}학점</span></div>
-    <div class="mrow"><span class="mkey">시간</span><span class="mval">${p.label}</span></div>`;
-  const reasons = REASONS[sid] || ['조건에 맞는 최적 과목으로 선정됐어요','빈 시간대에 자연스럽게 배치됐어요','학점 구성을 최적화했어요'];
-  document.getElementById('m-reasons').innerHTML=reasons.map(r=>`
-    <div class="ri"><div class="ri-dot"></div><div class="ri-text">${r}</div></div>`).join('');
+    <div class="mrow"><span class="mkey">시간</span><span class="mval">${p.label}</span></div>
+    <div class="mrow"><span class="mkey">강의실</span><span class="mval">${p.slots[0]?.room||'-'}</span></div>`;
+  const reasons=REASONS[sid]||['선택한 조건에 맞는 과목이에요','빈 시간대에 자연스럽게 배치됐어요','시간표 균형을 위해 선정됐어요'];
+  document.getElementById('m-reasons').innerHTML=reasons.map(r=>`<div class="ri"><div class="ri-dot"></div><div class="ri-text">${r}</div></div>`).join('');
   document.getElementById('modal').classList.add('open');
 }
+function closeMod(e){if(e.target===document.getElementById('modal'))document.getElementById('modal').classList.remove('open');}
 
-function closeModal(e){
-  if(e.target===document.getElementById('modal'))
-    document.getElementById('modal').classList.remove('open');
+// ── 이미지 저장 ──
+function saveImage(){
+  const el=document.getElementById('home-tt').parentElement;
+  html2canvas(el,{scale:2,backgroundColor:'#fff'}).then(canvas=>{
+    const a=document.createElement('a');
+    a.download='시간표.png';
+    a.href=canvas.toDataURL();
+    a.click();
+    showToast('📸 이미지가 저장됐어요!');
+  }).catch(()=>showToast('⚠️ 저장에 실패했어요. 다시 시도해주세요'));
 }
 
 // ── 토스트 ──
 let toastTmr;
 function showToast(msg){
   const el=document.getElementById('toast');
-  el.textContent=msg; el.classList.add('show');
+  el.textContent=msg;el.classList.add('show');
   clearTimeout(toastTmr);
-  toastTmr=setTimeout(()=>el.classList.remove('show'),2200);
+  toastTmr=setTimeout(()=>el.classList.remove('show'),2500);
 }
 
+// 초기화
 renderCheck();
 renderMake();
 </script>
